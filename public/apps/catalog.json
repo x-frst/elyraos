@@ -1,0 +1,1911 @@
+{
+  "apps": [
+    {
+      "name": "Subway Surfers NYC",
+      "description": "**Endless runner – dodge trains and obstacles down the streets of New York City.**\n\nDASH as fast as you can!\nDODGE the oncoming trains!\nHelp Jake, Tricky & Fresh escape from the grumpy Inspector and his dog.\n\n- Grind trains with your cool crew!\n- Colorful and vivid HD graphics!\n- Hoverboard Surfing!\n- Paint powered jetpack!\n- Lightning fast swipe acrobatics!\n- Challenge and help your friends!",
+      "url": "https://ubg77.github.io/updatefaqs/subway-surfers-nyc/",
+      "allowIframe": true,
+      "showCursor": true,
+      "featured": false,
+      "tags": [
+        "game"
+      ],
+      "icon_url": "https://i.imgur.com/m8NWZxS.jpeg",
+      "cover_image": "https://i.imgur.com/YQidt9D.jpeg",
+      "media": [
+        "https://www.youtube.com/watch?v=fGy-x3H-nxU",
+        "https://media.rawg.io/media/resize/420/-/screenshots/408/408f22b45b2b628a68da934a3916fabc.jpg",
+        "https://media.rawg.io/media/resize/420/-/screenshots/ae3/ae353a43b78c13d7919602e28a89b18b.jpg"
+      ]
+    },
+    {
+      "name": "Earth Wind Map",
+      "description": "Visualize global weather patterns in real-time with an interactive **earth wind map**.\n\nExplore wind movements, atmospheric conditions, and environmental data through a dynamic and immersive experience.\n\n## ✨ Key Features\n- Real-time visualization of global wind patterns  \n- Interactive map with smooth animations  \n- Explore weather layers and environmental data  \n- Zoom and navigate across the globe easily  \n- Clean and visually engaging interface  \n\n## 🚀 Why You'll Love It\n*Perfect for exploring weather data and understanding global patterns.*  \n\nSee the invisible forces of nature come to life in a stunning visual way.",
+      "url": "https://earth.nullschool.net/",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "education"
+      ],
+      "icon_url": "https://www.google.com/s2/favicons?domain=earth.nullschool.net&sz=128",
+      "cover_image": "https://i.imgur.com/G18AqP3.jpeg",
+      "media": [
+        "https://i.imgur.com/BIE4v5w.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "100,000 Stars",
+      "description": "Explore the universe like never before with an immersive **3D star visualization** of the stars closest to our Sun.\n\nDive into space and navigate through a beautifully rendered cosmic environment powered by `WebGL`.\n\n## ✨ Key Features\n- Interactive 3D map of nearby stars  \n- Smooth navigation through space  \n- Realistic visualization of star positions  \n- Built using high-performance `WebGL`  \n- Informative and engaging experience  \n\n## 🚀 Why You'll Love It\n*Perfect for space enthusiasts and curious minds.*  \n\nTravel through the stars and experience the cosmos from your screen.",
+      "url": "https://stars.chromeexperiments.com/",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "education"
+      ],
+      "icon_url": "https://www.google.com/s2/favicons?domain=stars.chromeexperiments.com&sz=128",
+      "cover_image": "https://i.imgur.com/i9pXziL.jpeg",
+      "media": [
+        "https://i.imgur.com/qc0Vj6h.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "Desmos Calculator",
+      "description": "The world’s most beautiful **free graphing calculator** — beloved by students, teachers and mathematicians.\n\n## Features\n- Plot *functions, parametric curves* and polar graphs in real time\n- Visualise **derivatives, integrals and inequalities**\n- Build interactive sliders to animate parameters\n- Share any graph with a permanent URL\n- Available in 25+ languages",
+      "url": "https://www.desmos.com/calculator",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "education"
+      ],
+      "icon_url": "https://i.imgur.com/z5e1sXf.jpeg",
+      "cover_image": "https://i.imgur.com/96FeaX2.jpeg",
+      "media": [
+        "https://i.imgur.com/yahhDw0.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "Music Lab",
+      "description": "Explore music in a fun and interactive way with a creative **music lab** full of hands-on experiments.\n\nPlay, compose, and experiment with sound using a variety of engaging tools designed for learning and creativity.\n\n## ✨ Key Features\n- Play music together with a shared piano  \n- Create melodies using a song maker  \n- Experiment with rhythm and timing  \n- Transform sounds with a voice spinner  \n- Explore harmonies and chords interactively  \n\n## 🚀 Why You'll Love It\n*Perfect for learning, experimenting, and enjoying music.*  \n\nDiscover music through play and unlock your creative potential.",
+      "url": "https://musiclab.chromeexperiments.com/",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "media"
+      ],
+      "icon_url": "https://www.google.com/s2/favicons?domain=musiclab.chromeexperiments.com&sz=128",
+      "cover_image": "https://i.imgur.com/qD38O78.jpeg",
+      "media": [
+        "https://i.imgur.com/SPrZkSb.jpeg",
+        "https://i.imgur.com/hikciFG.jpeg",
+        "https://i.imgur.com/lcOL5kv.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "Excalidraw",
+      "description": "**Excalidraw** is an open-source virtual whiteboard with a charming hand-drawn feel — perfect for quick diagrams, wireframes and brainstorming.\n\n## Why You'll Love It\n- *Infinite canvas* — never run out of space\n- **Real-time collaboration** — share a link and draw together\n- Export to PNG, SVG or a shareable .excalidraw file\n- Built-in **shape library** for wireframes and flowcharts\n- End-to-end encrypted for private sessions",
+      "url": "https://excalidraw.com/",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "design"
+      ],
+      "icon_url": "https://i.imgur.com/8ewo0mw.jpeg",
+      "cover_image": "https://i.imgur.com/f5Pnq8t.jpeg",
+      "media": [
+        "https://i.imgur.com/Y8wgM3p.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "tldraw",
+      "description": "A **minimal, delightful infinite canvas** for sketching ideas, annotating screenshots and making quick mockups.\n\n- *Multiplayer mode* — collaborate in real time with a shareable link\n- **Smart shapes** with snap-to-fit connectors\n- Export as PNG or SVG\n- Feels *instant* — no lag even on large complex boards\n- Free and open source",
+      "url": "https://www.tldraw.com/",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "design"
+      ],
+      "icon_url": "https://www.google.com/s2/favicons?domain=tldraw.com&sz=128",
+      "cover_image": "https://i.imgur.com/Lb2a86D.jpeg",
+      "media": [
+        "https://i.imgur.com/PeSOymj.jpeg",
+        "https://i.imgur.com/DLCKj46.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "Photopea",
+      "description": "**Photopea** is a powerful in-browser photo editor that supports PSD, XCF and Sketch files — no install required.\n\n## Key Features\n- Open and save **Photoshop PSD** files natively\n- Full layer support: *blending modes, masks, adjustment layers*\n- Advanced tools: pen, clone stamp, healing brush\n- Works completely **offline** once loaded\n- Export to PNG, JPG, SVG, PDF and more",
+      "url": "https://www.photopea.com#%7B%22files%22%3A%5B%22https%3A%2F%2Fwww.photopea.com%2Fapi%2Fimg2%2Fpug.png%22%5D%2C%22environment%22%3A%7B%7D%7D",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "design"
+      ],
+      "icon_url": "https://i.imgur.com/Og6oUU4.jpeg",
+      "cover_image": "https://i.imgur.com/Yxp9bcj.jpeg",
+      "media": [
+        "https://www.youtube.com/watch?v=rrSQErgkI6g",
+        "https://i.imgur.com/7k6UpSZ.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "AutoDraw",
+      "description": "Turn rough sketches into clean visuals instantly with **AutoDraw AI**, powered by Google’s smart drawing technology.\n\nSimply doodle anything, and watch it transform into polished illustrations in seconds.\n\n## ✨ Key Features\n- Convert rough sketches into refined drawings  \n- Smart AI suggestions as you draw  \n- Wide range of icons and illustrations  \n- Fast and lightweight drawing experience  \n- Easy-to-use interface for all skill levels  \n\n## 🚀 Why You'll Love It\n*No design skills needed — just draw and let AI do the magic.*  \n\nCreate clean, professional visuals in seconds with minimal effort.",
+      "url": "https://www.autodraw.com/",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "design"
+      ],
+      "icon_url": "https://www.google.com/s2/favicons?domain=www.autodraw.com&sz=128",
+      "cover_image": "https://i.imgur.com/KNmId20.jpeg",
+      "media": [
+        "https://www.youtube.com/watch?v=VwRbvVrUXTc",
+        "https://i.imgur.com/MWjDY11.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "JS Paint",
+      "description": "Experience a nostalgic yet functional drawing tool with a classic **paint app** inspired by old-school simplicity.\n\nCreate, edit, and play around with images using a familiar interface that feels both fun and easy to use.\n\n## ✨ Key Features\n- Draw and edit images with basic tools  \n- Use brushes, shapes, text, and fill options  \n- Open and save image files easily  \n- Undo, redo, and simple editing controls  \n- Lightweight and responsive interface  \n\n## 🚀 Why You'll Love It\n*Simple, fast, and perfect for quick edits or creative fun.*  \n\nBring your ideas to life with a tool that keeps things easy and enjoyable.",
+      "url": "https://jspaint.app/",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "design"
+      ],
+      "icon_url": "https://www.google.com/s2/favicons?domain=jspaint.app&sz=128",
+      "cover_image": "https://i.imgur.com/x8yoj7G.jpeg",
+      "media": [
+        "https://i.imgur.com/T1cxPYZ.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "Squoosh",
+      "description": "Compress and optimize your images effortlessly with **Squoosh**, a powerful tool by Google designed for fast and efficient image processing.\n\nReduce file sizes without compromising quality and prepare your images perfectly for web and sharing.\n\n## ✨ Key Features\n- Compress images with advanced optimization techniques  \n- Compare original and compressed versions in real-time  \n- Support for multiple formats like JPEG, PNG, and WebP  \n- Adjust quality, resolution, and encoding settings  \n- Fast, browser-based processing  \n\n## 🚀 Why You'll Love It\n*Perfect for developers, designers, and anyone working with images.*  \n\nMake your images lighter, faster, and web-ready in seconds.",
+      "url": "https://squoosh.app/",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "design"
+      ],
+      "icon_url": "https://www.google.com/s2/favicons?domain=squoosh.app&sz=128",
+      "cover_image": "https://i.imgur.com/uzgvuON.jpeg",
+      "media": [
+        "https://i.imgur.com/rtOMPP2.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "CSS Gradient",
+      "description": "Create stunning color transitions effortlessly with a powerful **CSS gradient generator**.\n\nDesign beautiful gradients visually and get ready-to-use code instantly for your projects.\n\n## ✨ Key Features\n- Generate linear and radial gradients  \n- Customize colors, angles, and positions  \n- Real-time preview of gradient changes  \n- Copy ready-to-use `CSS` code instantly  \n- Simple and interactive interface  \n\n## 🚀 Why You'll Love It\n*Perfect for developers and designers who want quick and beautiful gradients.*  \n\nTurn your ideas into smooth, modern backgrounds in seconds.",
+      "url": "https://cssgradient.io/",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "design"
+      ],
+      "icon_url": "https://www.google.com/s2/favicons?domain=cssgradient.io&sz=128",
+      "cover_image": "https://i.imgur.com/nvGGdih.jpeg",
+      "media": [
+        "https://i.imgur.com/lpQbeeo.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "Color Hunt",
+      "description": "Discover beautiful and trendy color palettes with a curated **color inspiration tool** designed for creatives.\n\nFind the perfect combination of colors for your next project, whether it's design, UI, or branding.\n\n## ✨ Key Features\n- Explore hand-picked color palettes  \n- Browse trending and popular combinations  \n- Copy color codes instantly  \n- Save favorite palettes for later  \n- Clean and visually appealing interface  \n\n## 🚀 Why You'll Love It\n*Perfect for designers and developers looking for color inspiration.*  \n\nFind the right colors faster and make your designs stand out effortlessly.",
+      "url": "https://colorhunt.co/",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "design"
+      ],
+      "icon_url": "https://www.google.com/s2/favicons?domain=colorhunt.co&sz=128",
+      "cover_image": "https://i.imgur.com/TTyHZoE.jpeg",
+      "media": [
+        "https://i.imgur.com/oMGqHBB.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "JSON Crack",
+      "description": "Transform complex **JSON, YAML, TOML, XML and CSV** into beautiful interactive node-graph visualizations — perfect for debugging nested structures.\n\n- Paste any data and see it as a **zoomable graph** instantly\n- Click nodes to *collapse or expand* branches\n- Switch between tree and graph view\n- Supports **dark mode** and multiple themes",
+      "url": "https://jsoncrack.com/editor",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "developer"
+      ],
+      "icon_url": "https://www.google.com/s2/favicons?domain=jsoncrack.com&sz=128",
+      "cover_image": "https://i.imgur.com/J5y55KZ.jpeg",
+      "media": [
+        "https://i.imgur.com/SfD65cx.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "Multi Testing Tool",
+      "description": "Test and validate your logic with a powerful **multi testing tool** built for developers and problem solvers.\n\nHandle pattern matching, transformations, and comparisons all in one place with speed and clarity.\n\n## ✨ Key Features\n- Test and validate `regex` patterns instantly  \n- Perform regex substitutions with real-time results  \n- Compare text with a built-in diff checker  \n- Highlight differences for easy analysis  \n- Fast and developer-friendly interface  \n\n## 🚀 Why You'll Love It\n*Perfect for debugging, testing, and refining text-based logic.*  \n\nSave time, reduce errors, and build with confidence.",
+      "url": "https://rextester.com/tester",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "developer"
+      ],
+      "icon_url": "https://i.imgur.com/B7xEu5J.jpeg",
+      "cover_image": "https://i.imgur.com/fCpghv6.jpeg",
+      "media": [
+        "https://i.imgur.com/ZW1ixTB.jpeg",
+        "https://i.imgur.com/Vbhz4yq.jpeg",
+        "https://i.imgur.com/Qs7uhBq.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "Crontab Guru",
+      "description": "Master scheduling with ease using a powerful **cron expression helper** designed for accuracy and simplicity.\n\nUnderstand, build, and test cron schedules without confusion using clear, human-readable explanations.\n\n## ✨ Key Features\n- Generate and validate cron expressions instantly  \n- Get human-readable descriptions of schedules  \n- Test and tweak timing with real-time feedback  \n- Support for complex scheduling patterns  \n- Clean and focused interface  \n\n## 🚀 Why You'll Love It\n*Perfect for developers working with task scheduling and automation.*  \n\nNever guess cron syntax again — build schedules with confidence.",
+      "url": "https://crontab.guru/",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "developer"
+      ],
+      "icon_url": "https://www.google.com/s2/favicons?domain=crontab.guru&sz=128",
+      "cover_image": "https://i.imgur.com/riZ8fCI.jpeg",
+      "media": [
+        "https://i.imgur.com/Sgbmvx9.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "Flems Playground",
+      "description": "Experiment, build, and share front-end code instantly with a powerful **web playground** that runs directly in your browser.\n\nWrite and preview your `HTML`, `CSS`, and `JS` in real-time with zero setup required.\n\n## ✨ Key Features\n- Zero-install coding environment  \n- Instant live reload for real-time preview  \n- Write and test `HTML`, `CSS`, and `JS` together  \n- Share your work with a single URL  \n- Fast and distraction-free interface  \n\n## 🚀 Why You'll Love It\n*Perfect for quick experiments, demos, and learning.*  \n\nCode, preview, and share — all in one seamless experience.",
+      "url": "https://flems.io/",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "developer"
+      ],
+      "icon_url": "https://www.google.com/s2/favicons?domain=flems.io&sz=128",
+      "cover_image": "https://i.imgur.com/55nng7H.jpeg",
+      "media": [
+        "https://i.imgur.com/dsBPGVP.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "Markdown Preview",
+      "description": "Write and preview your content seamlessly with a fast and intuitive **markdown preview** tool.\n\nSee your formatted output in real-time as you type and ensure your content looks exactly how you want.\n\n## ✨ Key Features\n- Live preview while writing `markdown`  \n- Clean side-by-side editing experience  \n- Support for standard formatting elements  \n- Instant rendering with no delays  \n- Minimal and distraction-free interface  \n\n## 🚀 Why You'll Love It\n*Perfect for writers, developers, and documentation work.*  \n\nFocus on writing while your formatting comes to life instantly.",
+      "url": "https://markdownlivepreview.com/",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "developer"
+      ],
+      "icon_url": "https://i.imgur.com/k6qOSuV.jpeg",
+      "cover_image": "https://i.imgur.com/x0d2NyE.jpeg",
+      "media": [
+        "https://i.imgur.com/NdcKoIG.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "CodeBeautify",
+      "description": "Format and clean your code effortlessly with a powerful **code beautifier** designed for readability and precision.\n\nTransform messy code into well-structured and easy-to-understand formats in seconds.\n\n## ✨ Key Features\n- Beautify and format code instantly  \n- Support for multiple languages like `JSON`, `HTML`, `CSS`, and `JS`  \n- Improve code readability and structure  \n- Minify or prettify as needed  \n- Fast and user-friendly interface  \n\n## 🚀 Why You'll Love It\n*Perfect for developers who value clean and maintainable code.*  \n\nMake your code look better, cleaner, and easier to work with.",
+      "url": "https://formatter.org/",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "developer"
+      ],
+      "icon_url": "https://i.imgur.com/HfA1dvp.jpeg",
+      "cover_image": "https://i.imgur.com/Y3qYT4l.jpeg",
+      "media": [
+        "https://i.imgur.com/uUM5xwk.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "JWT Debugger",
+      "description": "Inspect and verify your tokens effortlessly with a powerful **JWT debugger** built for developers.\n\nDecode, analyze, and validate `JWT` tokens in a clean and secure environment.\n\n## ✨ Key Features\n- Decode `JWT` tokens instantly  \n- View header, payload, and signature clearly  \n- Verify token integrity and validity  \n- Inspect claims and expiration details  \n- Simple and developer-friendly interface  \n\n## 🚀 Why You'll Love It\n*Perfect for debugging authentication and authorization workflows.*  \n\nUnderstand your tokens better and debug with confidence.",
+      "url": "https://jwt.is/",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "developer"
+      ],
+      "icon_url": "https://i.imgur.com/xc9doVV.jpeg",
+      "cover_image": "https://i.imgur.com/qxbUpOb.jpeg",
+      "media": [
+        "https://i.imgur.com/tAvqYd1.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "StackBlitz IDE",
+      "description": "Build, run, and share full-stack applications instantly with a powerful **online IDE** that runs entirely in your browser.\n\nDevelop projects with real-time preview and a seamless coding experience without any setup.\n\n## ✨ Key Features\n- Instant project setup with zero installation  \n- Live preview and hot reload  \n- Support for modern frameworks and tools  \n- Run and edit code directly in the browser  \n- Share projects with a simple link  \n\n## 🚀 Why You'll Love It\n*Perfect for rapid development, testing, and collaboration.*  \n\nCode, run, and deploy ideas faster — all from your browser.",
+      "url": "https://stackblitz.com/edit/react?embed=1",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "developer"
+      ],
+      "icon_url": "https://i.imgur.com/n5GLw3q.jpeg",
+      "cover_image": "https://i.imgur.com/YOhhyLi.jpeg",
+      "media": [
+        "https://i.imgur.com/9fjR2yG.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "Wikipedia",
+      "description": "Access a vast world of knowledge with a powerful **online encyclopedia** built and maintained by a global community.\n\nExplore articles on countless topics, from history and science to technology and culture.\n\n## ✨ Key Features\n- Search and read articles on millions of topics  \n- Well-structured and detailed information  \n- Regularly updated by contributors worldwide  \n- Cross-linked content for deeper exploration  \n- Clean and easy-to-read interface  \n\n## 🚀 Why You'll Love It\n*Perfect for learning, research, and quick information.*  \n\nDiscover, learn, and explore knowledge without limits.",
+      "url": "https://www.wikipedia.org/",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "education"
+      ],
+      "icon_url": "https://www.google.com/s2/favicons?domain=www.wikipedia.org&sz=128",
+      "cover_image": "https://i.imgur.com/CYUNOrh.jpeg",
+      "media": [
+        "https://i.imgur.com/lDXnXPj.jpeg",
+        "https://i.imgur.com/y7S9u1a.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "Geometry Dash",
+      "description": "**Jump and fly your way through danger in this rhythm-based action platformer!**\n\nPrepare for a near impossible challenge in the world of Geometry Dash. Push your skills to the limit as you jump, fly and flip your way through dangerous passages and spiky obstacles!",
+      "url": "https://geometry-dash-lite.1games.io/",
+      "allowIframe": true,
+      "showCursor": true,
+      "featured": false,
+      "tags": [
+        "game"
+      ],
+      "icon_url": "https://i.imgur.com/J8W3CD1.jpeg",
+      "cover_image": "https://i.imgur.com/ZEy7NOd.jpeg",
+      "media": [
+        "https://www.youtube.com/watch?v=k90y6PIzIaE",
+        "https://media.rawg.io/media/resize/420/-/screenshots/37f/37ff55af1148244d0443548834fb7731.jpg",
+        "https://media.rawg.io/media/resize/420/-/screenshots/da3/da358164d282213116278ad0dbc69882.jpg",
+        "https://media.rawg.io/media/resize/420/-/screenshots/515/515315577b287261aeb2aaf5d1e38e93.jpg"
+      ]
+    },
+    {
+      "name": "Online Office",
+      "description": "**ZIZIYI Office** is a powerful web application designed to provide a seamless experience for viewing and editing Office documents **(Word, Excel, PowerPoint)** directly in your browser. Built with a \"local-first\" philosophy, it ensures your documents remain private and secure while providing a desktop-class editing experience.",
+      "url": "https://office.ziziyi.com/",
+      "allowIframe": true,
+      "showCursor": true,
+      "featured": true,
+      "tags": [
+        "productivity"
+      ],
+      "icon_url": "https://i.imgur.com/vJoxjBs.jpeg",
+      "cover_image": "https://i.imgur.com/vPyaifJ.jpeg",
+      "media": [
+        "https://i.imgur.com/kglpUj2.jpeg",
+        "https://i.imgur.com/NnFpehu.jpeg"
+      ]
+    },
+    {
+      "name": "CodingBlocks IDE",
+      "description": "The **Coding Blocks Online IDE** is a web-based code compiler and editor developed by Coding Blocks to provide a frictionless environment for competitive programming and learning.",
+      "url": "https://ide.codingblocks.com/",
+      "allowIframe": true,
+      "showCursor": true,
+      "featured": false,
+      "tags": [
+        "developer"
+      ],
+      "icon_url": "https://i.imgur.com/o7x15p0.jpeg",
+      "cover_image": "https://i.imgur.com/HuN8pxR.jpeg",
+      "media": [
+        "https://i.imgur.com/qRSL1xv.jpeg"
+      ]
+    },
+    {
+      "name": "TODO List",
+      "description": "Stay organized, focused, and in control of your day with the **TODO List App** — your personal productivity companion.\n\nWhether you're managing daily tasks or long-term goals, this app helps you keep everything in one place and never miss a thing.\n\n## ✨ Key Features\n- Create, edit, and delete tasks effortlessly  \n- Organize tasks with priorities and categories  \n- Set deadlines and reminders to stay on track  \n- Mark tasks as completed with a satisfying check ✔️  \n- Clean and distraction-free interface  \n\n## 🚀 Why You'll Love It\n*Simple enough for quick notes, powerful enough for serious planning.*  \n\nTurn chaos into clarity and boost your productivity — one task at a time.",
+      "url": "https://todomvc.5apps.com/labs/architecture-examples/remotestorage/",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "productivity"
+      ],
+      "icon_url": "https://i.imgur.com/YLs8DF9.jpeg",
+      "cover_image": "https://i.imgur.com/tJpf63I.jpeg",
+      "media": [
+        "https://i.imgur.com/QBzGsYh.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "Web Spreadsheet",
+      "description": "Manage data like a pro with a powerful and intuitive **spreadsheet** experience designed for speed, flexibility, and precision.\n\nFrom simple lists to complex calculations, handle everything seamlessly in one organized workspace.\n\n## ✨ Key Features\n- Create and edit sheets with ease  \n- Perform calculations using built-in formulas  \n- Organize data with rows, columns, and filters  \n- Sort and analyze data efficiently  \n- Clean and responsive grid-based interface  \n\n## 🚀 Why You'll Love It\n*Perfect for everyday tracking or advanced data handling.*  \n\nTurn raw data into meaningful insights — faster and smarter.",
+      "url": "https://ethercalc.net/_new",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "productivity"
+      ],
+      "icon_url": "https://i.imgur.com/2gkhbCs.jpeg",
+      "cover_image": "https://i.imgur.com/GcGZR8E.jpeg",
+      "media": [
+        "https://i.imgur.com/TqfuVYQ.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "SQLite Viewer",
+      "description": "Explore and manage your databases effortlessly with a lightweight and efficient **SQLite Viewer**.\n\nPerfect for developers and data enthusiasts, this tool lets you inspect, analyze, and interact with SQLite databases in a clean and user-friendly environment.\n\n## ✨ Key Features\n- Open and browse SQLite database files instantly  \n- View tables, schemas, and data in a structured format  \n- Execute custom SQL queries with real-time results  \n- Search, filter, and sort records easily  \n- Fast and minimal interface for smooth performance  \n\n## 🚀 Why You'll Love It\n*Built for simplicity, yet powerful enough for deep database inspection.*  \n\nTake full control of your SQLite data — without the complexity.",
+      "url": "https://www.litespread.com/files",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "productivity"
+      ],
+      "icon_url": "https://i.imgur.com/hAtV07W.jpeg",
+      "cover_image": "https://i.imgur.com/N2MWryd.jpeg",
+      "media": [
+        "https://i.imgur.com/uo9W4o0.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "Asset Portfolio Manager",
+      "description": "Track, analyze, and grow your investments with a smart and streamlined **asset portfolio manager**.\n\nDesigned for clarity and control, manage multiple asset types and monitor performance all in one place.\n\n## ✨ Key Features\n- Add and manage stocks, crypto, and other assets  \n- Track real-time or manual price updates  \n- View overall portfolio value and profit/loss  \n- Analyze performance with simple insights  \n- Clean dashboard for quick overview  \n\n## 🚀 Why You'll Love It\n*Everything you need to manage your investments, without the clutter.*  \n\nMake better financial decisions with clear visibility of your portfolio.",
+      "url": "https://roadtofire.iliviu.me/portfolio/home",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "productivity"
+      ],
+      "icon_url": "https://i.imgur.com/8TLTG3p.jpeg",
+      "cover_image": "https://i.imgur.com/Ba4vrjX.jpeg",
+      "media": [
+        "https://i.imgur.com/0dRPx5z.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "Team Toolbox",
+      "description": "Organize collaboration effortlessly with a powerful **team toolbox** designed to streamline team building and task management.\n\nFrom forming teams to assigning work, everything you need to coordinate efficiently is right here.\n\n## ✨ Key Features\n- Build and manage teams with ease  \n- Find the next available member for tasks  \n- Create smart pairs for collaboration  \n- Assign and track tasks across teams  \n- Simple and structured interface for smooth workflow  \n\n## 🚀 Why You'll Love It\n*Perfect for managing people, tasks, and teamwork in one place.*  \n\nTurn coordination into clarity and keep your team moving forward.",
+      "url": "https://lduboeuf.github.io/team-tool-box/",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "productivity"
+      ],
+      "icon_url": "https://i.imgur.com/h8qNE8R.jpeg",
+      "cover_image": "https://i.imgur.com/7MZfruk.jpeg",
+      "media": [
+        "https://i.imgur.com/vvfIXzF.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "Super Task Planner",
+      "description": "Take control of your day with a powerful **task planner** that combines time tracking, notes, and smart planning in one place.\n\nStay focused, organized, and productive by managing everything from quick ideas to detailed schedules effortlessly.\n\n## ✨ Key Features\n- Plan and organize tasks with ease  \n- Track time spent on tasks for better productivity  \n- Add notes to capture ideas and important details  \n- Manage daily schedules and priorities  \n- Clean and distraction-free interface  \n\n## 🚀 Why You'll Love It\n*All-in-one solution for planning, tracking, and organizing your work.*  \n\nStay on top of your time and tasks — and get more done with less stress.",
+      "url": "https://app.super-productivity.com/",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "productivity"
+      ],
+      "icon_url": "https://i.imgur.com/uxiKN5v.jpeg",
+      "cover_image": "https://i.imgur.com/mgbS8n7.jpeg",
+      "media": [
+        "https://i.imgur.com/wBLkavK.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "Focus App",
+      "description": "Stay in the zone and boost your productivity with a powerful **focus app** designed around proven techniques and seamless music integration.\n\nWork smarter with structured sessions, balanced breaks, and the perfect soundtrack to keep you going.\n\n## ✨ Key Features\n- Pomodoro timer for focused work sessions  \n- Short and long break management  \n- Seamless Spotify integration for music while working  \n- Customizable session durations  \n- Minimal and distraction-free interface  \n\n## 🚀 Why You'll Love It\n*Designed to help you focus deeply and recharge effectively.*  \n\nFind your rhythm, stay consistent, and make every session count.",
+      "url": "https://studywithme.io/aesthetic-pomodoro-timer/",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "productivity"
+      ],
+      "icon_url": "https://i.imgur.com/s35xfa0.jpeg",
+      "cover_image": "https://i.imgur.com/s9vFGBp.jpeg",
+      "media": [
+        "https://i.imgur.com/Au8YYxd.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "Group Expense Tracker",
+      "description": "Manage shared expenses effortlessly with a smart **expense tracker** built for groups and contributions.\n\nWhether you're splitting bills, trips, or shared costs, keep everything transparent and fair for everyone involved.\n\n## ✨ Key Features\n- Add group expenses and track contributions  \n- Split costs equally or with custom shares  \n- Track who paid and who owes  \n- View balances between group members  \n- Simple and clear interface for easy management  \n\n## 🚀 Why You'll Love It\n*Perfect for trips, roommates, and team expenses.*  \n\nNo more confusion — settle up quickly and keep things fair.",
+      "url": "https://grouptabs.5apps.com/",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "productivity"
+      ],
+      "icon_url": "https://i.imgur.com/DzimFbQ.jpeg",
+      "cover_image": "https://i.imgur.com/pOSRih9.jpeg",
+      "media": [
+        "https://i.imgur.com/5cEet6j.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "PDF Editor",
+      "description": "Edit and manage your documents with ease using a powerful **PDF editor** built for simplicity and control.\n\nFrom quick changes to detailed edits, handle your PDFs without hassle in a clean and efficient workspace.\n\n## ✨ Key Features\n- Edit text and content within PDF files  \n- Add, remove, or rearrange pages  \n- Highlight, annotate, and add notes  \n- Merge and split PDF documents  \n- Fast and intuitive interface  \n\n## 🚀 Why You'll Love It\n*Everything you need to work with PDFs in one place.*  \n\nMake document editing simple, quick, and stress-free.",
+      "url": "https://app.embedpdf.com/",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "productivity"
+      ],
+      "icon_url": "https://i.imgur.com/10tfFYM.jpeg",
+      "cover_image": "https://i.imgur.com/vM46ZFh.jpeg",
+      "media": [
+        "https://i.imgur.com/zen05RI.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "Emojify Text",
+      "description": "Add a fun twist to your messages with a creative **text to emoji converter**.\n\nTransform plain text into expressive and playful emoji-filled content in seconds.\n\n## ✨ Key Features\n- Convert text into fun and relevant emojis  \n- Enhance messages with expressive symbols  \n- Quick and instant conversion  \n- Simple and interactive interface  \n- Copy and share results easily  \n\n## 🚀 Why You'll Love It\n*Make your conversations more lively and engaging.*  \n\nTurn ordinary text into something fun, expressive, and full of personality.",
+      "url": "https://madelinemiller.dev/apps/emojify/",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "design"
+      ],
+      "icon_url": "https://i.imgur.com/S6Xn3pI.jpeg",
+      "cover_image": "https://i.imgur.com/hRX9dmQ.jpeg",
+      "media": [
+        "https://i.imgur.com/8F4XHTs.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "PixelCraft",
+      "description": "Create stunning retro-style visuals with a powerful **pixel art editor** designed for precision and creativity.\n\nBring your ideas to life one pixel at a time with tools built for artists, designers, and hobbyists.\n\n## ✨ Key Features\n- Draw and edit pixel art with precision tools  \n- Custom grid and canvas size control  \n- Color palette management for consistent design  \n- Zoom and detail-focused editing  \n- Export your creations easily  \n\n## 🚀 Why You'll Love It\n*Perfect for creating sprites, icons, and retro-style artwork.*  \n\nTurn simple pixels into detailed masterpieces with complete control.",
+      "url": "https://pixelcraft.web.app/",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "design"
+      ],
+      "icon_url": "https://i.imgur.com/8LitPkm.jpeg",
+      "cover_image": "https://i.imgur.com/JS60dL8.jpeg",
+      "media": [
+        "https://i.imgur.com/KdJ5VrJ.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "3D Designer",
+      "description": "Design and visualize in three dimensions with a powerful **3D designer** built for creativity and precision.\n\nCreate models, shapes, and scenes effortlessly with intuitive tools that make 3D design accessible and fun.\n\n## ✨ Key Features\n- Create and edit 3D models with ease  \n- Use shapes, textures, and transformations  \n- Rotate, scale, and position objects freely  \n- Real-time preview of your designs  \n- Export models for further use  \n\n## 🚀 Why You'll Love It\n*Perfect for beginners and creators exploring 3D design.*  \n\nBring your ideas into the third dimension and design without limits.",
+      "url": "https://chili3d.com/",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "design"
+      ],
+      "icon_url": "https://i.imgur.com/8F3mXXI.jpeg",
+      "cover_image": "https://i.imgur.com/uOckT2m.jpeg",
+      "media": [
+        "https://i.imgur.com/mLGci1T.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "Text to Handwriting",
+      "description": "Convert digital text into realistic handwritten notes with a smart **text to handwriting** tool.\n\nGive your content a personal touch by transforming typed text into natural-looking handwriting styles.\n\n## ✨ Key Features\n- Convert text into realistic handwriting styles  \n- Choose from multiple fonts and writing formats  \n- Customize spacing, size, and alignment  \n- Generate notes for assignments or personal use  \n- Export as image or document  \n\n## 🚀 Why You'll Love It\n*Perfect for creating handwritten notes without writing by hand.*  \n\nMake your text feel more personal, natural, and visually appealing.",
+      "url": "https://saurabhdaware.github.io/text-to-handwriting/",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "design"
+      ],
+      "icon_url": "https://i.imgur.com/ckM0YK5.jpeg",
+      "cover_image": "https://i.imgur.com/PE8DUt4.jpeg",
+      "media": [
+        "https://i.imgur.com/b4y7zPn.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "Meme Generator",
+      "description": "Create hilarious and shareable content instantly with a fun and easy-to-use **meme generator**.\n\nTurn your ideas into memes in seconds using popular templates or your own images.\n\n## ✨ Key Features\n- Choose from a wide range of meme templates  \n- Add custom text with flexible positioning  \n- Upload your own images for unique memes  \n- Quick editing with instant preview  \n- Download and share memes easily  \n\n## 🚀 Why You'll Love It\n*Perfect for making jokes, reactions, and viral content.*  \n\nExpress your humor and creativity with memes that stand out.",
+      "url": "https://georapbox.github.io/meme-generator/",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "design"
+      ],
+      "icon_url": "https://i.imgur.com/ryOD2lu.jpeg",
+      "cover_image": "https://i.imgur.com/MUWHnuI.jpeg",
+      "media": [
+        "https://i.imgur.com/izCEyjt.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "AI Image Generator",
+      "description": "Turn your ideas into stunning visuals with a powerful **AI image generator**.\n\nSimply describe what you want, and watch it transform into unique, high-quality images in seconds.\n\n## ✨ Key Features\n- Generate images from text prompts  \n- Create unique and artistic visuals instantly  \n- Multiple styles and variations to choose from  \n- High-quality output for downloads and sharing  \n- Fast and intuitive interface  \n\n## 🚀 Why You'll Love It\n*No design skills needed — just imagine and create.*  \n\nBring your creativity to life with AI-powered image generation.",
+      "url": "https://ai-image-studio-app.vercel.app/generate",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "design"
+      ],
+      "icon_url": "https://i.imgur.com/5DLIzx4.jpeg",
+      "cover_image": "https://i.imgur.com/FVNqNNJ.jpeg",
+      "media": [
+        "https://i.imgur.com/a25fvBE.jpeg",
+        "https://i.imgur.com/vRH1Ffw.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "Bubbl",
+      "description": "Organize your thoughts and spark creativity with a powerful **mind-mapping tool** designed for brainstorming and idea planning.\n\nVisualize ideas clearly and connect concepts effortlessly in an interactive workspace.\n\n## ✨ Key Features\n- Create and expand mind maps easily  \n- Add and connect ideas with flexible nodes  \n- Organize thoughts visually for better clarity  \n- Plan projects and brainstorm effectively  \n- Clean and interactive interface  \n\n## 🚀 Why You'll Love It\n*Perfect for brainstorming, planning, and creative thinking.*  \n\nTurn scattered ideas into structured and meaningful visuals.",
+      "url": "https://bubbl.us/start",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "productivity"
+      ],
+      "icon_url": "https://i.imgur.com/tAk4fx2.jpeg",
+      "cover_image": "https://i.imgur.com/zK4oSuw.jpeg",
+      "media": [
+        "https://i.imgur.com/5vVcMQ5.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "Sketchpad",
+      "description": "Create stunning digital artwork with a versatile **sketchpad** built for creativity and flexibility.\n\nDraw, design, and export your creations in multiple formats for use anywhere.\n\n## ✨ Key Features\n- Draw and paint with a variety of tools  \n- Use shapes, brushes, and text options  \n- Customize colors and strokes easily  \n- Export artwork in `JPEG`, `PNG`, `SVG`, and `PDF` formats  \n- Smooth and responsive drawing experience  \n\n## 🚀 Why You'll Love It\n*Perfect for artists, designers, and creative enthusiasts.*  \n\nBring your ideas to life and export them in the format you need.",
+      "url": "https://sketch.io/sketchpad/",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "design"
+      ],
+      "icon_url": "https://i.imgur.com/l6xftN1.jpeg",
+      "cover_image": "https://i.imgur.com/Pd3jOIw.jpeg",
+      "media": [
+        "https://i.imgur.com/1LnuQ4O.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "SVG Editor",
+      "description": "Create and edit scalable graphics with a powerful **SVG editor and viewer** designed for precision and flexibility.\n\nWork with vector drawings effortlessly and build visuals that stay sharp at any size.\n\n## ✨ Key Features\n- Create and edit SVG vector graphics  \n- View and inspect SVG files in detail  \n- Draw shapes, paths, and custom designs  \n- Modify colors, strokes, and properties  \n- Export and use SVG files across projects  \n\n## 🚀 Why You'll Love It\n*Perfect for designers and developers working with vector graphics.*  \n\nDesign once and scale infinitely without losing quality.",
+      "url": "https://editor.method.ac/",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "design"
+      ],
+      "icon_url": "https://i.imgur.com/saREbIc.jpeg",
+      "cover_image": "https://i.imgur.com/h2pOrNB.jpeg",
+      "media": [
+        "https://i.imgur.com/S4IkKK2.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "Minifier",
+      "description": "Optimize and validate your code effortlessly with an all-in-one **minifier** designed for performance and accuracy.\n\nReduce file sizes and ensure clean code across multiple formats in one place.\n\n## ✨ Key Features\n- Minify `HTML`, `CSS`, and `JS` instantly  \n- Validate code for errors and best practices  \n- Reduce file size for faster load times  \n- Improve performance and efficiency  \n- Simple and fast interface  \n\n## 🚀 Why You'll Love It\n*Perfect for developers optimizing web performance.*  \n\nMake your code lighter, faster, and production-ready in seconds.",
+      "url": "https://www.minifier.org/",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "developer"
+      ],
+      "icon_url": "https://i.imgur.com/FZGGz3L.jpeg",
+      "cover_image": "https://i.imgur.com/aG86JgM.jpeg",
+      "media": [
+        "https://i.imgur.com/HSstBhx.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "UUID Generator",
+      "description": "Generate unique identifiers and encode them securely with a powerful **UUID/GUID generator** featuring base64 support.\n\nCreate reliable IDs and transform them into encoded formats for safe and efficient usage.\n\n## ✨ Key Features\n- Generate `UUID` and `GUID` instantly  \n- Convert identifiers to base64 encoding  \n- Fast and secure generation process  \n- Copy results with a single click  \n- Clean and minimal interface  \n\n## 🚀 Why You'll Love It\n*Perfect for developers working with unique identifiers and encoding.*  \n\nCreate, encode, and use IDs effortlessly in your workflows.",
+      "url": "https://guidgenerator.com/",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "developer"
+      ],
+      "icon_url": "https://i.imgur.com/P22a99O.jpeg",
+      "cover_image": "https://i.imgur.com/ZPNZsHa.jpeg",
+      "media": [
+        "https://i.imgur.com/C4nPNPp.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "Hash and Encrypt",
+      "description": "Secure your data with a powerful **hash and encryption tool** built for reliability and ease of use.\n\nGenerate hashes and encrypt sensitive information quickly with support for multiple algorithms.\n\n## ✨ Key Features\n- Generate hashes using algorithms like `MD5`, `SHA-1`, and `SHA-256`  \n- Encrypt and decrypt data securely  \n- Verify data integrity with hash comparison  \n- Fast processing with accurate results  \n- Clean and developer-friendly interface  \n\n## 🚀 Why You'll Love It\n*Perfect for securing data and verifying integrity.*  \n\nProtect your information and work with confidence.",
+      "url": "https://emn178.github.io/online-tools/sha256.html",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "developer"
+      ],
+      "icon_url": "https://i.imgur.com/pfJhGEC.jpeg",
+      "cover_image": "https://i.imgur.com/ZPhCU95.jpeg",
+      "media": [
+        "https://i.imgur.com/jKSJCbg.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "AI Code Generator",
+      "description": "Write code faster and smarter with a powerful **AI code generator** designed to turn ideas into working solutions instantly.\n\nDescribe what you need, and get clean, ready-to-use code across multiple languages.\n\n## ✨ Key Features\n- Generate code from simple prompts  \n- Support for multiple programming languages  \n- Create functions, scripts, and full components  \n- Get clean and optimized code output  \n- Fast and intuitive interface  \n\n## 🚀 Why You'll Love It\n*Perfect for speeding up development and reducing repetitive work.*  \n\nTurn your ideas into code in seconds and boost your productivity.",
+      "url": "https://zzzcode.ai/code-generator",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "developer"
+      ],
+      "icon_url": "https://i.imgur.com/fOMWogy.jpeg",
+      "cover_image": "https://i.imgur.com/lVTUFds.jpeg",
+      "media": [
+        "https://i.imgur.com/G98aFpr.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "URL Encoder/Decoder",
+      "description": "Encode and decode URLs effortlessly with a simple and reliable **URL encoder/decoder**.\n\nHandle special characters safely and ensure your URLs are properly formatted for web usage.\n\n## ✨ Key Features\n- Encode URLs to make them web-safe  \n- Decode encoded URLs instantly  \n- Handle special characters and query strings  \n- Quick and accurate conversions  \n- Clean and minimal interface  \n\n## 🚀 Why You'll Love It\n*Perfect for developers working with web requests and APIs.*  \n\nSimplify URL handling and avoid encoding errors with ease.",
+      "url": "https://www.utilities-online.info/urlencode",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "developer"
+      ],
+      "icon_url": "https://i.imgur.com/k5RZWXG.jpeg",
+      "cover_image": "https://i.imgur.com/JtnMs1J.jpeg",
+      "media": [
+        "https://i.imgur.com/pJDYXhT.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "Base64 Image Viewer",
+      "description": "View and decode images instantly with a simple and efficient **base64 image viewer**.\n\nConvert base64 strings into visible images and inspect them without any extra tools.\n\n## ✨ Key Features\n- Decode base64 strings into images  \n- Preview images instantly in the browser  \n- Support for multiple image formats  \n- Quick and accurate rendering  \n- Clean and minimal interface  \n\n## 🚀 Why You'll Love It\n*Perfect for developers working with encoded image data.*  \n\nTurn encoded strings into clear visuals in seconds.",
+      "url": "https://base64-viewer.onrender.com/",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "developer"
+      ],
+      "icon_url": "https://i.imgur.com/QoSkUM6.jpeg",
+      "cover_image": "https://i.imgur.com/98yWphT.jpeg",
+      "media": [
+        "https://i.imgur.com/DPK94Ix.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "Android Asset Studio",
+      "description": "Create polished app assets effortlessly with a powerful **Android asset studio** designed for developers.\n\nGenerate icons and visual resources that follow platform guidelines with ease.\n\n## ✨ Key Features\n- Generate launcher icons for Android apps  \n- Create adaptive and legacy icons  \n- Customize shapes, colors, and backgrounds  \n- Export assets in required resolutions  \n- Simple and guided interface  \n\n## 🚀 Why You'll Love It\n*Perfect for building professional app visuals quickly.*  \n\nDesign and export ready-to-use assets without manual effort.",
+      "url": "https://romannurik.github.io/AndroidAssetStudio/",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "developer"
+      ],
+      "icon_url": "https://i.imgur.com/Evs7VHQ.jpeg",
+      "cover_image": "https://i.imgur.com/yjwVMrH.jpeg",
+      "media": [
+        "https://i.imgur.com/tWdMYhP.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "Ba Ba Dum",
+      "description": "Learn new languages in a fun and interactive way with a dynamic **language learning platform** designed around games and visual learning.\n\nExplore multiple languages while playing engaging mini-games that make learning feel effortless.\n\n## ✨ Key Features\n- Learn across 9 different languages  \n- Play 5 interactive learning games  \n- Visual and intuitive learning approach  \n- Improve vocabulary and recognition skills  \n- Simple and engaging interface  \n\n## 🚀 Why You'll Love It\n*Perfect for beginners and casual learners.*  \n\nTurn language learning into a fun and addictive experience.",
+      "url": "https://babadum.com/play/",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "education"
+      ],
+      "icon_url": "https://i.imgur.com/JaltK9J.jpeg",
+      "cover_image": "https://i.imgur.com/fDqz4yQ.jpeg",
+      "media": [
+        "https://i.imgur.com/RtBOEsj.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "OneLook Dictionary",
+      "description": "Find meanings, definitions, and usage instantly with a fast and reliable **dictionary app**.\n\nUnderstand words better and expand your vocabulary with clear and accurate explanations.\n\n## ✨ Key Features\n- Search word meanings instantly  \n- View definitions, synonyms, and usage  \n- Learn pronunciation and word forms  \n- Quick and accurate results  \n- Clean and easy-to-use interface  \n\n## 🚀 Why You'll Love It\n*Perfect for learning new words and improving language skills.*  \n\nBuild your vocabulary and understand language with ease.",
+      "url": "https://www.onelook.com/",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "education"
+      ],
+      "icon_url": "https://i.imgur.com/rDhTWUR.jpeg",
+      "cover_image": "https://i.imgur.com/cxDONAe.jpeg",
+      "media": [
+        "https://i.imgur.com/BBkdTly.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "Keep Formula",
+      "description": "Solve everyday problems with ease using a versatile **calculator hub** that brings multiple tools into one place.\n\nAccess a wide range of calculators across different categories to handle everything from health to design and beyond.\n\n## ✨ Key Features\n- Collection of calculators for health, unit conversion, and more  \n- Tools for design and 3D printing calculations  \n- Quick and accurate results  \n- Easy switching between different calculator types  \n- Clean and organized interface  \n\n## 🚀 Why You'll Love It\n*Perfect for handling multiple calculations without switching apps.*  \n\nGet the right answers quickly, no matter the category.",
+      "url": "https://keepformula.github.io/",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "education"
+      ],
+      "icon_url": "https://i.imgur.com/cXWx8C1.jpeg",
+      "cover_image": "https://i.imgur.com/XGd7PKb.jpeg",
+      "media": [
+        "https://i.imgur.com/PsYGF4v.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "Math is Fun",
+      "description": "Learn math the fun and simple way with an engaging **learning platform** designed for students, teachers, and parents.\n\nExplore concepts through clear explanations, interactive activities, and visual learning tools.\n\n## ✨ Key Features\n- Math concepts explained in easy language  \n- Interactive puzzles and games for practice  \n- Printable worksheets for learning and revision  \n- Illustrated dictionary for better understanding  \n- Suitable for K-12 students and educators  \n\n## 🚀 Why You'll Love It\n*Perfect for making math easy, enjoyable, and accessible.*  \n\nBuild strong math skills through fun, clarity, and practice.",
+      "url": "https://www.mathsisfun.com/index.htm",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "education"
+      ],
+      "icon_url": "https://i.imgur.com/3O8bvsE.jpeg",
+      "cover_image": "https://i.imgur.com/m4QDuCM.jpeg",
+      "media": [
+        "https://i.imgur.com/gVgtFvH.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "3D Physics Simulator",
+      "description": "Explore motion, forces, and interactions in a dynamic **3D physics simulator** built for experimentation and learning.\n\nVisualize real-world physics concepts in an interactive environment and test ideas in real time.\n\n## ✨ Key Features\n- Simulate objects and physics in a 3D space  \n- Experiment with forces, gravity, and motion  \n- Real-time interaction and visual feedback  \n- Adjustable parameters for custom simulations  \n- Smooth and immersive interface  \n\n## 🚀 Why You'll Love It\n*Perfect for learning, testing, and exploring physics concepts.*  \n\nSee physics in action and understand how the world works through simulation.",
+      "url": "https://www.new3jcn.com/simulation.html",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "education"
+      ],
+      "icon_url": "https://i.imgur.com/wB8WebJ.jpeg",
+      "cover_image": "https://i.imgur.com/cUQGviL.jpeg",
+      "media": [
+        "https://i.imgur.com/fk8lStl.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "Circuit Simulator",
+      "description": "Build and test digital circuits with an interactive **circuit simulator** designed for logic gate experimentation.\n\nCreate and visualize how circuits work using fundamental components like AND, OR, and more.\n\n## ✨ Key Features\n- Simulate logic gates like `AND`, `OR`, `NOT`, and more  \n- Build circuits on an interactive board  \n- Visualize signal flow and outputs in real-time  \n- Experiment with different logic combinations  \n- Simple and educational interface  \n\n## 🚀 Why You'll Love It\n*Perfect for learning digital electronics and logic design.*  \n\nUnderstand circuits better by building and testing them visually.",
+      "url": "https://simulator.io/board",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "education"
+      ],
+      "icon_url": "https://i.imgur.com/tJDG2SR.jpeg",
+      "cover_image": "https://i.imgur.com/xHyDwB3.jpeg",
+      "media": [
+        "https://i.imgur.com/pIAggRS.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "Flowchart Maker",
+      "description": "Design clear and structured diagrams with an intuitive **flow chart maker** built for planning and visualization.\n\nMap out processes, ideas, and workflows effortlessly using simple and flexible tools.\n\n## ✨ Key Features\n- Create flowcharts with drag-and-drop elements  \n- Use shapes, connectors, and labels easily  \n- Organize processes and workflows visually  \n- Customize layouts and structure  \n- Clean and easy-to-use interface  \n\n## 🚀 Why You'll Love It\n*Perfect for planning, documentation, and problem solving.*  \n\nTurn complex ideas into simple and understandable diagrams.",
+      "url": "https://flow-chart.vercel.app/",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "education"
+      ],
+      "icon_url": "https://i.imgur.com/ODRGzMc.jpeg",
+      "cover_image": "https://i.imgur.com/Zawh00d.jpeg",
+      "media": [
+        "https://i.imgur.com/f5FoPEw.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "Anime Openings",
+      "description": "Enjoy nonstop anime vibes with a dedicated **anime openings and endings platform** built for fans.\n\nStream, explore, and download your favorite anime music and videos in one place.\n\n## ✨ Key Features\n- Listen to free anime radio anytime  \n- Browse a wide collection of openings and endings  \n- Watch or download videos easily  \n- Discover new anime music and tracks  \n- Simple and user-friendly interface  \n\n## 🚀 Why You'll Love It\n*Perfect for anime lovers and music enthusiasts.*  \n\nRelive your favorite anime moments through music and visuals.",
+      "url": "https://openings.moe/",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "media"
+      ],
+      "icon_url": "https://i.imgur.com/UJHfrK5.jpeg",
+      "cover_image": "https://i.imgur.com/JWSeaOL.jpeg",
+      "media": [
+        "https://i.imgur.com/Tlrfqa2.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "Anime Music",
+      "description": "Tune into your favorite tracks with a nonstop **anime music radio** streaming openings, endings, and iconic soundtracks.\n\nEnjoy continuous music from your favorite shows without interruptions.\n\n## ✨ Key Features\n- 24/7 anime music streaming  \n- Play openings, endings, and OSTs  \n- Discover new tracks and artists  \n- Smooth and uninterrupted playback  \n- Simple and clean interface  \n\n## 🚀 Why You'll Love It\n*Perfect for anime fans who love music.*  \n\nStay immersed in anime vibes anytime, anywhere.",
+      "url": "https://ongaku.js.org/",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "media"
+      ],
+      "icon_url": "https://i.imgur.com/DvAKk75.jpeg",
+      "cover_image": "https://i.imgur.com/ZBQQyzP.jpeg",
+      "media": [
+        "https://i.imgur.com/fklywm4.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "Live TV",
+      "description": "Watch channels from around the world with a seamless **live TV streaming platform**.\n\nExplore global broadcasts and switch between channels effortlessly in real time.\n\n## ✨ Key Features\n- Stream live TV channels worldwide  \n- Discover content from different countries  \n- Smooth channel switching  \n- Real-time streaming experience  \n- Clean and easy-to-use interface  \n\n## 🚀 Why You'll Love It\n*Perfect for exploring global television and live content.*  \n\nTune in anytime and experience TV without borders.",
+      "url": "https://famelack.com/",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "media"
+      ],
+      "icon_url": "https://i.imgur.com/ym9q74f.jpeg",
+      "cover_image": "https://i.imgur.com/oNdmbIc.jpeg",
+      "media": [
+        "https://i.imgur.com/e4GThOE.jpeg",
+        "https://i.imgur.com/8sbVf3O.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "Audio Mass",
+      "description": "Edit your audio effortlessly with a powerful **audio editor** built for precision and creativity.\n\nCut, refine, and enhance your sound with tools designed for both quick edits and detailed work.\n\n## ✨ Key Features\n- Cut and trim audio clips easily  \n- Merge multiple audio files seamlessly  \n- Apply effects and enhancements  \n- Adjust volume and fine-tune sound  \n- Clean and intuitive interface  \n\n## 🚀 Why You'll Love It\n*Perfect for editing music, voice recordings, and more.*  \n\nShape your sound exactly the way you want with ease.",
+      "url": "https://audiomass.co/",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "media"
+      ],
+      "icon_url": "https://i.imgur.com/7r231ff.jpeg",
+      "cover_image": "https://i.imgur.com/fMe3QUC.jpeg",
+      "media": [
+        "https://i.imgur.com/9EWUqLK.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "OpenCut",
+      "description": "Create and edit videos effortlessly with a powerful **video editor** designed for smooth and flexible editing.\n\nTrim, combine, and enhance your videos with intuitive tools that make editing simple and efficient.\n\n## ✨ Key Features\n- Cut, trim, and merge video clips  \n- Add transitions and basic effects  \n- Adjust audio and video settings  \n- Export videos in multiple formats  \n- Clean and user-friendly interface  \n\n## 🚀 Why You'll Love It\n*Perfect for quick edits and creative projects.*  \n\nBring your videos to life with easy and effective editing tools.",
+      "url": "https://opencut.app/projects",
+      "allowIframe": true,
+      "showCursor": true,
+      "featured": true,
+      "tags": [
+        "media"
+      ],
+      "icon_url": "https://i.imgur.com/eAf6xuQ.jpeg",
+      "cover_image": "https://i.imgur.com/9nvIYHn.jpeg",
+      "media": [
+        "https://i.imgur.com/TmpEjCV.jpeg",
+        "https://i.imgur.com/C2Twkvq.jpeg",
+        "https://i.imgur.com/9ZCr6cM.jpeg"
+      ]
+    },
+    {
+      "name": "VERT",
+      "description": "Convert your media effortlessly with a powerful **all-in-one media converter** designed for speed and flexibility.\n\nHandle videos, audio, images, and documents in one place with smooth and reliable conversions.\n\n## ✨ Key Features\n- Convert video, audio, image, and document files  \n- Support for multiple formats and outputs  \n- Fast and efficient processing  \n- Maintain quality during conversion  \n- Simple and user-friendly interface  \n\n## 🚀 Why You'll Love It\n*Perfect for handling all your conversion needs in one tool.*  \n\nSave time and convert files seamlessly without switching between apps.",
+      "url": "https://vert.sh/convert/",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "media"
+      ],
+      "icon_url": "https://i.imgur.com/VtEwcx6.jpeg",
+      "cover_image": "https://i.imgur.com/humdbrW.jpeg",
+      "media": [
+        "https://i.imgur.com/g3Wt9FT.jpeg",
+        "https://i.imgur.com/PX1Nf3Q.jpeg",
+        "https://i.imgur.com/ytQIqHa.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "Worldwide Radio",
+      "description": "Explore global music and broadcasts with an interactive **worldwide radio app** that lets you tune in directly from a 3D globe.\n\nNavigate the earth, pick a location, and instantly start listening to radio stations from around the world.\n\n## ✨ Key Features\n- Interactive globe to browse radio stations  \n- Listen to stations from different countries  \n- Smooth and immersive navigation experience  \n- Discover new music and cultures  \n- Clean and engaging interface  \n\n## 🚀 Why You'll Love It\n*Perfect for exploring global audio and discovering new sounds.*  \n\nTravel the world through radio — one station at a time.",
+      "url": "https://www.radio-browser.info/map",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "media"
+      ],
+      "icon_url": "https://i.imgur.com/pu4XuTO.jpeg",
+      "cover_image": "https://i.imgur.com/bkYPraD.jpeg",
+      "media": [
+        "https://i.imgur.com/RhkwAEa.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "PokeTube",
+      "description": "Watch videos without distractions using a clean and privacy-focused **video streaming interface**.\n\nEnjoy a lightweight experience with fast loading and a focus on content, not ads.\n\n## ✨ Key Features\n- Ad-free video viewing experience  \n- Clean and minimal interface  \n- Faster loading and reduced data usage  \n- Focus on privacy and simplicity  \n- Search and watch videos easily  \n\n## 🚀 Why You'll Love It\n*Perfect for distraction-free video watching.*  \n\nEnjoy content the way it should be — simple, fast, and clean.",
+      "url": "https://poketube.fun/search",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "media"
+      ],
+      "icon_url": "https://i.imgur.com/JjQQiZH.jpeg",
+      "cover_image": "https://i.imgur.com/TNY2R1K.jpeg",
+      "media": [
+        "https://i.imgur.com/G7MuPwo.jpeg",
+        "https://i.imgur.com/8jQes26.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "Musical Piano",
+      "description": "Play and experiment with sounds using a fun and versatile **musical piano** packed with creative effects.\n\nTurn simple notes into unique audio experiences with a wide range of instrument and sound options.\n\n## ✨ Key Features\n- Play piano with an interactive keyboard  \n- Apply fun effects like cat voice, fart, guitar, violin, and more  \n- Switch between different instruments easily  \n- Real-time sound playback  \n- Simple and playful interface  \n\n## 🚀 Why You'll Love It\n*Perfect for fun, creativity, and musical exploration.*  \n\nTransform your music into something unique and entertaining.",
+      "url": "https://app-188896.games.s3.yandex.net/188896/z8iwcfuuprqg07y4d57s0yv1vpchf7f1_brotli/index.html?sdk=%2Fsdk%2F_%2Fv2.c9dd7fdd48522a0f7d44.js#origin=https%3A%2F%2Fplayhop.com&app-id=188896&device-type=desktop",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "media"
+      ],
+      "icon_url": "https://i.imgur.com/XaYQDe2.jpeg",
+      "cover_image": "https://i.imgur.com/mK94hug.jpeg",
+      "media": [
+        "https://i.imgur.com/p0X8qod.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "Voice Changer",
+      "description": "Transform your voice instantly with a fun and powerful **voice changer** packed with creative effects.\n\nExperiment with different styles and turn your voice into something completely new.\n\n## ✨ Key Features\n- Apply effects like robot, hacker, sonic, alien, and more  \n- Real-time voice transformation  \n- Record and playback modified audio  \n- Multiple voice styles to explore  \n- Simple and interactive interface  \n\n## 🚀 Why You'll Love It\n*Perfect for fun, content creation, and experimentation.*  \n\nMake your voice sound unique and bring your creativity to life.",
+      "url": "https://voicechanger.io/",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "media"
+      ],
+      "icon_url": "https://i.imgur.com/rjaJdYT.jpeg",
+      "cover_image": "https://i.imgur.com/OHpCkmL.jpeg",
+      "media": [
+        "https://i.imgur.com/R4T99VL.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "Pixect",
+      "description": "Capture fun moments with a creative **camera app** packed with filters and effects.\n\nAdd personality to your photos and videos with a wide range of playful visual styles.\n\n## ✨ Key Features\n- Apply live camera filters and effects  \n- Use funny and creative visual styles  \n- Capture photos directly from your camera  \n- Real-time preview while applying effects  \n- Simple and interactive interface  \n\n## 🚀 Why You'll Love It\n*Perfect for fun selfies and creative shots.*  \n\nTurn everyday moments into something entertaining and unique.",
+      "url": "https://www.pixect.com/",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "media"
+      ],
+      "icon_url": "https://i.imgur.com/neVQNnf.jpeg",
+      "cover_image": "https://i.imgur.com/eYVDRoI.jpeg",
+      "media": [
+        "https://i.imgur.com/5IyHDw1.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "Maps",
+      "description": "Navigate the world with ease using a smart and reliable **maps app** designed for accurate directions and exploration.\n\nFind places, plan routes, and discover new locations with a smooth and intuitive experience.\n\n## ✨ Key Features\n- Get real-time directions and navigation  \n- Search for places, businesses, and landmarks  \n- Explore nearby locations easily  \n- View maps with zoom and interactive controls  \n- Fast and responsive interface  \n\n## 🚀 Why You'll Love It\n*Perfect for travel, daily navigation, and exploration.*  \n\nReach your destination faster and discover more along the way.",
+      "url": "https://marco.kosmos.org/",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "utility"
+      ],
+      "icon_url": "https://i.imgur.com/2MoAY2T.jpeg",
+      "cover_image": "https://i.imgur.com/C62DsOp.jpeg",
+      "media": [
+        "https://i.imgur.com/RQwMZC9.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "Password Generator",
+      "description": "Create strong and secure passwords instantly with a reliable **password generator** built for safety and convenience.\n\nGenerate random passwords that help protect your accounts and sensitive data.\n\n## ✨ Key Features\n- Generate strong and random passwords  \n- Customize length and character types  \n- Include letters, numbers, and symbols  \n- One-click copy for quick use  \n- Clean and simple interface  \n\n## 🚀 Why You'll Love It\n*Perfect for improving your online security.*  \n\nProtect your accounts with powerful passwords in seconds.",
+      "url": "https://gkvgk2001.github.io/Password-Generator/",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "utility"
+      ],
+      "icon_url": "https://i.imgur.com/NU5bJth.jpeg",
+      "cover_image": "https://i.imgur.com/wRjQjBw.jpeg",
+      "media": [
+        "https://i.imgur.com/edEi7Fp.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "URL Shortner",
+      "description": "Shorten long links instantly with a fast and efficient **URL shortener**.\n\nTurn lengthy URLs into clean and shareable links with ease.\n\n## ✨ Key Features\n- Convert long URLs into short links  \n- Easy copy and sharing options  \n- Quick and reliable link generation  \n- Clean and minimal interface  \n- Fast performance  \n\n## 🚀 Why You'll Love It\n*Perfect for sharing links in a clean and simple way.*  \n\nMake your links shorter, cleaner, and easier to share.",
+      "url": "https://v.gd/",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "utility"
+      ],
+      "icon_url": "https://i.imgur.com/Q0AeExi.jpeg",
+      "cover_image": "https://i.imgur.com/3zagjRh.jpeg",
+      "media": [
+        "https://i.imgur.com/zphVxqa.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "QR Code Generator",
+      "description": "Generate stylish and customizable codes with a powerful **QR code generator** designed for versatility and creativity.\n\nCreate QR codes for multiple use cases and make them visually appealing for sharing anywhere.\n\n## ✨ Key Features\n- Generate QR codes for text, `URL`, `phone`, `SMS`, `email`, `WiFi`, `location`, and `vCard`  \n- Customize colors, styles, and designs  \n- Instant preview and generation  \n- Download and share easily  \n- Fast and user-friendly interface  \n\n## 🚀 Why You'll Love It\n*Perfect for personal, business, and sharing needs.*  \n\nCreate functional and eye-catching QR codes in seconds.",
+      "url": "https://mini-qr-code-generator.vercel.app/",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "utility"
+      ],
+      "icon_url": "https://i.imgur.com/l4HmMkH.jpeg",
+      "cover_image": "https://i.imgur.com/b321MJt.jpeg",
+      "media": [
+        "https://i.imgur.com/uThcNgw.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "Minecraft",
+      "description": "Explore, build, and survive in an open world with a creative **sandbox game** full of endless possibilities.\n\nShape your environment, gather resources, and create anything you can imagine block by block.\n\n## ✨ Key Features\n- Build structures and worlds freely  \n- Explore vast and dynamic environments  \n- Gather resources and craft items  \n- Play in creative or survival modes  \n- Endless possibilities for creativity  \n\n## 🚀 Why You'll Love It\n*Perfect for creativity, exploration, and adventure.*  \n\nCreate your own world and play your way without limits.",
+      "url": "https://eaglercraftx.pages.dev/",
+      "allowIframe": true,
+      "showCursor": false,
+      "featured": false,
+      "tags": [
+        "game"
+      ],
+      "icon_url": "https://i.imgur.com/XeuvPod.jpeg",
+      "cover_image": "https://i.imgur.com/4rF05Jx.jpeg",
+      "media": [
+        "https://www.youtube.com/watch?v=7A5YWn33eps",
+        "https://i.imgur.com/EE5CHMm.jpeg",
+        "https://i.imgur.com/tW3ZWDk.jpeg"
+      ]
+    },
+    {
+      "name": "GTA VC",
+      "description": "Step into a vibrant open world with a classic **action-adventure game** set in a neon-lit city full of life and chaos.\n\nExperience a gripping story while exploring a dynamic environment inspired by retro vibes and endless possibilities.\n\n## ✨ Key Features\n- Open-world gameplay with full freedom  \n- Story-driven missions and side activities  \n- Drive vehicles and explore the city  \n- Engaging characters and narrative  \n- Action-packed gameplay experience  \n\n## 🚀 Why You'll Love It\n*Perfect for fans of open-world action and storytelling.*  \n\nDive into a world of crime, style, and unforgettable moments.",
+      "url": "https://vc.quenq.com/",
+      "allowIframe": true,
+      "showCursor": false,
+      "featured": true,
+      "tags": [
+        "game"
+      ],
+      "icon_url": "https://i.imgur.com/2x4vAbC.jpeg",
+      "cover_image": "https://i.imgur.com/PfELUiM.jpeg",
+      "media": [
+        "https://www.youtube.com/watch?v=BcqMaYdYow0",
+        "https://i.imgur.com/n0sPqjp.jpeg",
+        "https://i.imgur.com/pnT11ck.jpeg"
+      ]
+    },
+    {
+      "name": "Typing Tools",
+      "description": "Improve your typing skills with an all-in-one **typing tools** platform designed for learning, practice, and speed.\n\nBuild accuracy, increase speed, and make typing fun with interactive tools and exercises.\n\n## ✨ Key Features\n- Typing tutor for guided learning  \n- Practice touch typing techniques  \n- Fun typing games for skill improvement  \n- Speed and accuracy typing tests  \n- Progress tracking and performance insights  \n\n## 🚀 Why You'll Love It\n*Perfect for beginners and advanced users alike.*  \n\nType faster, smarter, and with confidence.",
+      "url": "https://rapidtyping.com/online-typing-test.html",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "utility"
+      ],
+      "icon_url": "https://i.imgur.com/2UKzWhf.jpeg",
+      "cover_image": "https://i.imgur.com/ZEbKXhi.jpeg",
+      "media": [
+        "https://i.imgur.com/Wma0tUw.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "WorldGuessr",
+      "description": "Test your geography skills with an exciting **location guessing game** based on real-world street views.\n\nExplore random places, analyze your surroundings, and guess where you are on the map.\n\n## ✨ Key Features\n- Guess locations using random street view scenes  \n- Explore real-world environments interactively  \n- Multiplayer mode to compete with others  \n- Score based on accuracy and distance  \n- Fun and engaging gameplay experience  \n\n## 🚀 Why You'll Love It\n*Perfect for geography lovers and competitive players.*  \n\nTravel the world virtually and challenge your knowledge.",
+      "url": "https://www.worldguessr.com/",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "education"
+      ],
+      "icon_url": "https://i.imgur.com/rL20ODL.jpeg",
+      "cover_image": "https://i.imgur.com/6P3I8C6.jpeg",
+      "media": [
+        "https://i.imgur.com/yO913EX.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "Gamepad Tester",
+      "description": "Test and fine-tune your controller with a powerful **gamepad tester** built for accuracy and performance analysis.\n\nCheck inputs, detect issues, and ensure your controller is working perfectly.\n\n## ✨ Key Features\n- Test buttons, triggers, and analog sticks  \n- Detect stick drift and input inconsistencies  \n- Calibrate controller for better accuracy  \n- Check polling rate and responsiveness  \n- Test vibration and feedback support  \n\n## 🚀 Why You'll Love It\n*Perfect for gamers and developers working with controllers.*  \n\nMake sure your gamepad performs at its best every time.",
+      "url": "https://controllertest.io/",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "utility"
+      ],
+      "icon_url": "https://i.imgur.com/nT5BQpR.jpeg",
+      "cover_image": "https://i.imgur.com/X0QOt1u.jpeg",
+      "media": [
+        "https://i.imgur.com/G4e3b2j.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "Scientific Calculator",
+      "description": "Perform advanced calculations with ease using a powerful **scientific calculator** built for precision and versatility.\n\nHandle everything from basic arithmetic to complex mathematical functions in one place.\n\n## ✨ Key Features\n- Perform basic and advanced calculations  \n- Support for trigonometry, logarithms, and powers  \n- Use constants like `π` and `e`  \n- Clean and responsive interface  \n- Fast and accurate results  \n\n## 🚀 Why You'll Love It\n*Perfect for students, engineers, and everyday calculations.*  \n\nSolve complex problems quickly and efficiently.",
+      "url": "https://sci-calculator.vercel.app/",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "utility"
+      ],
+      "icon_url": "https://i.imgur.com/TZBzKfq.jpeg",
+      "cover_image": "https://i.imgur.com/CKIlfcR.jpeg",
+      "media": [
+        "https://i.imgur.com/lxM2EAC.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "Text Compare",
+      "description": "Compare text instantly with a powerful **text compare tool** designed to highlight differences clearly.\n\nAnalyze changes between two pieces of text and spot edits with precision.\n\n## ✨ Key Features\n- Compare two texts side by side  \n- Highlight differences and changes clearly  \n- Detect additions, deletions, and modifications  \n- Fast and accurate comparison  \n- Clean and easy-to-use interface  \n\n## 🚀 Why You'll Love It\n*Perfect for developers, writers, and reviewers.*  \n\nFind differences quickly and review changes with confidence.",
+      "url": "https://diffviewer.vercel.app/",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "utility"
+      ],
+      "icon_url": "https://i.imgur.com/Aj3Zanw.jpeg",
+      "cover_image": "https://i.imgur.com/wpgucV5.jpeg",
+      "media": [
+        "https://i.imgur.com/rd5Rf4u.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "IP Tracker",
+      "description": "Track and analyze network details with a powerful **IP tracker** designed for quick and accurate insights.\n\nView your IP information or search any IP address to discover its location and network details.\n\n## ✨ Key Features\n- View your current IP address and details  \n- Search any IP to get location on the map  \n- Display ISP and network information  \n- Fast and accurate lookup  \n- Clean and informative interface  \n\n## 🚀 Why You'll Love It\n*Perfect for network diagnostics and information lookup.*  \n\nUnderstand IP details and locations with ease.",
+      "url": "https://ip-detective.vercel.app/",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "utility"
+      ],
+      "icon_url": "https://i.imgur.com/8XwC7lg.jpeg",
+      "cover_image": "https://i.imgur.com/8QpE03u.jpeg",
+      "media": [
+        "https://i.imgur.com/UmE7kRo.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "Egg Timer",
+      "description": "Manage your time effortlessly with a simple and flexible **online timer** built for quick use.\n\nSet timers in seconds and stay on track for tasks, workouts, or productivity sessions.\n\n## ✨ Key Features\n- Set custom timers quickly using simple input  \n- Supports multiple time formats  \n- Instant start with minimal setup  \n- Clean and distraction-free interface  \n- Fast and responsive performance  \n\n## 🚀 Why You'll Love It\n*Perfect for quick timing without complications.*  \n\nStay focused and manage your time with ease.",
+      "url": "https://e.ggtimer.com/",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "utility"
+      ],
+      "icon_url": "https://i.imgur.com/pJotaIk.jpeg",
+      "cover_image": "https://i.imgur.com/4h7G3w3.jpeg",
+      "media": [
+        "https://i.imgur.com/dVQNwsT.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "Flocus Stopwatch",
+      "description": "Stay focused and track time beautifully with an elegant **aesthetic stopwatch** designed for productivity and calm.\n\nCombine functionality with a visually pleasing experience that keeps you motivated and on track.\n\n## ✨ Key Features\n- Start, pause, and reset stopwatch easily  \n- Clean and aesthetic design for distraction-free use  \n- Smooth and accurate time tracking  \n- Minimal interface with calming visuals  \n- Responsive and easy-to-use controls  \n\n## 🚀 Why You'll Love It\n*Perfect for focus sessions, workouts, and daily timing.*  \n\nTrack your time in style and stay in the flow.",
+      "url": "https://flocus.com/aesthetic-stopwatch/",
+      "allowIframe": true,
+      "showCursor": true,
+      "featured": true,
+      "tags": [
+        "utility"
+      ],
+      "icon_url": "https://i.imgur.com/sigICYW.jpeg",
+      "cover_image": "https://i.imgur.com/cYhPhKn.jpeg",
+      "media": [
+        "https://i.imgur.com/m67c891.jpeg"
+      ]
+    },
+    {
+      "name": "Alarm Clock",
+      "description": "Wake up on time and stay organized with a reliable **alarm clock** designed for simplicity and consistency.\n\nSet alarms easily and manage your schedule with ease using a clean and focused interface.\n\n## ✨ Key Features\n- Set and manage multiple alarms  \n- Customize alarm times and labels  \n- Simple controls for quick setup  \n- Reliable and accurate alerts  \n- Clean and distraction-free interface  \n\n## 🚀 Why You'll Love It\n*Perfect for daily routines and time management.*  \n\nNever miss an important moment and stay on schedule effortlessly.",
+      "url": "https://alarm-clock-pi.vercel.app/",
+      "allowIframe": true,
+      "featured": false,
+      "tags": [
+        "utility"
+      ],
+      "icon_url": "https://i.imgur.com/nRmU0eT.jpeg",
+      "cover_image": "https://i.imgur.com/ALSQhfE.jpeg",
+      "media": [
+        "https://i.imgur.com/p9h0CMk.jpeg"
+      ],
+      "showCursor": true
+    },
+    {
+      "name": "Plants vs Zombies",
+      "description": "Defend your home with strategy and creativity in a fun and addictive **tower defense game**.\n\nUse a variety of unique plants to stop waves of quirky zombies from invading your yard.\n\n## ✨ Key Features\n- Strategic tower defense gameplay  \n- Wide variety of plants with unique abilities  \n- Different zombie types with challenging behaviors  \n- Progressive levels and increasing difficulty  \n- Fun and engaging visuals  \n\n## 🚀 Why You'll Love It\n*Perfect for strategy lovers and casual gamers.*  \n\nPlan, place, and protect your garden from the zombie invasion.",
+      "url": "https://en.gameslol.net/data/pvz/en/index.php",
+      "allowIframe": true,
+      "showCursor": true,
+      "featured": false,
+      "tags": [
+        "game"
+      ],
+      "icon_url": "https://i.imgur.com/ZvFvSQz.jpeg",
+      "cover_image": "https://i.imgur.com/M4ZALix.jpeg",
+      "media": [
+        "https://www.youtube.com/watch?v=CHAbHz8iYHc",
+        "https://i.imgur.com/yVcIeBk.jpeg",
+        "https://i.imgur.com/at0vpg0.jpeg"
+      ]
+    },
+    {
+      "name": "Decision Wheel",
+      "description": "Make decisions quickly and fairly with a versatile **random picker** designed for fun and utility.\n\nGenerate random numbers, pick choices, or spin the wheel to select winners instantly.\n\n## ✨ Key Features\n- Generate random numbers instantly  \n- Pick random choices from a list  \n- Spin the wheel to select winners  \n- Fair and unbiased selection process  \n- Simple and interactive interface  \n\n## 🚀 Why You'll Love It\n*Perfect for games, giveaways, and decision making.*  \n\nLet randomness decide and keep things exciting.",
+      "url": "https://random-wheel-two.vercel.app/",
+      "allowIframe": true,
+      "showCursor": true,
+      "featured": false,
+      "tags": [
+        "utility"
+      ],
+      "icon_url": "https://i.imgur.com/4SnLMH5.jpeg",
+      "cover_image": "https://i.imgur.com/GtEwAHq.jpeg",
+      "media": [
+        "https://i.imgur.com/lehUave.jpeg"
+      ]
+    },
+    {
+      "name": "Currency Converter",
+      "description": "Convert currencies instantly with a fast and reliable **currency converter** designed for accurate global exchange.\n\nGet up-to-date values and switch between currencies with ease.\n\n## ✨ Key Features\n- Convert between multiple currencies  \n- Real-time exchange rate updates  \n- Support for major and global currencies  \n- Quick and accurate calculations  \n- Clean and easy-to-use interface  \n\n## 🚀 Why You'll Love It\n*Perfect for travel, business, and everyday conversions.*  \n\nStay updated and convert currencies with confidence.",
+      "url": "https://currency-converter-app.vercel.app/",
+      "allowIframe": true,
+      "showCursor": true,
+      "featured": false,
+      "tags": [
+        "utility"
+      ],
+      "icon_url": "https://i.imgur.com/uxS8Efz.jpeg",
+      "cover_image": "https://i.imgur.com/jLSPBev.jpeg",
+      "media": [
+        "https://i.imgur.com/uf5GspO.jpeg"
+      ]
+    },
+    {
+      "name": "Unit Converter",
+      "description": "Convert measurements effortlessly with a versatile **unit converter** designed for everyday and professional use.\n\nSwitch between different units quickly and get accurate results across multiple categories.\n\n## ✨ Key Features\n- Convert length, weight, temperature, volume, area, and time  \n- Support for multiple unit systems  \n- Fast and accurate calculations  \n- Easy switching between categories  \n- Clean and user-friendly interface  \n\n## 🚀 Why You'll Love It\n*Perfect for quick conversions in daily tasks and work.*  \n\nGet precise results instantly without any hassle.",
+      "url": "https://unit-converter-puce.vercel.app/",
+      "allowIframe": true,
+      "showCursor": true,
+      "featured": false,
+      "tags": [
+        "utility"
+      ],
+      "icon_url": "https://i.imgur.com/ry5kwIW.jpeg",
+      "cover_image": "https://i.imgur.com/wi4OUSI.jpeg",
+      "media": [
+        "https://i.imgur.com/TICKk9P.jpeg"
+      ]
+    },
+    {
+      "name": "Translator",
+      "description": "Translate text instantly with a fast and reliable **translation app** designed for seamless communication.\n\nBreak language barriers and understand content across multiple languages with ease.\n\n## ✨ Key Features\n- Translate text between multiple languages  \n- Quick and accurate translations  \n- Support for common and global languages  \n- Simple input and instant results  \n- Clean and easy-to-use interface  \n\n## 🚀 Why You'll Love It\n*Perfect for travel, learning, and everyday communication.*  \n\nUnderstand and communicate across languages effortlessly.",
+      "url": "https://translate-app-dl.vercel.app/",
+      "allowIframe": true,
+      "showCursor": true,
+      "featured": false,
+      "tags": [
+        "utility"
+      ],
+      "icon_url": "https://i.imgur.com/WFJsOE2.jpeg",
+      "cover_image": "https://i.imgur.com/OyZpKj6.jpeg",
+      "media": [
+        "https://i.imgur.com/XQg2rCB.jpeg"
+      ]
+    },
+    {
+      "name": "Weather",
+      "description": "Stay updated with accurate forecasts using a reliable **weather app** designed for daily planning and insights.\n\nCheck current conditions, upcoming forecasts, and important sun timings all in one place.\n\n## ✨ Key Features\n- View daily and weekly weather reports  \n- Real-time temperature and conditions  \n- Sunrise and sunset timings  \n- Forecast for upcoming days  \n- Clean and easy-to-read interface  \n\n## 🚀 Why You'll Love It\n*Perfect for planning your day and staying prepared.*  \n\nKnow what to expect and stay ahead of the weather.",
+      "url": "https://weather-app-tawny-zeta-38.vercel.app/",
+      "allowIframe": true,
+      "showCursor": true,
+      "featured": false,
+      "tags": [
+        "utility"
+      ],
+      "icon_url": "https://i.imgur.com/P3eGvtD.jpeg",
+      "cover_image": "https://i.imgur.com/3z0TqBr.jpeg",
+      "media": [
+        "https://i.imgur.com/aJMA3mG.jpeg"
+      ]
+    },
+    {
+      "name": "Horoscope",
+      "description": "Discover what the stars have in store with a personalized **horoscope** experience.\n\nGet insights and predictions to guide your day with easy access to past, present, and upcoming readings.\n\n## ✨ Key Features\n- Read horoscope for yesterday, today, and tomorrow  \n- Daily insights for all zodiac signs  \n- Simple and easy navigation between days  \n- Clear and concise predictions  \n- Clean and engaging interface  \n\n## 🚀 Why You'll Love It\n*Perfect for daily guidance and curiosity.*  \n\nStay connected with your zodiac and see what lies ahead.",
+      "url": "https://horoscope-app-ten.vercel.app/",
+      "allowIframe": true,
+      "showCursor": true,
+      "featured": false,
+      "tags": [
+        "utility"
+      ],
+      "icon_url": "https://i.imgur.com/QO2lDTR.jpeg",
+      "cover_image": "https://i.imgur.com/EHqItoh.jpeg",
+      "media": [
+        "https://i.imgur.com/7dPpOcl.jpeg"
+      ]
+    },
+    {
+      "name": "AQI Map",
+      "description": "Explore global air quality in real time with an interactive **AQI map** displayed on a dynamic globe.\n\nVisualize pollution levels around the world and understand environmental conditions at a glance.\n\n## ✨ Key Features\n- Interactive globe showing air quality index worldwide  \n- Real-time AQI data visualization  \n- Color-coded pollution levels for easy understanding  \n- Zoom and explore different regions  \n- Smooth and engaging interface  \n\n## 🚀 Why You'll Love It\n*Perfect for tracking air quality and environmental awareness.*  \n\nSee the world’s air quality instantly and stay informed.",
+      "url": "https://world-map-black.vercel.app/",
+      "allowIframe": true,
+      "showCursor": true,
+      "featured": false,
+      "tags": [
+        "utility"
+      ],
+      "icon_url": "https://i.imgur.com/tUt3aIw.jpeg",
+      "cover_image": "https://i.imgur.com/MyJD1xN.jpeg",
+      "media": [
+        "https://i.imgur.com/y8JzgVj.jpeg"
+      ]
+    },
+    {
+      "name": "Hydration Tracker",
+      "description": "Stay healthy and consistent with a smart **hydration tracker** designed to monitor your daily water intake.\n\nSet goals, track progress, and build better hydration habits effortlessly.\n\n## ✨ Key Features\n- Track daily water consumption  \n- Set and customize your hydration goals  \n- Get reminders to drink water  \n- Monitor progress throughout the day  \n- Clean and easy-to-use interface  \n\n## 🚀 Why You'll Love It\n*Perfect for maintaining a healthy daily routine.*  \n\nStay hydrated, stay focused, and feel your best every day.",
+      "url": "https://hydration-tracker.vercel.app/",
+      "allowIframe": true,
+      "showCursor": true,
+      "featured": false,
+      "tags": [
+        "utility"
+      ],
+      "icon_url": "https://i.imgur.com/r8NG9mv.jpeg",
+      "cover_image": "https://i.imgur.com/uWfpf7M.jpeg",
+      "media": [
+        "https://i.imgur.com/kGztV0n.jpeg"
+      ]
+    },
+    {
+      "name": "Rocket Goal",
+      "description": "Experience high-speed action with a thrilling **car soccer game** that blends driving and competitive gameplay.\n\nScore goals, perform stunts, and compete in fast-paced matches with skill and precision.\n\n## ✨ Key Features\n- Unique combination of cars and soccer gameplay  \n- Fast-paced and competitive matches  \n- Perform aerials, flips, and advanced moves  \n- Multiplayer modes for team-based play  \n- Smooth and action-packed experience  \n\n## 🚀 Why You'll Love It\n*Perfect for competitive players and sports game fans.*  \n\nDrive, jump, and score your way to victory in an adrenaline-filled arena.",
+      "url": "https://rocketgoal.io/",
+      "allowIframe": true,
+      "showCursor": true,
+      "featured": false,
+      "tags": [
+        "game"
+      ],
+      "icon_url": "https://i.imgur.com/KM0VGRk.jpeg",
+      "cover_image": "https://i.imgur.com/JN8ee0V.jpeg",
+      "media": [
+        "https://www.youtube.com/watch?v=Lui6ekga1Pc",
+        "https://i.imgur.com/nqW2a5f.jpeg",
+        "https://i.imgur.com/yNm7EBc.jpeg"
+      ]
+    },
+    {
+      "name": "Among Us",
+      "description": "Work together or deceive your friends in a thrilling **social deduction game** full of suspense and strategy.\n\nComplete tasks, identify impostors, or secretly eliminate others without getting caught.\n\n## ✨ Key Features\n- Multiplayer gameplay with teamwork and deception  \n- Complete tasks to win as a crew member  \n- Play as an impostor and sabotage others  \n- Emergency meetings and voting system  \n- Simple yet engaging gameplay mechanics  \n\n## 🚀 Why You'll Love It\n*Perfect for playing with friends and testing your instincts.*  \n\nTrust no one and outsmart everyone to win.",
+      "url": "https://buckshotroulettee.github.io/game/among-us/",
+      "allowIframe": true,
+      "showCursor": true,
+      "featured": false,
+      "tags": [
+        "game"
+      ],
+      "icon_url": "https://i.imgur.com/5C8xD43.jpeg",
+      "cover_image": "https://i.imgur.com/nmpHtFq.jpeg",
+      "media": [
+        "https://www.youtube.com/watch?v=0YKjFoGxbec",
+        "https://i.imgur.com/RAlYdgu.jpeg",
+        "https://i.imgur.com/22OjBi0.jpeg"
+      ]
+    },
+    {
+      "name": "Fall Beans",
+      "description": "Jump into chaotic fun with a colorful **party battle royale game** packed with hilarious challenges.\n\nCompete with others through obstacle courses, mini-games, and unpredictable moments to be the last one standing.\n\n## ✨ Key Features\n- Multiplayer battle royale with fun mini-games  \n- Challenging obstacle courses and rounds  \n- Bright and playful visuals  \n- Compete against players in fast-paced matches  \n- Simple controls with engaging gameplay  \n\n## 🚀 Why You'll Love It\n*Perfect for casual fun and competitive chaos.*  \n\nDodge, jump, and stumble your way to victory in a wild and entertaining experience.",
+      "url": "https://html-classic.itch.zone/html/7581269/HTML5/index.html",
+      "allowIframe": true,
+      "showCursor": true,
+      "featured": false,
+      "tags": [
+        "game"
+      ],
+      "icon_url": "https://i.imgur.com/G3TUuyB.jpeg",
+      "cover_image": "https://i.imgur.com/DNz60PE.jpeg",
+      "media": [
+        "https://www.youtube.com/watch?v=HwJBFWeehhk",
+        "https://i.imgur.com/tz09To4.jpeg",
+        "https://i.imgur.com/4s7TD2P.jpeg"
+      ]
+    },
+    {
+      "name": "Granny",
+      "description": "Survive the night in a tense **horror escape game** where every sound could give you away.\n\nSneak through a dark house, solve puzzles, and find a way out without getting caught.\n\n## ✨ Key Features\n- Stealth-based survival gameplay  \n- Solve puzzles to unlock your escape  \n- Avoid detection and stay silent  \n- Multiple paths and strategies  \n- Intense and suspenseful atmosphere  \n\n## 🚀 Why You'll Love It\n*Perfect for fans of horror and thrill.*  \n\nStay quiet, think fast, and escape before it’s too late.",
+      "url": "https://badparentingame.io/play/granny/",
+      "allowIframe": true,
+      "showCursor": true,
+      "featured": false,
+      "tags": [
+        "game"
+      ],
+      "icon_url": "https://i.imgur.com/LJryWwL.jpeg",
+      "cover_image": "https://i.imgur.com/0bnLLSz.jpeg",
+      "media": [
+        "https://www.youtube.com/watch?v=4rsXOjQshJs",
+        "https://i.imgur.com/FTFhxHI.jpeg",
+        "https://i.imgur.com/sVPNsSp.jpeg"
+      ]
+    },
+    {
+      "name": "Traffic Rider",
+      "description": "Hit the road with a thrilling **motorbike racing game** that puts you in the rider’s seat.\n\nSpeed through highways, dodge traffic, and push your limits in a fast-paced first-person experience.\n\n## ✨ Key Features\n- First-person bike riding experience  \n- Endless highway racing gameplay  \n- Overtake traffic and earn rewards  \n- Multiple bikes to unlock and upgrade  \n- Smooth and immersive controls  \n\n## 🚀 Why You'll Love It\n*Perfect for speed lovers and racing fans.*  \n\nRide fast, take risks, and dominate the road.",
+      "url": "https://azgames.io/game/traffic-rider/",
+      "allowIframe": true,
+      "showCursor": true,
+      "featured": false,
+      "tags": [
+        "game"
+      ],
+      "icon_url": "https://i.imgur.com/lr1be3h.jpeg",
+      "cover_image": "https://i.imgur.com/6AIOOe8.jpeg",
+      "media": [
+        "https://www.youtube.com/watch?v=0FimuzxUiQY",
+        "https://i.imgur.com/2Qnd4sd.jpeg",
+        "https://i.imgur.com/T8bXOYM.jpeg"
+      ]
+    },
+    {
+      "name": "Fortzone",
+      "description": "Drop into action and fight to survive in an intense **battle royale shooter** filled with fast-paced combat and strategy.\n\nExplore the map, gather resources, and outlast opponents to be the last one standing.\n\n## ✨ Key Features\n- Battle royale gameplay with survival mechanics  \n- Explore and loot across a dynamic map  \n- Fast-paced combat and shooting mechanics  \n- Strategic gameplay and positioning  \n- Multiplayer action with competitive matches  \n\n## 🚀 Why You'll Love It\n*Perfect for fans of action and survival games.*  \n\nGear up, stay sharp, and fight your way to victory.",
+      "url": "https://game.fortzone.games/fortzone/index.html",
+      "allowIframe": true,
+      "showCursor": true,
+      "featured": false,
+      "tags": [
+        "game"
+      ],
+      "icon_url": "https://i.imgur.com/ijVEhz3.jpeg",
+      "cover_image": "https://i.imgur.com/YbPKs3V.jpeg",
+      "media": [
+        "https://i.imgur.com/kapBb5z.jpeg",
+        "https://i.imgur.com/AJkMPeH.jpeg",
+        "https://i.imgur.com/XyyOJNB.jpeg"
+      ]
+    },
+    {
+      "name": "Traffic Rally",
+      "description": "Race through busy roads with high-speed action in an exciting **traffic racing game**.\n\nDodge vehicles, master your driving skills, and push your limits in fast-paced highway challenges.\n\n## ✨ Key Features\n- Intense traffic racing gameplay  \n- Navigate through crowded roads  \n- Smooth and responsive controls  \n- Multiple vehicles to unlock  \n- Challenging and engaging levels  \n\n## 🚀 Why You'll Love It\n*Perfect for fans of fast driving and quick reflexes.*  \n\nSpeed through traffic and prove your racing skills.",
+      "url": "https://game.azgame.io/traffic-rally/",
+      "allowIframe": true,
+      "showCursor": true,
+      "featured": false,
+      "tags": [
+        "game"
+      ],
+      "icon_url": "https://i.imgur.com/7TrqkkM.jpeg",
+      "cover_image": "https://i.imgur.com/7nxERAC.jpeg",
+      "media": [
+        "https://i.imgur.com/AVmDhnz.jpeg",
+        "https://i.imgur.com/We6ktlh.jpeg"
+      ]
+    },
+    {
+      "name": "Commando Force 2",
+      "description": "Step into the battlefield with an action-packed **shooter game** built for intense combat and fast reflexes.\n\nTake on missions, eliminate enemies, and prove your skills in high-energy scenarios.\n\n## ✨ Key Features\n- Fast-paced shooting gameplay  \n- Multiple missions and objectives  \n- Variety of weapons and combat styles  \n- Challenging enemy encounters  \n- Smooth and responsive controls  \n\n## 🚀 Why You'll Love It\n*Perfect for fans of action and combat games.*  \n\nGear up, stay sharp, and dominate every mission.",
+      "url": "https://html5.gamedistribution.com/rvvASMiM/7d0574417a0d4c158b4d6e381f1c4a3e/index.html",
+      "allowIframe": true,
+      "showCursor": true,
+      "featured": false,
+      "tags": [
+        "game"
+      ],
+      "icon_url": "https://i.imgur.com/Rfkre8f.jpeg",
+      "cover_image": "https://i.imgur.com/ndI8b4C.jpeg",
+      "media": [
+        "https://www.youtube.com/watch?v=UuDLqCBEmj8",
+        "https://i.imgur.com/MqGi6MY.jpeg",
+        "https://i.imgur.com/lteFp2r.jpeg"
+      ]
+    },
+    {
+      "name": "GT Traffic Racer",
+      "description": "Experience high-speed thrills with an exciting **traffic racing game** built for adrenaline and precision.\n\nRace through busy highways, avoid collisions, and push your driving skills to the limit.\n\n## ✨ Key Features\n- Fast-paced highway racing gameplay  \n- Dodge traffic and earn rewards  \n- Multiple cars to unlock and upgrade  \n- Smooth and responsive controls  \n- Endless and challenging racing modes  \n\n## 🚀 Why You'll Love It\n*Perfect for speed lovers and racing enthusiasts.*  \n\nDrive fast, take risks, and rule the road.",
+      "url": "https://html5.gamedistribution.com/rvvASMiM/cecfade6d8ef4fb7a4b1924452da4204/index.html?gd_zone_config=eyJwYXJlbnRVUkwiOiJodHRwczovL2h0bWw1LmdhbWVkaXN0cmlidXRpb24uY29tL2NlY2ZhZGU2ZDhlZjRmYjdhNGIxOTI0NDUyZGE0MjA0LyIsInBhcmVudERvbWFpbiI6Imh0bWw1LmdhbWVkaXN0cmlidXRpb24uY29tIiwidG9wRG9tYWluIjoiaHRtbDUuZ2FtZWRpc3RyaWJ1dGlvbi5jb20iLCJoYXNJbXByZXNzaW9uIjp0cnVlLCJsb2FkZXJFbmFibGVkIjp0cnVlLCJob3N0IjoiaHRtbDUuZ2FtZWRpc3RyaWJ1dGlvbi5jb20iLCJ2ZXJzaW9uIjoiMS41LjE4In0%253D",
+      "allowIframe": true,
+      "showCursor": true,
+      "featured": false,
+      "tags": [
+        "game"
+      ],
+      "icon_url": "https://i.imgur.com/TjrlTLj.jpeg",
+      "cover_image": "https://i.imgur.com/cQwa82T.jpeg",
+      "media": [
+        "https://i.imgur.com/krxDwmW.jpeg",
+        "https://i.imgur.com/Z0VWPNv.jpeg"
+      ]
+    },
+    {
+      "name": "Stickman Dragon Fight",
+      "description": "Unleash powerful attacks in an action-packed **stickman fighting game** inspired by intense anime-style battles.\n\nTake control of your fighter, perform special moves, and defeat enemies in fast-paced combat.\n\n## ✨ Key Features\n- Dynamic stickman combat gameplay  \n- Perform powerful combos and special attacks  \n- Multiple characters and abilities  \n- Challenging enemy battles  \n- Smooth and engaging animations  \n\n## 🚀 Why You'll Love It\n*Perfect for fans of fighting games and action.*  \n\nPower up, fight hard, and dominate every battle.",
+      "url": "https://h5.ant.games/game-assets/17181010411909/index.html",
+      "allowIframe": true,
+      "showCursor": true,
+      "featured": false,
+      "tags": [
+        "game"
+      ],
+      "icon_url": "https://i.imgur.com/FhWQukI.jpeg",
+      "cover_image": "https://i.imgur.com/UM7s04d.jpeg",
+      "media": [
+        "https://i.imgur.com/0wPA5ei.jpeg",
+        "https://i.imgur.com/GbvNjDE.jpeg",
+        "https://i.imgur.com/BC0gIR2.jpeg"
+      ]
+    },
+    {
+      "name": "DTA 6",
+      "description": "Dive into an immersive open-world experience with a dynamic **action-adventure game** full of freedom and exploration.\n\nComplete missions, explore the city, and shape your journey through a world filled with opportunities.\n\n## ✨ Key Features\n- Open-world gameplay with full freedom  \n- Story-driven missions and activities  \n- Explore a detailed and lively environment  \n- Drive vehicles and interact with the world  \n- Engaging gameplay with endless possibilities  \n\n## 🚀 Why You'll Love It\n*Perfect for fans of open-world and action games.*  \n\nCreate your own path and experience a world without limits.",
+      "url": "https://cdn2.unblocked-games-free.com/games/3938/g2SpKqr4HGOjUQzn/285639/keqtfmn01j5v773e5cw2i8shyxdozu55/index.html",
+      "allowIframe": true,
+      "showCursor": true,
+      "featured": false,
+      "tags": [
+        "game"
+      ],
+      "icon_url": "https://i.imgur.com/1bSTT0P.jpeg",
+      "cover_image": "https://i.imgur.com/Sxe2P5t.jpeg",
+      "media": [
+        "https://i.imgur.com/MFzsBVi.jpeg",
+        "https://i.imgur.com/x2zuBwh.jpeg",
+        "https://i.imgur.com/8N5AEM5.jpeg"
+      ]
+    },
+    {
+      "name": "Squid Game",
+      "description": "Survive intense challenges in a thrilling **survival game** inspired by high-stakes competitions.\n\nCompete in a series of deadly mini-games where only the smartest and fastest players make it through.\n\n## ✨ Key Features\n- Multiple challenging mini-games  \n- Survival-based gameplay mechanics  \n- Test reflexes, timing, and strategy  \n- Increasing difficulty with each round  \n- Engaging and suspenseful experience  \n\n## 🚀 Why You'll Love It\n*Perfect for fans of competitive and survival games.*  \n\nStay sharp, play smart, and survive every challenge.",
+      "url": "https://lagged.com/api/play2/real-squid-game-online/#goog_fullscreen_ad",
+      "allowIframe": true,
+      "showCursor": true,
+      "featured": false,
+      "tags": [
+        "game"
+      ],
+      "icon_url": "https://i.imgur.com/pFgRnLL.jpeg",
+      "cover_image": "https://i.imgur.com/sLtyrIE.jpeg",
+      "media": [
+        "https://i.imgur.com/M3N9utr.jpeg",
+        "https://i.imgur.com/nduHrzA.jpeg",
+        "https://i.imgur.com/fl4RGuE.jpeg"
+      ]
+    },
+    {
+      "name": "Super Liquid Soccer",
+      "description": "Step onto the field and enjoy fast-paced action in an exciting **soccer game** built for fun and competition.\n\nScore goals, control your team, and experience the thrill of the game with smooth gameplay.\n\n## ✨ Key Features\n- Realistic and arcade-style soccer gameplay  \n- Control players and execute strategic moves  \n- Compete in matches and tournaments  \n- Smooth and responsive controls  \n- Engaging and dynamic gameplay  \n\n## 🚀 Why You'll Love It\n*Perfect for football fans and competitive players.*  \n\nPlay your style, score amazing goals, and win every match.",
+      "url": "https://h5.ant.games/g/super-liquid-soccer/",
+      "allowIframe": true,
+      "showCursor": true,
+      "featured": false,
+      "tags": [
+        "game"
+      ],
+      "icon_url": "https://i.imgur.com/ShNQfo3.jpeg",
+      "cover_image": "https://i.imgur.com/DhBFR81.jpeg",
+      "media": [
+        "https://i.imgur.com/RPP7Zjj.jpeg",
+        "https://i.imgur.com/pKsTGlw.jpeg",
+        "https://i.imgur.com/sTHjQHu.jpeg"
+      ]
+    },
+    {
+      "name": "ArmedForces IO",
+      "description": "Jump into intense battles with a fast-paced **multiplayer FPS game** set in a modern combat environment.\n\nFight against real players, choose your loadout, and dominate the battlefield with skill and strategy.\n\n## ✨ Key Features\n- Multiplayer first-person shooter gameplay  \n- Multiple game modes like team battle, free-for-all, and capture the flag :contentReference[oaicite:0]{index=0}  \n- Wide range of weapons and customizable loadouts :contentReference[oaicite:1]{index=1}  \n- Large maps with tactical gameplay  \n- Smooth controls and realistic shooting mechanics  \n\n## 🚀 Why You'll Love It\n*Perfect for fans of online shooting and competitive gameplay.*  \n\nTeam up, aim sharp, and prove your skills in every match.",
+      "url": "https://h5.ant.games/game-assets/17509912713178/index.html",
+      "allowIframe": true,
+      "showCursor": true,
+      "featured": false,
+      "tags": [
+        "game"
+      ],
+      "icon_url": "https://i.imgur.com/2QSB4BD.jpeg",
+      "cover_image": "https://i.imgur.com/LvlrjwF.jpeg",
+      "media": [
+        "https://i.imgur.com/InyL6ot.jpeg",
+        "https://i.imgur.com/7tABEKZ.jpeg"
+      ]
+    },
+    {
+      "name": "Slope 3",
+      "description": "Push your reflexes to the extreme with a fast-paced **endless runner game** set on a dynamic 3D slope.\n\nControl a speeding ball, dodge obstacles, and survive as long as possible in an ever-accelerating environment.\n\n## ✨ Key Features\n- High-speed endless gameplay with increasing difficulty  \n- Navigate a neon-lit 3D slope with sharp turns and obstacles  \n- Simple left and right controls for quick reactions  \n- Randomized tracks for a unique experience every run  \n- Addictive gameplay focused on beating high scores  \n\n## 🚀 Why You'll Love It\n*Perfect for quick, intense gaming sessions and reflex training.*  \n\nStay focused, react fast, and see how far you can go without falling.",
+      "url": "https://h5.ant.games/game-assets/17270664882344/index.html",
+      "allowIframe": true,
+      "showCursor": true,
+      "featured": false,
+      "tags": [
+        "game"
+      ],
+      "icon_url": "https://i.imgur.com/C4CtmMy.jpeg",
+      "cover_image": "https://i.imgur.com/lw0tgF6.jpeg",
+      "media": [
+        "https://youtu.be/DVH33NpwJEc?si=OcIV4jirMMera7Kp",
+        "https://i.imgur.com/rImOGnD.jpeg",
+        "https://i.imgur.com/gxRvzvW.jpeg"
+      ]
+    },
+    {
+      "name": "Ping Pong Go!",
+      "description": "Enjoy fast and exciting rallies with a dynamic **table tennis game** built for quick reflexes and fun gameplay.\n\nHit precise shots, outplay your opponent, and experience the thrill of ping pong anytime.\n\n## ✨ Key Features\n- Smooth and responsive table tennis gameplay  \n- Control shots with precision and timing  \n- Challenge AI or improve your skills  \n- Fast-paced matches with increasing difficulty  \n- Simple and intuitive controls  \n\n## 🚀 Why You'll Love It\n*Perfect for quick matches and skill-based fun.*  \n\nReact fast, play smart, and dominate the table.",
+      "url": "https://h5.ant.games/game-assets/17314991042776/index.html",
+      "allowIframe": true,
+      "showCursor": true,
+      "featured": false,
+      "tags": [
+        "game"
+      ],
+      "icon_url": "https://i.imgur.com/BjfapTC.jpeg",
+      "cover_image": "https://i.imgur.com/sNFDO0U.jpeg",
+      "media": [
+        "https://i.imgur.com/5DMvD5p.jpeg",
+        "https://i.imgur.com/vGqfUbB.jpeg"
+      ]
+    },
+    {
+      "name": "Head Soccer",
+      "description": "Jump into fun and fast-paced matches with a quirky **soccer game** featuring big-headed characters and over-the-top action.\n\nScore goals using powerful shots and unique abilities in exciting one-on-one battles.\n\n## ✨ Key Features\n- Arcade-style soccer gameplay with fun mechanics  \n- One-on-one matches with simple controls  \n- Use special powers and unique moves  \n- Multiple characters with different abilities  \n- Quick and entertaining matches  \n\n## 🚀 Why You'll Love It\n*Perfect for casual fun and competitive play.*  \n\nScore crazy goals and enjoy nonstop action on the field.",
+      "url": "https://h5.ant.games/game-assets/17587089573318/index.html",
+      "allowIframe": true,
+      "showCursor": true,
+      "featured": false,
+      "tags": [
+        "game"
+      ],
+      "icon_url": "https://i.imgur.com/DSwmCPI.jpeg",
+      "cover_image": "https://i.imgur.com/vP2FBIR.jpeg",
+      "media": [
+        "https://i.imgur.com/POk72wQ.jpeg",
+        "https://i.imgur.com/t2a7Idc.jpeg"
+      ]
+    },
+    {
+      "name": "Temple Run 2",
+      "description": "Run, jump, and escape in an action-packed **endless runner game** filled with obstacles and adventure.\n\nDash through dangerous paths, avoid traps, and collect rewards while being chased.\n\n## ✨ Key Features\n- Fast-paced endless running gameplay  \n- Dodge obstacles and avoid hazards  \n- Collect coins and power-ups  \n- Multiple environments and challenges  \n- Smooth and responsive controls  \n\n## 🚀 Why You'll Love It\n*Perfect for quick and addictive gameplay sessions.*  \n\nKeep running, react fast, and beat your high score.",
+      "url": "https://templerungames.github.io/file/",
+      "allowIframe": true,
+      "showCursor": true,
+      "featured": false,
+      "tags": [
+        "game"
+      ],
+      "icon_url": "https://i.imgur.com/wn143LJ.jpeg",
+      "cover_image": "https://i.imgur.com/6btt2Ns.jpeg",
+      "media": [
+        "https://www.youtube.com/watch?v=qPMIQobB3ZM",
+        "https://i.imgur.com/EN7eLMz.jpeg",
+        "https://i.imgur.com/Zj1gb20.jpeg"
+      ]
+    },
+    {
+      "name": "8 Ball Pool",
+      "description": "Play classic billiards with a competitive edge in a smooth and engaging **pool game**.\n\nAim carefully, control your shots, and pocket all your balls before your opponent.\n\n## ✨ Key Features\n- Realistic 8 ball pool gameplay  \n- Precise aiming and shot control  \n- Play against AI or challenge others  \n- Smooth physics and ball movement  \n- Simple and intuitive controls  \n\n## 🚀 Why You'll Love It\n*Perfect for casual matches and skill-based gameplay.*  \n\nLine up your shots, stay focused, and clear the table to win.",
+      "url": "https://77pen.github.io/p8/8-ball-pool/",
+      "allowIframe": true,
+      "showCursor": true,
+      "featured": false,
+      "tags": [
+        "game"
+      ],
+      "icon_url": "https://i.imgur.com/iOWelz5.jpeg",
+      "cover_image": "https://i.imgur.com/PgPhUuN.jpeg",
+      "media": [
+        "https://i.imgur.com/77CyE2i.jpeg",
+        "https://i.imgur.com/qO3QYdb.jpeg"
+      ]
+    },
+    {
+      "name": "Dreadhear Parkour",
+      "description": "Test your agility and precision in a challenging **parkour platformer game** built for fast reflexes.\n\nJump, climb, and navigate through tricky obstacles while mastering your movement skills.\n\n## ✨ Key Features\n- Parkour-style platforming gameplay  \n- Navigate obstacles with precise jumps  \n- Increasing difficulty and challenging levels  \n- Smooth and responsive controls  \n- Skill-based progression  \n\n## 🚀 Why You'll Love It\n*Perfect for players who enjoy movement challenges and precision gameplay.*  \n\nStay sharp, time your moves, and conquer every obstacle.",
+      "url": "https://77pen.github.io/p7/dreadhead-parkour/",
+      "allowIframe": true,
+      "showCursor": true,
+      "featured": false,
+      "tags": [
+        "game"
+      ],
+      "icon_url": "https://i.imgur.com/XQO3BOa.jpeg",
+      "cover_image": "https://i.imgur.com/mYZCRcH.jpeg",
+      "media": [
+        "https://i.imgur.com/PdbJIac.jpeg",
+        "https://i.imgur.com/k1yD1jR.jpeg",
+        "https://i.imgur.com/JTJMqj1.jpeg"
+      ]
+    },
+    {
+      "name": "Red Ball 4",
+      "description": "Roll into action with a fun and adventurous **platformer game** where you control a brave red ball on a mission.\n\nJump, bounce, and defeat enemies while navigating through challenging levels.\n\n## ✨ Key Features\n- Classic side-scrolling platformer gameplay  \n- Solve puzzles and overcome obstacles  \n- Defeat enemies and bosses  \n- Multiple levels with increasing difficulty  \n- Smooth and simple controls  \n\n## 🚀 Why You'll Love It\n*Perfect for casual fun and adventure lovers.*  \n\nRoll forward, stay sharp, and save the day.",
+      "url": "https://77pen.github.io/p9/red-ball-4/",
+      "allowIframe": true,
+      "showCursor": true,
+      "featured": false,
+      "tags": [
+        "game"
+      ],
+      "icon_url": "https://i.imgur.com/DCcPHmN.jpeg",
+      "cover_image": "https://i.imgur.com/kVlXFqU.jpeg",
+      "media": [
+        "https://i.imgur.com/NbMWH22.jpeg",
+        "https://i.imgur.com/NbMWH22.jpeg",
+        "https://i.imgur.com/E5lC7R7.jpeg"
+      ]
+    },
+    {
+      "name": "Angry Birds Slingshot",
+      "description": "Launch into action with a fun and addictive **physics-based puzzle game** where every shot counts.\n\nUse a slingshot to fling birds, destroy structures, and defeat enemies with precision and strategy.\n\n## ✨ Key Features\n- Slingshot-based gameplay with realistic physics  \n- Aim and launch birds to break structures  \n- Unique bird abilities for strategic play  \n- Challenging levels with creative layouts  \n- Simple controls with engaging mechanics  \n\n## 🚀 Why You'll Love It\n*Perfect for puzzle lovers and casual gamers.*  \n\nAim smart, shoot accurately, and bring everything crashing down.",
+      "url": "https://77pen.github.io/p77/angrybirdsslingshotfrenzy-alpha/",
+      "allowIframe": true,
+      "showCursor": true,
+      "featured": false,
+      "tags": [
+        "game"
+      ],
+      "icon_url": "https://i.imgur.com/g7z7JU3.jpeg",
+      "cover_image": "https://i.imgur.com/4wpvTZa.jpeg",
+      "media": [
+        "https://www.youtube.com/watch?v=2BU5UdPtmQQ",
+        "https://i.imgur.com/HhsDu5I.jpeg",
+        "https://i.imgur.com/1KUYd6U.jpeg"
+      ]
+    },
+    {
+      "name": "Five Nights at Freddy's",
+      "description": "Survive the night in a chilling **horror survival game** where every second counts.\n\nMonitor cameras, manage limited resources, and stay alert as mysterious animatronics come to life.\n\n## ✨ Key Features\n- Tense survival gameplay with limited resources  \n- Monitor security cameras to track movement  \n- Strategic use of power and defenses  \n- Increasing difficulty each night  \n- Dark and immersive atmosphere  \n\n## 🚀 Why You'll Love It\n*Perfect for fans of horror and suspense.*  \n\nStay calm, watch closely, and make it through the night.",
+      "url": "https://run3.io/popgame/fnaf/fnaf1/",
+      "allowIframe": true,
+      "showCursor": true,
+      "featured": false,
+      "tags": [
+        "game"
+      ],
+      "icon_url": "https://i.imgur.com/JTJWCu3.jpeg",
+      "cover_image": "https://i.imgur.com/rpTCJdk.jpeg",
+      "media": [
+        "https://www.youtube.com/watch?v=RP4UTOek0-Y",
+        "https://i.imgur.com/Jw59GYm.jpeg",
+        "https://i.imgur.com/TbPz2ea.jpeg"
+      ]
+    }
+  ]
+}

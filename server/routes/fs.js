@@ -125,15 +125,19 @@ router.get('/raw/:nodeId', (req, res, next) => {
 router.use(requireAuth)
 
 // Pass (qpMiddleware) is only enforced for structural mutations (move, rename, etc.).
-// File CONTENT reads/writes (/content/:nodeId) are exempt:
+// File CONTENT reads/writes (/content/:nodeId, /stream/:nodeId, /copy/:nodeId) are exempt:
 //   - Reads are GET — idempotent, no state change.
 //   - Writes use the per-user JWT for auth + the Authorization header prevents CSRF.
-//     Exempting writes avoids a race where createNode fires fsWrite and _saveFsTree
-//     (via dbSet/_savePending) simultaneously — both would grab the same single-use
-//     pass, one 403s, and the createNode rollback silently deletes the node.
+//     Exempting writes avoids a race where createNodeEntry fires fsUploadStream and
+//     _saveFsTree (via dbSet/_savePending) simultaneously — both would grab the same
+//     single-use pass, one 403s, and the upload silently fails.
+//     /stream/:nodeId carries binary bodies so the Bearer JWT is the sole auth mechanism.
+//     /copy/:nodeId is a server-side copy with no external content involved.
 router.use((req, res, next) => {
   if (req.method === 'GET') return next()
   if (req.path.startsWith('/content/')) return next()
+  if (req.path.startsWith('/stream/'))  return next()
+  if (req.path.startsWith('/copy/'))    return next()
   return qpMiddleware(req, res, next)
 })
 

@@ -1,0 +1,8 @@
+/node_modules
+
+.elyra-host
+.elyra-ready
+
+server/.env
+
+src/config.js

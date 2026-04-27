@@ -307,6 +307,7 @@ export default function Terminal({ windowId }) {
       <div className="flex items-center px-3 py-2 flex-shrink-0"
         style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
         <span style={{ color: '#a78bfa' }}>{PROMPT}</span>
+        {' '}
         <input
           ref={inputRef}
           autoFocus

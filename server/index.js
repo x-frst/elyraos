@@ -1,7 +1,14 @@
+import dotenv from "dotenv";
+import path from "path";
+
+// Load env FIRST (before anything uses process.env)
+dotenv.config({
+  path: process.env.DOTENV_PATH || path.resolve("server/.env")
+});
+
 import express from 'express'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
-import path from 'path'
 import { fileURLToPath } from 'url'
 import { existsSync, readFileSync } from 'fs'
 

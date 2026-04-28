@@ -1,9 +1,14 @@
 import { Router } from 'express'
+import express from 'express'
 import { requireAuth } from './auth.js'
+import { PROXY_WORKER_URL, PROXY_WORKER_SECRET } from '../config.js'
 
 const router = Router()
 export { router as proxyRouter }
 
+// Parse urlencoded + text bodies for the POST proxy route
+router.use(express.urlencoded({ extended: true, limit: '1mb' }))
+router.use(express.text({ limit: '1mb' }))
 // Headers that prevent iframe embedding — we strip these before forwarding
 const STRIP_HEADERS = new Set([
   'x-frame-options',
@@ -13,6 +18,142 @@ const STRIP_HEADERS = new Set([
   'connection',
   'keep-alive',
 ])
+
+// ── Cloudflare Worker proxy ───────────────────────────────────────────────────
+// Most browser page fetches are routed through the CF Worker so outbound
+// requests originate from Cloudflare's datacenter, not the home server.
+// Exception: major search engines block CF datacenter IPs — bypass the Worker
+// for those and fetch directly (server IP).  The server still strips
+// X-Frame-Options so srcdoc embedding works fine.
+const CF_WORKER_URL    = PROXY_WORKER_URL
+const CF_WORKER_SECRET = PROXY_WORKER_SECRET
+
+// URLs that should be fetched directly from the server (bypass CF Worker).
+// CF Worker's datacenter IP gets CAPTCHAed on search engine result pages, but
+// NOT on their click-tracking / redirect endpoints (e.g. bing.com/ck/a).
+// So we only bypass for the actual search/homepage paths — everything else,
+// including redirect chains, goes through the Worker.
+function isDirectFetch(url) {
+  try {
+    const { hostname, pathname } = new URL(url)
+    const h = hostname.replace(/^www\./, '')
+    if (h === 'bing.com') {
+      // Only Bing search UI pages — NOT /ck/a tracking redirects
+      return pathname === '/' || /^\/(search|images|videos|news|maps|translate)(\/|$|\?)/i.test(pathname)
+    }
+    if (h === 'google.com') {
+      return pathname === '/' || /^\/(search|maps|imghp|webhp)(\/|$|\?)/i.test(pathname)
+    }
+    if (h === 'duckduckgo.com') {
+      return pathname === '/' || pathname.startsWith('/html') || pathname.startsWith('/lite')
+    }
+    if (h === 'search.yahoo.com') return true
+    if (h === 'youtube.com') return true
+    return false
+  } catch { return false }
+}
+
+// Decode search-engine click-tracking redirect URLs to get the real destination
+// so we can route it through CF Worker directly (avoiding redirect ambiguity).
+// Bing: /ck/a?...&u=a1<base64url>&...  → decode base64 after "a1" prefix
+// Google: /url?q=<url>&...             → plain URL in q param
+function decodeTrackerUrl(url) {
+  try {
+    const u = new URL(url)
+    const h = u.hostname.replace(/^www\./, '')
+
+    if (h === 'bing.com' && u.pathname === '/ck/a') {
+      const encoded = u.searchParams.get('u')
+      if (encoded && encoded.startsWith('a1')) {
+        const decoded = Buffer.from(encoded.slice(2), 'base64').toString('utf-8')
+        const dest = new URL(decoded)
+        if ((dest.protocol === 'http:' || dest.protocol === 'https:') && !isBlockedHost(dest.hostname))
+          return dest.href
+      }
+    }
+
+    if (h === 'google.com' && u.pathname === '/url') {
+      const q = u.searchParams.get('q') || u.searchParams.get('url')
+      if (q) {
+        const dest = new URL(q)
+        if ((dest.protocol === 'http:' || dest.protocol === 'https:') && !isBlockedHost(dest.hostname))
+          return dest.href
+      }
+    }
+  } catch {}
+  return null
+}
+
+const COMMON_HEADERS = {
+  'User-Agent':      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+  'Accept':          'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+  'Accept-Language': 'en-US,en;q=0.9',
+  'Accept-Encoding': 'identity',
+  'Cache-Control':   'no-cache',
+}
+
+/**
+ * Fetch a URL via the Cloudflare Worker when configured.
+ * Falls back to direct fetch if PROXY_WORKER_URL / PROXY_WORKER_SECRET are unset.
+ * Only used by the Browser app routes — no other routes call this.
+ * @param {string} url
+ * @param {'GET'|'POST'} [method='GET']
+ * @param {string|null} [body]
+ * @param {string|null} [contentType]
+ */
+async function proxyFetch(url, method = 'GET', body = null, contentType = null, _hops = 0) {
+  if (_hops > 10) throw new Error('Too many redirects')
+
+  // Decode click-tracker URLs (bing.com/ck/a, google.com/url) to the real
+  // destination so it's routed through CF Worker from the start.
+  const realDest = decodeTrackerUrl(url)
+  if (realDest) return proxyFetch(realDest, method, body, contentType, _hops + 1)
+
+  if (CF_WORKER_URL && CF_WORKER_SECRET && !isDirectFetch(url)) {
+    const res = await fetch(CF_WORKER_URL, {
+      method:  'POST',
+      headers: {
+        'Content-Type':   'application/json',
+        'X-Proxy-Secret': CF_WORKER_SECRET,
+      },
+      body:   JSON.stringify({ url, method, body, contentType }),
+      signal: AbortSignal.timeout(20_000),
+    })
+    res._proxyFinalUrl = res.headers.get('X-Final-Url') || url
+    return res
+  }
+
+  // Direct fetch — handle redirects manually so each hop is re-checked.
+  // This prevents a bing.com redirect URL from silently following through to a
+  // non-search-engine site using the server's real IP.
+  const opts = {
+    method,
+    headers: { ...COMMON_HEADERS },
+    redirect: 'manual',
+    signal: AbortSignal.timeout(15_000),
+  }
+  if (body) {
+    opts.body = body
+    if (contentType) opts.headers['Content-Type'] = contentType
+  }
+  const res = await fetch(url, opts)
+
+  // Follow 3xx responses one hop at a time, re-entering proxyFetch so the
+  // destination is re-evaluated (it might need the CF Worker path).
+  if (res.status >= 301 && res.status <= 308) {
+    const location = res.headers.get('location')
+    if (location) {
+      const nextUrl    = new URL(location, url).href
+      // 307/308 preserve the original method; everything else becomes GET
+      const nextMethod = (res.status === 307 || res.status === 308) ? method : 'GET'
+      const nextBody   = nextMethod === 'GET' ? null : body
+      return proxyFetch(nextUrl, nextMethod, nextBody, contentType, _hops + 1)
+    }
+  }
+
+  res._proxyFinalUrl = url
+  return res
+}
 
 // SSRF protection: block loopback / private network ranges
 function isBlockedHost(hostname) {
@@ -77,6 +218,18 @@ const INTERCEPTOR = `<script data-nova-proxy>
   }
   history.pushState    = wrap(history.pushState.bind(history));
   history.replaceState = wrap(history.replaceState.bind(history));
+  // Intercept location.assign / replace / reload so JS-driven navigations
+  // are proxied instead of breaking out of the iframe.
+  // Note: location.href setter cannot be overridden in Chrome — the onLoad
+  // handler in the parent React component handles that case instead.
+  try {
+    var _assign  = location.assign.bind(location);
+    var _replace = location.replace.bind(location);
+    var _reload  = location.reload.bind(location);
+    location.assign  = function(u){ try{u=new URL(String(u),location.href).href;}catch(ex){} if(!nav(u)) _assign(u); };
+    location.replace = function(u){ try{u=new URL(String(u),location.href).href;}catch(ex){} if(!nav(u)) _replace(u); };
+    location.reload  = function(){ nav(location.href) || _reload(); };
+  } catch(e){}
   // Report URL after full page load
   window.addEventListener('load', function(){
     P.postMessage({type:'nova-loc',url:location.href},'*');
@@ -105,16 +258,7 @@ router.get('/download', async (req, res) => {
   }
 
   try {
-    const upstream = await fetch(parsed.href, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-        'Accept': '*/*',
-        'Accept-Encoding': 'identity',
-        'Cache-Control': 'no-cache',
-      },
-      redirect: 'follow',
-      signal: AbortSignal.timeout(30_000),
-    })
+    const upstream = await proxyFetch(parsed.href)
 
     const contentType = (upstream.headers.get('content-type') || 'application/octet-stream').split(';')[0].trim()
 
@@ -139,6 +283,42 @@ router.get('/download', async (req, res) => {
   }
 })
 
+// GET /api/proxy/raw?url=<encoded-url>
+// Returns the raw upstream response body with its original Content-Type.
+// Used by the in-page fetch/XHR interceptor so JS on proxied pages gets real
+// API responses (not JSON-wrapped HTML) while the request originates from the server.
+router.get('/raw', async (req, res) => {
+  const raw = req.query.url
+  if (!raw) return res.status(400).json({ error: 'Missing url parameter' })
+
+  let parsed
+  try {
+    parsed = new URL(raw)
+    if (!['http:', 'https:'].includes(parsed.protocol))
+      return res.status(400).json({ error: 'Only http/https URLs are supported' })
+    if (isBlockedHost(parsed.hostname))
+      return res.status(400).json({ error: 'Access to this host is not allowed' })
+  } catch {
+    return res.status(400).json({ error: 'Invalid URL' })
+  }
+
+  try {
+    const upstream = await proxyFetch(parsed.href)
+
+    const contentType = upstream.headers.get('content-type') || 'application/octet-stream'
+    const buf = Buffer.from(await upstream.arrayBuffer())
+
+    res.status(upstream.status)
+    res.set('Content-Type', contentType)
+    res.set('X-Proxy-Final-Url', upstream._proxyFinalUrl || parsed.href)
+    // Allow the in-page script (same origin via srcdoc) to read the response
+    res.set('Access-Control-Allow-Origin', '*')
+    return res.send(buf)
+  } catch (err) {
+    return res.status(502).json({ error: `Proxy failed: ${err.message}` })
+  }
+})
+
 // GET /api/proxy?url=<encoded-url>
 // Returns { html: string, finalUrl: string } for HTML pages
 // Returns { html: string, finalUrl: string } with a wrapper for media/text
@@ -158,19 +338,9 @@ router.get('/', async (req, res) => {
   }
 
   try {
-    const upstream = await fetch(parsed.href, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
-        'Accept-Language': 'en-US,en;q=0.9',
-        'Accept-Encoding': 'identity',   // disable gzip — we read text directly
-        'Cache-Control': 'no-cache',
-      },
-      redirect: 'follow',
-      signal: AbortSignal.timeout(15_000),
-    })
+    const upstream = await proxyFetch(parsed.href)
 
-    const finalUrl   = upstream.url || parsed.href
+    const finalUrl   = upstream._proxyFinalUrl || parsed.href
     const contentType = (upstream.headers.get('content-type') || 'text/html').toLowerCase()
 
     // ── HTML ────────────────────────────────────────────────────────────────
@@ -217,6 +387,62 @@ router.get('/', async (req, res) => {
     // ── Unsupported binary content ──────────────────────────────────────────
     const html = `<!DOCTYPE html><html><head><style>body{background:#1a1a2e;color:#94a3b8;font-family:system-ui;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;gap:1rem;text-align:center}</style></head><body><div style="font-size:3rem">📄</div><div>Binary content</div><div style="font-size:.85rem;color:#64748b">${contentType}</div><a href="${finalUrl}" target="_blank" rel="noopener noreferrer" style="padding:.5rem 1.5rem;background:#7c3aed;color:white;border-radius:.5rem;text-decoration:none;margin-top:.5rem">Open in new tab</a></body></html>`
     return res.json({ html, finalUrl, type: 'binary' })
+
+  } catch (err) {
+    return res.status(502).json({ error: `Could not reach ${parsed.hostname}: ${err.message}` })
+  }
+})
+
+// POST /api/proxy?url=<encoded-url>
+// Forwards a form POST through the proxy and returns {html, finalUrl}.
+// Used by the in-page POST form interceptor so CAPTCHA submissions and other
+// POST forms are proxied server-side instead of going directly from the browser.
+router.post('/', async (req, res) => {
+  const raw = req.query.url
+  if (!raw) return res.status(400).json({ error: 'Missing url parameter' })
+
+  let parsed
+  try {
+    parsed = new URL(raw)
+    if (!['http:', 'https:'].includes(parsed.protocol))
+      return res.status(400).json({ error: 'Only http/https URLs are supported' })
+    if (isBlockedHost(parsed.hostname))
+      return res.status(400).json({ error: 'Access to this host is not allowed' })
+  } catch {
+    return res.status(400).json({ error: 'Invalid URL' })
+  }
+
+  // Reconstruct body — accept either urlencoded or raw text
+  const rawBody = typeof req.body === 'string'
+    ? req.body
+    : (req.body && Object.keys(req.body).length
+        ? new URLSearchParams(req.body).toString()
+        : null)
+  const contentType = req.headers['content-type'] || 'application/x-www-form-urlencoded'
+
+  try {
+    const upstream = await proxyFetch(parsed.href, 'POST', rawBody, contentType)
+    const finalUrl = upstream._proxyFinalUrl || parsed.href
+    const upCt     = (upstream.headers.get('content-type') || 'text/html').toLowerCase()
+
+    let html = await upstream.text()
+
+    if (upCt.includes('text/html') || upCt.includes('application/xhtml')) {
+      const baseHref = finalUrl.replace(/[^/]+$/, '') || new URL(finalUrl).origin + '/'
+      if (!/<base\b/i.test(html)) {
+        html = html.replace(/(<head\b[^>]*>)/i, `$1\n<base href="${baseHref}">`)
+        if (!html.includes('<base')) html = `<base href="${baseHref}">\n` + html
+      }
+      if (/<\/head>/i.test(html)) {
+        html = html.replace(/<\/head>/i, INTERCEPTOR + '</head>')
+      } else {
+        html = INTERCEPTOR + html
+      }
+      return res.json({ html, finalUrl, type: 'html' })
+    }
+
+    // Non-HTML POST response — just return finalUrl so client can re-navigate
+    return res.json({ html: '', finalUrl, type: 'redirect' })
 
   } catch (err) {
     return res.status(502).json({ error: `Could not reach ${parsed.hostname}: ${err.message}` })

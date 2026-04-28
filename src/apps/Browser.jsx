@@ -9,6 +9,118 @@ import { getJWT } from '../utils/db'
 const HOME_URL      = 'https://www.bing.com/'
 const SEARCH_ENGINE = 'https://www.bing.com/search?q='
 
+// No domains need direct iframe src= loading — all are handled via server proxy
+// (which strips X-Frame-Options). Search engines that blocked the CF Worker
+// are now fetched server-direct in proxy.js instead.
+const DIRECT_DOMAINS = new Set([])
+
+function isDirect(url) {
+  try { return DIRECT_DOMAINS.has(new URL(url).hostname) } catch { return false }
+}
+
+/**
+ * Prepend a security interceptor to proxied HTML that:
+ *  1. Disables WebRTC (prevents real-IP leaks via ICE candidates)
+ *  2. Routes GET fetch() and XHR calls through the server's raw proxy so
+ *     JS-initiated API requests (e.g. ipify.org) originate from the server,
+ *     not the client browser. POST requests are left untouched to avoid
+ *     breaking form submissions and POST-based APIs.
+ */
+function buildProxiedSrcdoc(html, jwt) {
+  const script = `<script data-nova-ip-shield>(function(){
+  var RAW='/api/proxy/raw?url=', T=${JSON.stringify(jwt || '')};
+  var oFetch=window.fetch.bind(window);
+  var oOpen=XMLHttpRequest.prototype.open,
+      oSend=XMLHttpRequest.prototype.send,
+      oSet =XMLHttpRequest.prototype.setRequestHeader;
+
+  function isExt(u){
+    if(!u||typeof u!=='string')return false;
+    var s=u.trim();
+    if(/^(\/|data:|blob:|javascript:|#|about:)/i.test(s))return false;
+    try{
+      var h=new URL(s).hostname;
+      if(!h)return false;
+      // Don't proxy requests to our own server
+      if(h===window.location.hostname)return false;
+      return true;
+    }catch(e){return false;}
+  }
+
+  // 1. Block WebRTC — primary browser IP-leak vector via ICE candidates
+  ['RTCPeerConnection','webkitRTCPeerConnection','mozRTCPeerConnection','RTCIceGatherer'].forEach(function(k){
+    try{Object.defineProperty(window,k,{value:undefined,configurable:false});}catch(e){}
+  });
+
+  // 2. Intercept fetch — GET only so POST APIs / form submits still work
+  window.fetch=function(input,opts){
+    var method=((opts&&opts.method)||'GET').toUpperCase();
+    var url=typeof input==='string'?input:(input&&input.url?input.url:String(input||''));
+    if(method!=='GET'||!isExt(url))return oFetch(input,opts);
+    return oFetch(RAW+encodeURIComponent(url),{headers:{'Authorization':'Bearer '+T}});
+  };
+
+  // 3. Intercept XHR — GET only
+  XMLHttpRequest.prototype.open=function(method,url){
+    var args=[].slice.call(arguments);
+    if((method||'').toUpperCase()==='GET'&&isExt(String(url||''))){
+      this._pxUrl=RAW+encodeURIComponent(String(url));
+      args[1]=this._pxUrl;
+    }
+    return oOpen.apply(this,args);
+  };
+  XMLHttpRequest.prototype.setRequestHeader=function(n,v){
+    if(this._pxUrl&&n.toLowerCase()==='authorization')return;
+    return oSet.call(this,n,v);
+  };
+  XMLHttpRequest.prototype.send=function(b){
+    if(this._pxUrl&&T){try{oSet.call(this,'Authorization','Bearer '+T);}catch(e){}}
+    return oSend.call(this,b);
+  };
+
+  // 4. Intercept POST form submissions — proxy them server-side so redirects
+  //    (e.g. after CAPTCHA) are followed by the server and returned as HTML,
+  //    instead of the iframe navigating directly to an X-Frame-Options blocked page.
+  //    Two interception points needed:
+  //      a) submit event  — catches user-initiated submits
+  //      b) form.submit() override — catches JS-driven submits (e.g. reCAPTCHA callback
+  //         calls form.submit() which does NOT fire the submit event)
+  function interceptPostForm(f) {
+    var action;
+    try { action = new URL(f.action || location.href, location.href).href; } catch(ex) { return false; }
+    if (!isExt(action)) return false;
+    var body = new URLSearchParams(new FormData(f)).toString();
+    oFetch('/api/proxy?url=' + encodeURIComponent(action), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + T },
+      body: body
+    }).then(function(r) { return r.json(); }).then(function(d) {
+      if (d.finalUrl) window.parent.postMessage({ type: 'nova-nav', url: d.finalUrl }, '*');
+    }).catch(function() {});
+    return true;
+  }
+
+  document.addEventListener('submit', function(e) {
+    var f = e.target;
+    if (!f.method || f.method.toLowerCase() === 'get') return;
+    if (interceptPostForm(f)) { e.preventDefault(); e.stopPropagation(); }
+  }, true);
+
+  // Override programmatic form.submit() — reCAPTCHA and many JS flows call this
+  // directly, which bypasses the submit event entirely.
+  var origSubmit = HTMLFormElement.prototype.submit;
+  HTMLFormElement.prototype.submit = function() {
+    if (this.method && this.method.toLowerCase() !== 'get' && interceptPostForm(this)) return;
+    return origSubmit.call(this);
+  };
+})();<\/script>`
+
+  // Inject as the very first thing inside <head> so it runs before any page script
+  if (/<head/i.test(html)) return html.replace(/(<head[^>]*>)/i, '$1' + script)
+  if (/<html/i.test(html)) return html.replace(/(<html[^>]*>)/i, '$1' + script)
+  return script + html
+}
+
 function normalizeUrl(raw) {
   const trimmed = raw.trim()
   if (!trimmed) return HOME_URL
@@ -26,13 +138,15 @@ export default function Browser() {
   const [displayUrl, setDisplayUrl] = useState(HOME_URL)
   const [inputVal,   setInputVal]   = useState(HOME_URL)
   // Proxy response
-  const [srcdoc,  setSrcdoc]  = useState('')
+  const [srcdoc,    setSrcdoc]    = useState('')
+  const [directSrc, setDirectSrc] = useState('')   // non-empty = direct iframe src mode
   const [loading, setLoading] = useState(false)
   const [error,   setError]   = useState(null)
   const [downloads,     setDownloads]     = useState([])
   const [showDownloads, setShowDownloads] = useState(false)
-  const dlHandlerRef = useRef(null)
-  const iframeRef    = useRef(null)
+  const dlHandlerRef    = useRef(null)
+  const iframeRef       = useRef(null)
+  const displayUrlRef   = useRef(HOME_URL)
 
   const createNode = useStore(s => s.createNode)
   const listDir    = useStore(s => s.listDir)
@@ -69,11 +183,29 @@ export default function Browser() {
     }
   }
 
-  // Core loader: fetches the URL through the server proxy and updates srcdoc
+  // Core loader: fetches the URL through the server proxy and updates srcdoc,
+  // or sets directSrc for domains that should load natively in the iframe.
   const loadUrl = useCallback(async (url, push = true) => {
     setLoading(true)
     setError(null)
+
+    // Direct mode — just point the iframe src at the real URL
+    if (isDirect(url)) {
+      setDirectSrc(url)
+      setSrcdoc('')
+      setDisplayUrl(url)
+      displayUrlRef.current = url
+      setInputVal(url)
+      if (push) {
+        setHist(h => [...h.slice(0, histIdx + 1), url])
+        setHistIdx(i => i + 1)
+      }
+      setLoading(false)
+      return
+    }
+
     try {
+      setDirectSrc('')  // switching to proxied mode
       const res = await fetch(`/api/proxy?url=${encodeURIComponent(url)}`, {
         headers: { Authorization: `Bearer ${getJWT()}` },
       })
@@ -89,9 +221,10 @@ export default function Browser() {
         setLoading(false)
         return
       }
-      setSrcdoc(data.html || '')
+      setSrcdoc(buildProxiedSrcdoc(data.html || '', getJWT()))
       const finalUrl = data.finalUrl || url
       setDisplayUrl(finalUrl)
+      displayUrlRef.current = finalUrl
       setInputVal(finalUrl)
       if (push) {
         setHist(h => [...h.slice(0, histIdx + 1), finalUrl])
@@ -274,12 +407,38 @@ export default function Browser() {
         ) : (
           <iframe
             ref={iframeRef}
-            key={srcdoc ? undefined : 'empty'}
-            srcdoc={srcdoc}
+            key={directSrc || (srcdoc ? 'srcdoc' : 'empty')}
+            {...(directSrc ? { src: directSrc } : { srcdoc })}
             title="Browser"
             sandbox="allow-scripts allow-forms allow-same-origin allow-popups allow-modals"
             className="absolute inset-0 w-full h-full border-0"
             style={{ background: '#fff' }}
+            onLoad={() => {
+              if (!iframeRef.current) return
+              // Direct mode — track URL changes via iframe src, no re-proxy needed
+              if (directSrc) {
+                try {
+                  const href = iframeRef.current.contentWindow?.location?.href
+                  if (href && !href.startsWith('about:')) {
+                    setDisplayUrl(href)
+                    displayUrlRef.current = href
+                    setInputVal(href)
+                  }
+                } catch { /* cross-origin within direct domain, ignore */ }
+                setLoading(false)
+                return
+              }
+              // Proxied srcdoc mode — check if iframe escaped to a real URL
+              try {
+                const href = iframeRef.current.contentWindow?.location?.href
+                if (!href || href.startsWith('about:')) return
+                navigate(href)
+              } catch {
+                // SecurityError = iframe navigated cross-origin → re-proxy
+                const url = displayUrlRef.current
+                if (url && !url.startsWith('about:')) loadUrl(url, false)
+              }
+            }}
           />
         )}
       </div>

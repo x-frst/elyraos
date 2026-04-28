@@ -57,7 +57,16 @@ export const TOKEN_EXPIRY = process.env.TOKEN_EXPIRY || "15m"
 export const REFRESH_TOKEN_EXPIRY = process.env.REFRESH_TOKEN_EXPIRY || "7d"
 
 /** Minimum password length enforced at registration */
-export const MIN_PASSWORD_LENGTH = parseInt(process.env.MIN_PASSWORD_LENGTH || "4", 10)
+export const MIN_PASSWORD_LENGTH = parseInt(process.env.MIN_PASSWORD_LENGTH || "8", 10)
+
+// ── Browser proxy (Cloudflare Worker) ────────────────────────────────────────
+/** URL of the Cloudflare Worker used to proxy browser page fetches.
+ * When set together with PROXY_WORKER_SECRET, all browser requests are routed
+ * through the Worker so the server's home IP is not exposed.
+ * Leave blank to fall back to direct server-side fetching.
+ */
+export const PROXY_WORKER_URL    = process.env.PROXY_WORKER_URL    || ""
+export const PROXY_WORKER_SECRET = process.env.PROXY_WORKER_SECRET || ""
 
 // ── Per-user storage quota ────────────────────────────────────────────────────
 /** Default storage quota in bytes assigned to new users (1 GB) */
@@ -279,3 +288,5 @@ export const SMTP = {
 
 /** How long a one-time code stays valid (minutes). Override via OTP_EXPIRY_MINUTES. */
 export const OTP_EXPIRY_MINUTES = parseInt(process.env.OTP_EXPIRY_MINUTES || '10', 10)
+
+

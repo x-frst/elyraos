@@ -41,12 +41,12 @@ export const useMusicStore = create((set, get) => ({
     } else {
       const track = localTracks[localTrackIdx]
       if (!track) return
-      if (!track.src.startsWith('blob:')) {
-        // Non-blob src (data URL / HTTP URL) — delegate to playLocalTrack which converts to blob
+      if (track.src.startsWith('data:')) {
+        // Data URL — needs blob conversion; delegate to playLocalTrack
         get().playLocalTrack(localTrackIdx)
         return
       }
-      // Blob URL: only reassign src if it's a different track so currentTime is preserved on resume
+      // HTTP or blob URL — assign directly and play
       if (audio.src !== track.src) audio.src = track.src
       audio.play().then(() => set({ playing: true })).catch(() => set({ playing: false }))
     }
@@ -105,19 +105,22 @@ export const useMusicStore = create((set, get) => ({
     const track = localTracks[idx]
     if (!track) return
     let src = track.src
-    // Convert data URLs and HTTP URLs to blob URLs exactly once.
-    // Blob URLs allow the browser to seek freely; data URLs and HTTP URLs do not reliably support seeking.
-    if (!src.startsWith('blob:')) {
+
+    // Data URLs (from local device FileReader upload) must be converted to blob URLs
+    // so the browser can seek freely. HTTP URLs (fsRawUrl) and existing blob URLs
+    // stream directly via range requests — no full download needed.
+    if (src.startsWith('data:')) {
       try {
         const res = await fetch(src)
         const blob = await res.blob()
         src = URL.createObjectURL(blob)
         set(s => ({ localTracks: s.localTracks.map((t, i) => i === idx ? { ...t, src } : t) }))
-      } catch { return }
+      } catch { set({ playing: false }); return }
     }
+
     const audio = getAudio()
     audio.volume = volume
-    audio.src = src
+    if (audio.src !== src) audio.src = src
     audio.play()
       .then(() => set({ localTrackIdx: idx, mode: 'local', playing: true }))
       .catch(() => set({ playing: false }))

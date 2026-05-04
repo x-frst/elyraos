@@ -7,6 +7,7 @@ import { useAuthStore } from "../store/useAuthStore"
 import { AppTile, CatalogTile } from "../utils/icons"
 import { DND_FS_MIME, DND_APP_MIME } from "../config.js"
 import { useFileUpload } from "../hooks/useFileUpload"
+import { fsStatSize, fmtBytes } from "../utils/db"
 
 // ── File icon for FS items on the desktop ──────────────────────────────────────────
 const FS_EXT_ICONS = {
@@ -81,6 +82,19 @@ export default function Desktop() {
   const [hideIcons, setHideIcons]   = useState(false)
   const [confirmDelete, setConfirmDelete] = useState(null) // { ids: [] }
   const [propertiesApp, setPropertiesApp] = useState(null)  // { type: 'app'|'fs', app?, node? }
+  const [propertiesFsSize, setPropertiesFsSize] = useState(null)  // fetched real size in bytes
+
+  // Fetch the real on-disk file size whenever a file Properties dialog opens
+  useEffect(() => {
+    if (!propertiesApp || propertiesApp.type !== 'fs' || propertiesApp.node.type !== 'file') {
+      setPropertiesFsSize(null); return
+    }
+    let cancelled = false
+    setPropertiesFsSize(undefined)  // undefined = loading
+    fsStatSize(propertiesApp.node.id, propertiesApp.node.name)
+      .then(sz => { if (!cancelled) setPropertiesFsSize(sz) })
+    return () => { cancelled = true }
+  }, [propertiesApp])
   const [urlDialog, setUrlDialog] = useState(null) // null | { url: string, name: string }
   // Inline rename state for FS items on the desktop
   const [renamingId,  setRenamingId]  = useState(null)
@@ -849,7 +863,7 @@ export default function Desktop() {
                 <>
                   <div className="flex gap-2"><span className="text-white/40 w-20 flex-shrink-0">Name</span><span className="text-white break-all">{propertiesApp.node.name}</span></div>
                   <div className="flex gap-2"><span className="text-white/40 w-20 flex-shrink-0">Type</span><span className="text-white capitalize">{propertiesApp.node.type}</span></div>
-                  {propertiesApp.node.type === 'file' && <div className="flex gap-2"><span className="text-white/40 w-20 flex-shrink-0">Size</span><span className="text-white">{propertiesApp.node.size ?? 0} bytes</span></div>}
+                  {propertiesApp.node.type === 'file' && <div className="flex gap-2"><span className="text-white/40 w-20 flex-shrink-0">Size</span><span className="text-white">{propertiesFsSize === undefined ? 'Loading…' : fmtBytes(propertiesFsSize ?? propertiesApp.node.size)}</span></div>}
                   {propertiesApp.node.type === 'folder' && <div className="flex gap-2"><span className="text-white/40 w-20 flex-shrink-0">Contents</span><span className="text-white">{(propertiesApp.node.children || []).length} items</span></div>}
                   <div className="flex gap-2"><span className="text-white/40 w-20 flex-shrink-0">Modified</span><span className="text-white">{new Date(propertiesApp.node.updatedAt).toLocaleString()}</span></div>
                 </>

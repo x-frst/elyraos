@@ -85,14 +85,16 @@ export default function VideoPlayer({ windowId, context }) {
   const [showSpeed,    setShowSpeed]    = useState(false)
   const [confirmDel,   setConfirmDel]   = useState(false)
   const [showFsPicker, setShowFsPicker] = useState(false)
+  const [vidError,     setVidError]     = useState(null)   // error message string | null
 
-  // Revoke blob URL on unmount (only used for locally-opened device files)
+  // Clear any previous error when the source changes
+  useEffect(() => setVidError(null), [localSrc, currentFileId])
+
   useEffect(() => () => { if (blobUrlRef.current) URL.revokeObjectURL(blobUrlRef.current) }, [])
 
-  // When src changes, reload and autoplay
   useEffect(() => {
     const v = videoRef.current
-    if (!v || !src) return   // src computed below, but effect runs after render so it's fine
+    if (!v || !src) return
     v.load()
     v.play().then(() => setPlaying(true)).catch(() => {})
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -102,10 +104,7 @@ export default function VideoPlayer({ windowId, context }) {
     if (videoRef.current) { videoRef.current.playbackRate = speed; videoRef.current.loop = loop }
   }, [speed, loop])
 
-  // Auto-focus the player so keyboard shortcuts work immediately
   useEffect(() => { rootRef.current?.focus() }, [])
-
-  // ── Keyboard shortcuts ─────────────────────────────────────────────────
   const handleKeyDown = useCallback((e) => {
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return
     const isMac = /Mac|iPod|iPhone|iPad/.test(navigator.platform)
@@ -350,13 +349,31 @@ export default function VideoPlayer({ windowId, context }) {
       </div>
 
       {/* ── Video ──────────────────────────────────────────────────── */}
-      <div className="flex-1 flex items-center justify-center overflow-hidden bg-black cursor-pointer"
+      <div className="flex-1 flex items-center justify-center overflow-hidden bg-black cursor-pointer relative"
         onClick={togglePlay} onDoubleClick={fullscreen}>
         <video ref={videoRef} src={src} className="max-w-full max-h-full" style={{ objectFit: "contain" }}
           onTimeUpdate={(e) => { if (!seeking) setCurrent(e.target.currentTime) }}
-          onLoadedMetadata={(e) => setDuration(e.target.duration)}
+          onLoadedMetadata={(e) => { setDuration(e.target.duration); setVidError(null) }}
           onEnded={() => { if (!loop) setPlaying(false) }}
+          onError={(e) => {
+            const code = e.target.error?.code
+            const msgs = {
+              1: 'Playback was aborted.',
+              2: 'Network error — could not load the file. Check your connection.',
+              3: 'Codec not supported by this browser. Try converting to H.264 MP4.',
+              4: 'Could not play this file. The codec may be unsupported (e.g. Apple ProRes / QuickTime). Try converting to H.264 MP4 or WebM, or open in Safari on macOS.',
+            }
+            setVidError(msgs[code] || `Playback error (code ${code}).`)
+            setPlaying(false)
+          }}
         />
+        {vidError && (
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 px-6"
+            style={{ background: 'rgba(0,0,0,0.75)', pointerEvents: 'none' }}>
+            <div className="text-4xl">⚠️</div>
+            <div className="text-white/80 text-[13px] font-medium text-center">{vidError}</div>
+          </div>
+        )}
       </div>
 
       {/* ── Controls ───────────────────────────────────────────────── */}

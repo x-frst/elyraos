@@ -3,6 +3,7 @@ import { Headphones, Radio, Play, Pause, SkipBack, SkipForward,
          Volume2, VolumeX, Upload, FolderOpen, X, Music } from 'lucide-react'
 import { useMusicStore, RADIO_STATIONS, getAudio } from '../store/useMusicStore'
 import { useStore } from '../store/useStore'
+import { fsRawUrl } from '../utils/db'
 
 const AUDIO_EXTS = ['mp3', 'm4a', 'ogg', 'wav', 'flac', 'aac', 'opus', 'webm']
 
@@ -34,18 +35,18 @@ export default function MusicPlayer() {
   } = useMusicStore()
 
   const fsRoot   = useStore(s => s.fsRoot)
-  const readFile = useStore(s => s.readFile)
-  const loadFile = useStore(s => s.loadFile)
 
   const [tab, setTab]                   = useState('radio')
   const [showFsPicker, setShowFsPicker] = useState(false)
   const [currentTime, setCurrentTime]   = useState(0)
   const [duration, setDuration]         = useState(0)
+  const [audioError, setAudioError]     = useState(null)
+
+  // Clear audio error when playback mode or track changes
+  useEffect(() => setAudioError(null), [mode, localTrackIdx])
 
   // Keep visible tab in sync with active playback mode
   useEffect(() => { setTab(mode === 'local' ? 'library' : 'radio') }, [mode])
-
-  // Pause audio when the Music window is actually closed.
   // Uses a ref + setTimeout(0) to be React StrictMode-safe:
   // StrictMode remounts synchronously before the timeout fires, so
   // mountedRef will be true again and pause is skipped.
@@ -59,25 +60,32 @@ export default function MusicPlayer() {
     }
   }, [])
 
+  // Pause audio when the Music window is actually closed.
   // Attach audio event listeners for seek display + auto-advance
   useEffect(() => {
     const audio = getAudio()
     const onTime   = () => setCurrentTime(audio.currentTime)
-    const onSeeked  = () => setCurrentTime(audio.currentTime)
+    const onSeeked = () => setCurrentTime(audio.currentTime)
     const onMeta   = () => setDuration(isFinite(audio.duration) ? audio.duration : 0)
     const onEnded  = () => {
       const st = useMusicStore.getState()
       if (st.mode === 'local' && st.localTracks.length > 0) st.nextLocalTrack()
     }
+    const onErr = () => {
+      setAudioError('This audio format is not supported by your browser.')
+      useMusicStore.getState().pause()
+    }
     audio.addEventListener('timeupdate', onTime)
     audio.addEventListener('seeked', onSeeked)
     audio.addEventListener('loadedmetadata', onMeta)
     audio.addEventListener('ended', onEnded)
+    audio.addEventListener('error', onErr)
     return () => {
       audio.removeEventListener('timeupdate', onTime)
       audio.removeEventListener('seeked', onSeeked)
       audio.removeEventListener('loadedmetadata', onMeta)
       audio.removeEventListener('ended', onEnded)
+      audio.removeEventListener('error', onErr)
     }
   }, [])
 
@@ -157,6 +165,13 @@ export default function MusicPlayer() {
               <span key={i} className="w-1 rounded-full animate-bounce"
                 style={{ background: 'rgba(130,80,255,0.85)', animationDelay: `${delay}ms`, height: BAR_HEIGHTS[i] }} />
             ))}
+          </div>
+        )}
+        {audioError && (
+          <div className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-[12px]"
+            style={{ background: 'rgba(239,68,68,0.2)', border: '1px solid rgba(239,68,68,0.4)', color: 'rgba(255,180,180,0.9)' }}>
+            <span className="flex-1">⚠️ {audioError}</span>
+            <button onClick={() => setAudioError(null)} className="text-white/40 hover:text-white/80">✕</button>
           </div>
         )}
         {/* Seek bar — only for local tracks with known duration */}
@@ -328,14 +343,13 @@ export default function MusicPlayer() {
             ) : (
               <div className="flex flex-col gap-1">
                 {fsAudioFiles.map(node => {
-                  const added = localTracks.some(t => t.id === node.id)
+                  const trackName = node.name.replace(/\.[^.]+$/, '')
+                  const added = localTracks.some(t => t.name === trackName)
                   return (
                     <button key={node.id} disabled={added}
-                      onClick={async () => {
-                        let src = readFile(node.id)
-                        if (!src) src = await loadFile(node.id)
-                        if (!src) return
-                        addLocalTracks([{ id: node.id, name: node.name.replace(/\.[^.]+$/, ''), src }])
+                      onClick={() => {
+                        const src = fsRawUrl(node.id, node.name)
+                        useMusicStore.getState().playRawData(node.name.replace(/\.[^.]+$/, ''), src)
                         setShowFsPicker(false)
                       }}
                       className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all hover:bg-white/10"

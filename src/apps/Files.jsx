@@ -12,7 +12,7 @@ import { useMusicStore } from "../store/useMusicStore"
 import { useAuthStore } from "../store/useAuthStore"
 import { useFileUpload } from "../hooks/useFileUpload"
 import { DND_FILES_MIME } from "../config.js"
-import { fsRawUrl, fsUploadStream } from "../utils/db"
+import { fsRawUrl, fsUploadStream, fsStatSize, fmtBytes } from "../utils/db"
 
 const EXT_ICONS = {
   jpg: Image, jpeg: Image, png: Image, gif: Image, webp: Image, svg: Image,
@@ -121,6 +121,7 @@ export default function Files({ windowId, context }) {
   const [renameVal, setRenameVal]   = useState("")
   const [selRect, setSelRect]       = useState(null)
   const [propertiesNode, setPropertiesNode] = useState(null)
+  const [propertiesFsSize, setPropertiesFsSize] = useState(null)  // fetched real size
   const [confirmDelete, setConfirmDelete] = useState(null)
   const [urlDialog, setUrlDialog]         = useState(null)
   const [sortKey, setSortKey]     = useState("name")
@@ -136,6 +137,16 @@ export default function Files({ windowId, context }) {
   // True on touch/stylus-only devices — disables HTML5 drag to restore long-press context menu
   const isTouchDevice = useRef(window.matchMedia('(pointer: coarse)').matches).current
   const { uploads, uploadFiles } = useFileUpload()
+
+  // Fetch the real on-disk file size whenever a file Properties dialog opens
+  useEffect(() => {
+    if (!propertiesNode || propertiesNode.type !== 'file') { setPropertiesFsSize(null); return }
+    let cancelled = false
+    setPropertiesFsSize(undefined)  // undefined = loading
+    fsStatSize(propertiesNode.id, propertiesNode.name)
+      .then(sz => { if (!cancelled) setPropertiesFsSize(sz) })
+    return () => { cancelled = true }
+  }, [propertiesNode])
 
   const cwd   = history[historyIdx]
   const rawItems = listDir(cwd)
@@ -862,7 +873,7 @@ export default function Files({ windowId, context }) {
                     ) : (
                       <>
                         <span className="flex-1 text-white/85 text-[13px] truncate" title={node.name}>{node.name}</span>
-                        <span className="text-white/30 text-[11px] w-20 text-right flex-shrink-0">{node.type === 'folder' ? `${(node.children||[]).length} items` : (() => { const sz = node.size ?? 0; return sz < 1024 ? `${sz} B` : `${(sz/1024).toFixed(1)} KB` })()}</span>
+                        <span className="text-white/30 text-[11px] w-20 text-right flex-shrink-0">{node.type === 'folder' ? `${(node.children||[]).length} items` : fmtBytes(node.size ?? 0)}</span>
                         <span className="text-white/30 text-[11px] w-24 text-right flex-shrink-0">{new Date(node.updatedAt).toLocaleDateString()}</span>
                         <span className="text-white/25 text-[11px] w-12 text-right flex-shrink-0">{node.type === "folder" ? "Folder" : (node.name.split(".").pop()?.toUpperCase() || "File")}</span>
                       </>
@@ -930,7 +941,7 @@ export default function Files({ windowId, context }) {
             <div className="flex flex-col gap-2 text-white/70">
               <div className="flex gap-2"><span className="text-white/40 w-20 flex-shrink-0">Name</span><span className="text-white break-all">{propertiesNode.name}</span></div>
               <div className="flex gap-2"><span className="text-white/40 w-20 flex-shrink-0">Type</span><span className="text-white capitalize">{propertiesNode.type}</span></div>
-              {propertiesNode.type === "file" && <div className="flex gap-2"><span className="text-white/40 w-20 flex-shrink-0">Size</span><span className="text-white">{(propertiesNode.size ?? 0).toLocaleString()} bytes</span></div>}
+              {propertiesNode.type === "file" && <div className="flex gap-2"><span className="text-white/40 w-20 flex-shrink-0">Size</span><span className="text-white">{propertiesFsSize === undefined ? 'Loading…' : fmtBytes(propertiesFsSize ?? propertiesNode.size)}</span></div>}
               {propertiesNode.type === "folder" && <div className="flex gap-2"><span className="text-white/40 w-20 flex-shrink-0">Contents</span><span className="text-white">{(propertiesNode.children || []).length} items</span></div>}
               <div className="flex gap-2"><span className="text-white/40 w-20 flex-shrink-0">Modified</span><span className="text-white">{new Date(propertiesNode.updatedAt).toLocaleString()}</span></div>
             </div>

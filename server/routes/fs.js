@@ -108,14 +108,14 @@ router.get('/raw/:nodeId', (req, res, next) => {
       const buf   = Buffer.from(b64.replace(/\s/g, ''), 'base64')
       res.setHeader('Content-Type', mime)
       res.setHeader('Content-Length', buf.length)
-      res.setHeader('Cache-Control', 'private, no-cache')
+      res.setHeader('Cache-Control', 'private, max-age=900')
       return res.end(buf)
     }
 
     // New format: raw bytes — pipe with range support via res.sendFile
     const absPath = path.resolve(fp)
     res.setHeader('Content-Type', guessedMime)
-    res.setHeader('Cache-Control', 'private, no-cache')
+    res.setHeader('Cache-Control', 'private, max-age=900')
     res.sendFile(absPath)
   } catch (e) {
     res.status(400).json({ error: e.message })

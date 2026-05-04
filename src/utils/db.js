@@ -303,6 +303,36 @@ export function fsRawUrl(nodeId, name) {
 }
 
 /**
+ * Format a byte count into a human-readable string.
+ * e.g. 0 → "0 bytes", 1536 → "1.50 KB", 52428800 → "50.00 MB"
+ */
+export function fmtBytes(n) {
+  if (n == null || isNaN(n) || n < 0) return '—'
+  if (n === 0) return '0 bytes'
+  if (n === 1) return '1 byte'
+  const units = ['bytes', 'KB', 'MB', 'GB', 'TB']
+  const i = Math.min(Math.floor(Math.log(n) / Math.log(1024)), units.length - 1)
+  if (i === 0) return `${n} bytes`
+  return `${(n / Math.pow(1024, i)).toFixed(2)} ${units[i]}`
+}
+
+/**
+ * Fetch the true on-disk byte size of a file from the server.
+ * Uses a HEAD request against the raw endpoint — no file content is transferred.
+ * Returns the byte count, or null if the request fails or the file doesn't exist.
+ */
+export async function fsStatSize(nodeId, name) {
+  if (!_jwt) return null
+  try {
+    const url = fsRawUrl(nodeId, name)
+    const res = await fetch(url, { method: 'HEAD' })
+    if (!res.ok) return null
+    const len = res.headers.get('content-length')
+    return len != null ? parseInt(len, 10) : null
+  } catch { return null }
+}
+
+/**
  * Upload a file via streaming XHR (no readAsDataURL, no base64 overhead).
  * Sends raw bytes directly — server writes them to disk without buffering.
  * Supports upload progress events and cancellation via AbortSignal.

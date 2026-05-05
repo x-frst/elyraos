@@ -9,11 +9,11 @@
 // ── Branding ──────────────────────────────────────────────────────────────────
 export const BRANDING = {
   /** Short name shown in the title bar, dock tooltips, and login screen */
-  name: "ElyraOS",
+  name: "Elyra",
   /** Full product name (used in About screens) */
   fullName: "Elyra Operating System",
   /** Shown in the browser tab <title> */
-  pageTitle: "ElyraOS",
+  pageTitle: "Elyra",
   /** Version string shown in Settings → About */
   version: "1.0",
   /** Website or repo URL (used in Settings → About) */

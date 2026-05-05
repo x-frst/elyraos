@@ -6,6 +6,7 @@ import {
 } from '../config.js'
 
 const uid = () => Math.random().toString(36).slice(2, 10)
+const WINDOW_CLOSE_DELAY_MS = 180
 
 // ── Tree helpers ──────────────────────────────────────────────────────────────
 function mapNode(node, id, fn) {
@@ -190,6 +191,12 @@ export const useStore = create((set, get) => ({
     return id
   },
   closeWindow(id) { set(s => ({ windows: s.windows.filter(w => w.id !== id) })) },
+  requestWindowClose(id) {
+    const win = get().windows.find(w => w.id === id)
+    if (!win || win.closing) return
+    set(s => ({ windows: s.windows.map(w => w.id === id ? { ...w, closing: true } : w) }))
+    setTimeout(() => get().closeWindow(id), WINDOW_CLOSE_DELAY_MS)
+  },
   minimizeWindow(id) { set(s => ({ windows: s.windows.map(w => w.id === id ? { ...w, minimized: true } : w) })) },
   minimizeAll() { set(s => ({ windows: s.windows.map(w => ({ ...w, minimized: true })) })) },
 

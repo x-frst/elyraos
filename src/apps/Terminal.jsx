@@ -27,7 +27,7 @@ function parseCommandLine(input) {
 }
 
 // ── Built-in commands ─────────────────────────────────────────────────────────
-function buildCommands(getState, cwd, setCwd) {
+function buildCommands(getState, cwd, setCwd, windowId) {
   const resolve = (path) => {
     if (!path || path === '~') return 'root'
     const state = getState()
@@ -98,6 +98,7 @@ function buildCommands(getState, cwd, setCwd) {
   open <n>  - open in app
   date      - current date/time
   clear     - clear terminal
+  exit      - close terminal window
   help      - show this help`,
 
     ls: () => {
@@ -177,6 +178,11 @@ function buildCommands(getState, cwd, setCwd) {
       }
       return `Opening ${name}…`
     },
+
+    exit: () => {
+      getState().requestWindowClose(windowId)
+      return ''
+    },
   }
 }
 
@@ -191,7 +197,7 @@ export default function Terminal({ windowId }) {
   const bottomRef = useRef(null)
   const inputRef  = useRef(null)
 
-  const commands = buildCommands(getState, cwd, setCwd)
+  const commands = buildCommands(getState, cwd, setCwd, windowId)
 
   // Dynamic prompt based on cwd
   const cwdLabel = cwd === 'root' ? '~' : (commands._getCwdPath(cwd) || '~')

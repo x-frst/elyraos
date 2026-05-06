@@ -1,4 +1,4 @@
-import { useRef, useState, useCallback, memo } from 'react'
+import { useRef, useCallback, memo } from 'react'
 import { motion } from 'framer-motion'
 // Titlebar button icons — inline SVG for crispness at small sizes
 const IconClose    = () => <svg viewBox="0 0 10 10" fill="none" className="w-full h-full"><line x1="2" y1="2" x2="8" y2="8" stroke="#7a1f1b" strokeWidth="1.6" strokeLinecap="round"/><line x1="8" y1="2" x2="2" y2="8" stroke="#7a1f1b" strokeWidth="1.6" strokeLinecap="round"/></svg>
@@ -18,15 +18,13 @@ function isMobile() { return window.innerWidth < 768 && window.innerHeight > win
 
 export default memo(function Window({ win }) {
   const focusWindow    = useStore(s => s.focusWindow)
-  const closeWindow    = useStore(s => s.closeWindow)
+  const requestWindowClose = useStore(s => s.requestWindowClose)
   const minimizeWindow = useStore(s => s.minimizeWindow)
   const toggleMaximize = useStore(s => s.toggleMaximize)
   const updateWindowPos  = useStore(s => s.updateWindowPos)
   const updateWindowSize = useStore(s => s.updateWindowSize)
   const titlebarButtonsRight = useStore(s => s.settings?.titlebarButtonsRight)
 
-  // local "closing" animation flag
-  const [isClosing, setIsClosing] = useState(false)
   const isDragging  = useRef(false)
   const isResizing  = useRef(false)
   const dragOrigin  = useRef({ mx: 0, my: 0, wx: 0, wy: 0 })
@@ -157,12 +155,6 @@ export default memo(function Window({ win }) {
     window.addEventListener('mouseup', onUp)
   }, [win.id, win.width, win.height, win.maximized, focusWindow, updateWindowSize])
 
-  // ── Close with animation ─────────────────────────────────────────────────
-  const handleClose = useCallback(() => {
-    setIsClosing(true)
-    setTimeout(() => closeWindow(win.id), 180)
-  }, [win.id, closeWindow])
-
   // ── Derived layout ────────────────────────────────────────────────────────
   const mobile = isMobile()
   const DOCK_H = 80
@@ -175,7 +167,7 @@ export default memo(function Window({ win }) {
     ? { left: 0, top: 0, width: '100vw', height: '100vh', zIndex: win.zIndex }
     : { left: win.x, top: win.y, width: win.width, height: win.height }
 
-  const animate = isClosing
+  const animate = win.closing
     ? { opacity: 0, scale: 0.82, transition: { duration: 0.16, ease: [0.4, 0, 0.8, 1] } }
     : win.minimized
     ? { opacity: [1, 0.85, 0], scaleX: [1, 0.68, 0.08], scaleY: [1, 0.2, 0.02], y: ['0%', '16vh', '50vh'],
@@ -232,7 +224,7 @@ export default memo(function Window({ win }) {
                   </span>
                 </button>
               )}
-              <button data-wcbtn onClick={handleClose}
+              <button data-wcbtn onClick={() => requestWindowClose(win.id)}
                 className="w-3.5 h-3.5 rounded-full flex items-center justify-center group transition-all hover:brightness-110 active:scale-90 p-[2.5px]"
                 style={{ background: '#ff5f57' }} title="Close">
                 <span className="opacity-0 group-hover:opacity-100 transition-opacity w-full h-full"><IconClose /></span>
@@ -243,7 +235,7 @@ export default memo(function Window({ win }) {
           /* macOS-style: buttons on left — title absolutely centered */
           <>
             <div className="flex items-center gap-2 mr-3 flex-shrink-0" data-wcbtn>
-              <button data-wcbtn onClick={handleClose}
+              <button data-wcbtn onClick={() => requestWindowClose(win.id)}
                 className="w-3.5 h-3.5 rounded-full flex items-center justify-center group transition-all hover:brightness-110 active:scale-90 p-[2.5px]"
                 style={{ background: '#ff5f57' }} title="Close">
                 <span className="opacity-0 group-hover:opacity-100 transition-opacity w-full h-full"><IconClose /></span>

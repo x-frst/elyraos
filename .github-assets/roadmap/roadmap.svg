@@ -1,0 +1,423 @@
+<svg width="900" height="1290" viewBox="0 0 900 1290" xmlns="http://www.w3.org/2000/svg">
+
+<defs>
+
+  <!-- Background -->
+  <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+    <stop offset="0%" stop-color="#f7dcff"/>
+    <stop offset="25%" stop-color="#e4deff"/>
+    <stop offset="50%" stop-color="#f8f8fb"/>
+    <stop offset="75%" stop-color="#dfe7ff"/>
+    <stop offset="100%" stop-color="#f6ddff"/>
+  </linearGradient>
+
+  <!-- Aurora -->
+  <radialGradient id="leftGlow" cx="0%" cy="100%" r="70%">
+    <stop offset="0%" stop-color="#ff4fd8" stop-opacity="0.28"/>
+    <stop offset="100%" stop-color="#ff4fd8" stop-opacity="0"/>
+  </radialGradient>
+
+  <radialGradient id="rightGlow" cx="100%" cy="0%" r="70%">
+    <stop offset="0%" stop-color="#5b8cff" stop-opacity="0.28"/>
+    <stop offset="100%" stop-color="#5b8cff" stop-opacity="0"/>
+  </radialGradient>
+
+  <!-- Timeline -->
+  <linearGradient id="timelineGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+    <stop offset="0%" stop-color="#5b8cff"/>
+    <stop offset="100%" stop-color="#d946ef"/>
+  </linearGradient>
+
+  <!-- Card Shadow -->
+  <filter id="cardShadow" x="-20%" y="-20%" width="140%" height="140%">
+    <feDropShadow dx="0" dy="10" stdDeviation="18"
+      flood-color="#9d8cff"
+      flood-opacity="0.15"/>
+  </filter>
+
+  <!-- Node Glow -->
+  <filter id="nodeGlow">
+    <feGaussianBlur stdDeviation="4" result="blur"/>
+    <feMerge>
+      <feMergeNode in="blur"/>
+      <feMergeNode in="SourceGraphic"/>
+    </feMerge>
+  </filter>
+
+  <style>
+
+    .title {
+      fill: #111827;
+      font-size: 21px;
+      font-weight: 700;
+      font-family: Inter, Segoe UI, sans-serif;
+    }
+
+    .desc {
+      fill: #5b6475;
+      font-size: 14px;
+      font-family: Inter, Segoe UI, sans-serif;
+    }
+
+    .date {
+      fill: #3b82f6;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      font-family: Inter, Segoe UI, sans-serif;
+    }
+
+    .card {
+      fill: rgba(255,255,255,0.26);
+      stroke: rgba(255,255,255,0.55);
+      stroke-width: 1.2;
+    }
+
+    .cardHighlight {
+      fill: rgba(255,255,255,0.18);
+    }
+
+    .timelineCore {
+      stroke: url(#timelineGradient);
+      stroke-width: 3;
+      stroke-linecap: round;
+    }
+
+    .timelineGlow {
+      stroke: url(#timelineGradient);
+      stroke-width: 10;
+      opacity: 0.18;
+      stroke-linecap: round;
+    }
+
+    .completed {
+      fill: #14f195;
+    }
+
+    .progress {
+      fill: #ffb020;
+    }
+
+    .future {
+      fill: #b9bfd1;
+    }
+
+    .tick {
+      stroke: white;
+      stroke-width: 2.6;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .nodePulse {
+      animation: pulse 2.6s infinite;
+      transform-origin: center;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.7; }
+      100% { opacity: 1; }
+    }
+
+  </style>
+
+</defs>
+
+<!-- Background -->
+<rect width="100%" height="100%" fill="url(#bgGradient)"/>
+
+<!-- Aurora -->
+<rect width="100%" height="100%" fill="url(#leftGlow)"/>
+<rect width="100%" height="100%" fill="url(#rightGlow)"/>
+
+<!-- Timeline -->
+<line x1="140" y1="70" x2="140" y2="1220" class="timelineGlow"/>
+<line x1="140" y1="70" x2="140" y2="1220" class="timelineCore"/>
+
+<g filter="url(#cardShadow)">
+
+  <!-- Card -->
+  <rect x="190" y="40" width="620" height="86" rx="24" class="card"/>
+  <rect x="191" y="41" width="618" height="28" rx="24" class="cardHighlight"/>
+
+  <!-- Node -->
+  <circle cx="140" cy="83.0" r="9"
+          class="completed nodePulse"
+          filter="url(#nodeGlow)"/>
+
+  <path d="M136 83.0
+           L140 87.0
+           L147 78.0"
+        class="tick"/>
+
+
+  <!-- Text -->
+  <text x="225" y="62" class="date">April 2026</text>
+
+  <text x="225" y="92" class="title">
+    Cloudflare Proxy Migration
+  </text>
+
+  <text x="225" y="118" class="desc">
+    Migrate to Cloudflare proxy for improved performance and security
+  </text>
+
+</g>
+
+<g filter="url(#cardShadow)">
+
+  <!-- Card -->
+  <rect x="190" y="150" width="620" height="86" rx="24" class="card"/>
+  <rect x="191" y="151" width="618" height="28" rx="24" class="cardHighlight"/>
+
+  <!-- Node -->
+  <circle cx="140" cy="193.0" r="9"
+          class="completed nodePulse"
+          filter="url(#nodeGlow)"/>
+
+  <path d="M136 193.0
+           L140 197.0
+           L147 188.0"
+        class="tick"/>
+
+
+  <!-- Text -->
+  <text x="225" y="172" class="date">April 2026</text>
+
+  <text x="225" y="202" class="title">
+    QoL Improvements
+  </text>
+
+  <text x="225" y="228" class="desc">
+    Implement various quality of life improvements
+  </text>
+
+</g>
+
+<g filter="url(#cardShadow)">
+
+  <!-- Card -->
+  <rect x="190" y="260" width="620" height="86" rx="24" class="card"/>
+  <rect x="191" y="261" width="618" height="28" rx="24" class="cardHighlight"/>
+
+  <!-- Node -->
+  <circle cx="140" cy="303.0" r="9"
+          class="future nodePulse"
+          filter="url(#nodeGlow)"/>
+
+
+  <!-- Text -->
+  <text x="225" y="282" class="date">May 2026</text>
+
+  <text x="225" y="312" class="title">
+    Forgot Password System
+  </text>
+
+  <text x="225" y="338" class="desc">
+    Implement password recovery and reset flow
+  </text>
+
+</g>
+
+<g filter="url(#cardShadow)">
+
+  <!-- Card -->
+  <rect x="190" y="370" width="620" height="86" rx="24" class="card"/>
+  <rect x="191" y="371" width="618" height="28" rx="24" class="cardHighlight"/>
+
+  <!-- Node -->
+  <circle cx="140" cy="413.0" r="9"
+          class="future nodePulse"
+          filter="url(#nodeGlow)"/>
+
+
+  <!-- Text -->
+  <text x="225" y="392" class="date">May 2026</text>
+
+  <text x="225" y="422" class="title">
+    Desktop Widgets Expansion
+  </text>
+
+  <text x="225" y="448" class="desc">
+    Add new widgets and enhance existing ones for the desktop environment
+  </text>
+
+</g>
+
+<g filter="url(#cardShadow)">
+
+  <!-- Card -->
+  <rect x="190" y="480" width="620" height="86" rx="24" class="card"/>
+  <rect x="191" y="481" width="618" height="28" rx="24" class="cardHighlight"/>
+
+  <!-- Node -->
+  <circle cx="140" cy="523.0" r="9"
+          class="future nodePulse"
+          filter="url(#nodeGlow)"/>
+
+
+  <!-- Text -->
+  <text x="225" y="502" class="date">May 2026</text>
+
+  <text x="225" y="532" class="title">
+    Report an App System
+  </text>
+
+  <text x="225" y="558" class="desc">
+    Allow users to report apps for moderation and review
+  </text>
+
+</g>
+
+<g filter="url(#cardShadow)">
+
+  <!-- Card -->
+  <rect x="190" y="590" width="620" height="86" rx="24" class="card"/>
+  <rect x="191" y="591" width="618" height="28" rx="24" class="cardHighlight"/>
+
+  <!-- Node -->
+  <circle cx="140" cy="633.0" r="9"
+          class="future nodePulse"
+          filter="url(#nodeGlow)"/>
+
+
+  <!-- Text -->
+  <text x="225" y="612" class="date">June 2026</text>
+
+  <text x="225" y="642" class="title">
+    Social Media Platform
+  </text>
+
+  <text x="225" y="668" class="desc">
+    Build integrated social features and platform
+  </text>
+
+</g>
+
+<g filter="url(#cardShadow)">
+
+  <!-- Card -->
+  <rect x="190" y="700" width="620" height="86" rx="24" class="card"/>
+  <rect x="191" y="701" width="618" height="28" rx="24" class="cardHighlight"/>
+
+  <!-- Node -->
+  <circle cx="140" cy="743.0" r="9"
+          class="future nodePulse"
+          filter="url(#nodeGlow)"/>
+
+
+  <!-- Text -->
+  <text x="225" y="722" class="date">July 2026</text>
+
+  <text x="225" y="752" class="title">
+    Admin Panel Enhancements
+  </text>
+
+  <text x="225" y="778" class="desc">
+    Temporary invite link creation/deletion and additional admin tools
+  </text>
+
+</g>
+
+<g filter="url(#cardShadow)">
+
+  <!-- Card -->
+  <rect x="190" y="810" width="620" height="86" rx="24" class="card"/>
+  <rect x="191" y="811" width="618" height="28" rx="24" class="cardHighlight"/>
+
+  <!-- Node -->
+  <circle cx="140" cy="853.0" r="9"
+          class="future nodePulse"
+          filter="url(#nodeGlow)"/>
+
+
+  <!-- Text -->
+  <text x="225" y="832" class="date">August 2026</text>
+
+  <text x="225" y="862" class="title">
+    Elyra App Creation (AI/API)
+  </text>
+
+  <text x="225" y="888" class="desc">
+    Enable app creation using built-in AI Assistant or Elyra API
+  </text>
+
+</g>
+
+<g filter="url(#cardShadow)">
+
+  <!-- Card -->
+  <rect x="190" y="920" width="620" height="86" rx="24" class="card"/>
+  <rect x="191" y="921" width="618" height="28" rx="24" class="cardHighlight"/>
+
+  <!-- Node -->
+  <circle cx="140" cy="963.0" r="9"
+          class="future nodePulse"
+          filter="url(#nodeGlow)"/>
+
+
+  <!-- Text -->
+  <text x="225" y="942" class="date">August 2026</text>
+
+  <text x="225" y="972" class="title">
+    App Submission and Publishing
+  </text>
+
+  <text x="225" y="998" class="desc">
+    System for submitting and publishing Elyra apps
+  </text>
+
+</g>
+
+<g filter="url(#cardShadow)">
+
+  <!-- Card -->
+  <rect x="190" y="1030" width="620" height="86" rx="24" class="card"/>
+  <rect x="191" y="1031" width="618" height="28" rx="24" class="cardHighlight"/>
+
+  <!-- Node -->
+  <circle cx="140" cy="1073.0" r="9"
+          class="future nodePulse"
+          filter="url(#nodeGlow)"/>
+
+
+  <!-- Text -->
+  <text x="225" y="1052" class="date">September 2026</text>
+
+  <text x="225" y="1082" class="title">
+    Built-in Hosting System
+  </text>
+
+  <text x="225" y="1108" class="desc">
+    Hosting for websites and workers within ElyraOS
+  </text>
+
+</g>
+
+<g filter="url(#cardShadow)">
+
+  <!-- Card -->
+  <rect x="190" y="1140" width="620" height="86" rx="24" class="card"/>
+  <rect x="191" y="1141" width="618" height="28" rx="24" class="cardHighlight"/>
+
+  <!-- Node -->
+  <circle cx="140" cy="1183.0" r="9"
+          class="future nodePulse"
+          filter="url(#nodeGlow)"/>
+
+
+  <!-- Text -->
+  <text x="225" y="1162" class="date">TBD</text>
+
+  <text x="225" y="1192" class="title">
+    Stable Release
+  </text>
+
+  <text x="225" y="1218" class="desc">
+    Finalize features and release stable version
+  </text>
+
+</g>
+</svg>

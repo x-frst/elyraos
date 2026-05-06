@@ -95,21 +95,40 @@ goto :eof
 :banner
 cls
 echo.
-echo %C%  ^█^█^█^█^█^█^█^╗^█^█^╗     ^█^█^╗   ^█^█^╗^█^█^█^█^█^█^╗  ^█^█^█^█^█^╗ %NC%
-echo %C%  ^^██╔════╝^^██║     ╚^^██╗ ^^██╔╝^^██╔══^^██╗^^██╔══^^██╗%NC%
-echo %C%  ^█^█^█^█^█^╗  ^█^█^║      ╚^█^█^█^█^╔╝ ^█^█^█^█^█^█^╔╝^█^█^█^█^█^█^█^║%NC%
-echo %C%  ^^██╔══╝  ^^██║       ╚^^██╔╝  ^^██╔══^^██╗^^██╔══^^██║%NC%
-echo %C%  ^█^█^█^█^█^█^█^╗^█^█^█^█^█^█^█^╗   ^█^█^║   ^█^█^║  ^█^█^║^█^█^║  ^█^█^║%NC%
+echo %C%  ███████╗██╗     ██╗   ██╗██████╗  █████╗ %NC%
+echo %C%  ██╔════╝██║     ╚██╗ ██╔╝██╔══██╗██╔══██╗%NC%
+echo %C%  █████╗  ██║      ╚████╔╝ ██████╔╝███████║%NC%
+echo %C%  ██╔══╝  ██║       ╚██╔╝  ██╔══██╗██╔══██║%NC%
+echo %C%  ███████╗███████╗   ██║   ██║  ██║██║  ██║%NC%
 echo %C%  ╚══════╝╚══════╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝%NC%
 echo.
 goto :eof
 
-:ok   & echo   %G%^[OK^] %~1%NC% & goto :eof
-:fail & echo   %R%^[ERR^] %~1%NC% & goto :eof
-:warn & echo   %Y%^[WARN^] %~1%NC% & goto :eof
-:info & echo   %B%^[  ^] %~1%NC% & goto :eof
-:step & echo. & echo   %W%==  %~1  ==%NC% & echo. & goto :eof
-:sep  & echo %C%----------------------------------------------------------------%NC% & goto :eof
+:ok
+echo   %G%[OK] %~1%NC%
+exit /b 0
+
+:fail
+echo   %R%[ERR] %~1%NC%
+exit /b 0
+
+:warn
+echo   %Y%[WARN] %~1%NC%
+exit /b 0
+
+:info
+echo   %B%[  ] %~1%NC%
+exit /b 0
+
+:step
+echo.
+echo   %W%==  %~1  ==%NC%
+echo.
+exit /b 0
+
+:sep
+echo %C%----------------------------------------------------------------%NC%
+exit /b 0
 
 :: ── check_node ───────────────────────────────────────────────────────────────
 :check_node
@@ -209,14 +228,22 @@ if not "!STORAGE_PFX!"=="elyra" (
 )
 
 :: Use PowerShell to do the multi-pattern replacement in config.js
-powershell -NoProfile -Command ^
-  "$c = Get-Content '%CONFIG_FILE%' -Raw;" ^
-  "$c = $c -replace 'name: *""[^""]*""', 'name: ""!APP_NAME!""';" ^
-  "$c = $c -replace 'fullName: *""[^""]*""', 'fullName: ""!APP_FULLNAME!""';" ^
-  "$c = $c -replace 'pageTitle: *""[^""]*""', 'pageTitle: ""!APP_PAGETITLE!""';" ^
-  "$c = $c -replace 'version: *""[^""]*""', 'version: ""!APP_VERSION!""';" ^
-  "$c = $c -replace 'STORAGE_PREFIX = *""[^""]*""', 'STORAGE_PREFIX = ""!STORAGE_PFX!""';" ^
-  "$c | Set-Content '%CONFIG_FILE%' -NoNewline"
+:: Replacement values are passed via env vars; $q=[char]34 builds the literal
+:: double-quote character inside PowerShell, keeping the CMD line free of any
+:: " chars that could be mangled by CMD's escape/quoting rules.
+set "BRAND_NAME=!APP_NAME!"
+set "BRAND_FULLNAME=!APP_FULLNAME!"
+set "BRAND_PAGETITLE=!APP_PAGETITLE!"
+set "BRAND_VERSION=!APP_VERSION!"
+set "BRAND_PREFIX=!STORAGE_PFX!"
+powershell -NoProfile -ExecutionPolicy Bypass -Command ^
+  "$q=[char]34; $f='%CONFIG_FILE%'; $c=Get-Content $f -Raw;" ^
+  "$c=$c -replace ('\bname:\s*'+$q+'[^'+$q+']*'+$q), ('name: '+$q+$env:BRAND_NAME+$q);" ^
+  "$c=$c -replace ('\bfullName:\s*'+$q+'[^'+$q+']*'+$q), ('fullName: '+$q+$env:BRAND_FULLNAME+$q);" ^
+  "$c=$c -replace ('\bpageTitle:\s*'+$q+'[^'+$q+']*'+$q), ('pageTitle: '+$q+$env:BRAND_PAGETITLE+$q);" ^
+  "$c=$c -replace ('\bversion:\s*'+$q+'[^'+$q+']*'+$q), ('version: '+$q+$env:BRAND_VERSION+$q);" ^
+  "$c=$c -replace ('STORAGE_PREFIX\s*=\s*'+$q+'[^'+$q+']*'+$q), ('STORAGE_PREFIX = '+$q+$env:BRAND_PREFIX+$q);" ^
+  "$c | Set-Content $f -NoNewline"
 
 call :ok "src\config.js updated"
 goto :eof
@@ -381,7 +408,7 @@ if /i "!SMTP_CHOICE!"=="y" (
     echo AI_API_KEY=!AI_KEY!
   )
   echo.
-  echo # -- Tunable defaults (uncomment to override) ---------------------------
+  echo # -- Tunable defaults ^(uncomment to override^) ---------------------------
   echo DEFAULT_AI_QUOTA_TOKENS=!AI_QUOTA!
   echo # TOKEN_EXPIRY=15m
   echo # REFRESH_TOKEN_EXPIRY=7d
@@ -408,7 +435,6 @@ call :ok "server\.env written"
 goto :eof
 
 :: ── create_database ─────────────────────────────────────────────────────
-create_database is replaced by :create_database
 
 :: ── show_db_guide (kept as label, immediately falls through) ───────────────
 :show_db_guide

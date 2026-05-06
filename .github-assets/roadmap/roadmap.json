@@ -1,0 +1,68 @@
+[
+    {
+        "date": "April 2026",
+        "title": "Cloudflare Proxy Migration",
+        "desc": "Migrate to Cloudflare proxy for improved performance and security",
+        "status": "completed"
+    },
+    {
+        "date": "April 2026",
+        "title": "QoL Improvements",
+        "desc": "Implement various quality of life improvements",
+        "status": "completed"
+    },
+    {
+        "date": "May 2026",
+        "title": "Forgot Password System",
+        "desc": "Implement password recovery and reset flow",
+        "status": "future"
+    },
+    {
+        "date": "May 2026",
+        "title": "Desktop Widgets Expansion",
+        "desc": "Add new widgets and enhance existing ones for the desktop environment",
+        "status": "future"
+    },
+    {
+        "date": "May 2026",
+        "title": "Report an App System",
+        "desc": "Allow users to report apps for moderation and review",
+        "status": "future"
+    },
+    {
+        "date": "June 2026",
+        "title": "Social Media Platform",
+        "desc": "Build integrated social features and platform",
+        "status": "future"
+    },
+    {
+        "date": "July 2026",
+        "title": "Admin Panel Enhancements",
+        "desc": "Temporary invite link creation/deletion and additional admin tools",
+        "status": "future"
+    },
+    {
+        "date": "August 2026",
+        "title": "Elyra App Creation (AI/API)",
+        "desc": "Enable app creation using built-in AI Assistant or Elyra API",
+        "status": "future"
+    },
+    {
+        "date": "August 2026",
+        "title": "App Submission and Publishing",
+        "desc": "System for submitting and publishing Elyra apps",
+        "status": "future"
+    },
+    {
+        "date": "September 2026",
+        "title": "Built-in Hosting System",
+        "desc": "Hosting for websites and workers within ElyraOS",
+        "status": "future"
+    },
+    {
+        "date": "TBD",
+        "title": "Stable Release",
+        "desc": "Finalize features and release stable version",
+        "status": "future"
+    }
+]

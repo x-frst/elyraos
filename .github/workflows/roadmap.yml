@@ -1,0 +1,35 @@
+name: Generate Roadmap SVG
+
+on:
+  push:
+    paths:
+      - ".github-assets/roadmap/roadmap.json"
+      - ".github-assets/roadmap/generate_svg.py"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Generate SVG
+        run: python .github-assets/roadmap/generate_svg.py
+
+      - name: Commit SVG if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .github-assets/roadmap/roadmap.svg
+          git diff --staged --quiet || git commit -m "chore: update roadmap SVG"
+          git push

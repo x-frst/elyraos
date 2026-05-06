@@ -27,6 +27,9 @@
 
 ---
 
+
+
+
 ## Quick Start
 
 The fastest way to get Elyra running is the interactive setup script. It checks all requirements, walks you through configuration, and launches the server — all in one step.
@@ -57,6 +60,11 @@ The script will:
 > The manual setup instructions below (sections 1–12) are for advanced configuration, CI/CD pipelines, or if you prefer not to use the script.
 
 ---
+
+## Roadmap
+
+![Roadmap](./.github-assets/roadmap/roadmap.svg)
+
 
 ## Table of Contents
 
@@ -292,15 +300,24 @@ NODE_ENV=development
 
 ## 4. Environment Variables
 
-All environment variables belong in **`server/.env`** (inside the `server/` folder). Do **not** place `.env` in the project root — the server loads it from `server/` explicitly.
+All environment variables belong in **`server/.env`** (inside the `server/` folder). Do **not** place `.env` in the project root — the server loads it from `server/` explicitly. A fully annotated template is available at `server/.env.example` — copy it to `server/.env` and fill in your values.
 
 ```env
 # ── Required ───────────────────────────────────────────────────────────────────
-# PostgreSQL connection string
+# PostgreSQL connection string.
+# Create the database first: psql -U postgres -c "CREATE DATABASE elyra_db;"
+#
+# Format:  postgresql://USER:PASSWORD@HOST:PORT/DBNAME
+# Windows: postgresql://postgres:YOUR_PASSWORD@localhost:5432/elyra_db
+# macOS (Homebrew, no password): postgresql://localhost/elyra_db
+# Linux (peer auth, no password): postgresql://localhost/elyra_db
+#
+# IMPORTANT: If your password contains special characters, percent-encode them:
+#   @  ->  %40     #  ->  %23     %  ->  %25     :  ->  %3A
 DATABASE_URL=postgresql://postgres:YOUR_PASSWORD@localhost:5432/elyra_db
 
 # Secret key for signing JWT tokens (use a long random string in production)
-JWT_SECRET=replace_this_with_a_long_random_secret_string
+JWT_SECRET=change-this-to-a-long-random-secret-in-production
 
 # ── HTTP Server ────────────────────────────────────────────────────────────────
 # Port the Express backend listens on (default: 3001)
@@ -310,18 +327,19 @@ PORT=3001
 NODE_ENV=development
 
 # ── Branding (server-side) ─────────────────────────────────────────────────────
-# App name used in the server startup banner and logs (default: "Elyra")
-# APP_NAME=Elyra
+# App name used in the server startup banner and logs (default: "ElyraOS")
+# APP_NAME=ElyraOS
 
 # App version string in the startup banner (default: "1.0")
 # APP_VERSION=1.0
 
 # ── CORS ───────────────────────────────────────────────────────────────────────
-# Primary frontend origin allowed by CORS (default: http://localhost:5173)
+# Primary frontend origin allowed by CORS.
+# In development this defaults to http://localhost:5173 automatically.
 # In production set this to your real domain:
 # FRONTEND_ORIGIN=https://elyraos.com
 
-# Extra comma-separated origins (e.g. staging, CDN preview):
+# Optional: extra comma-separated origins (e.g. staging, CDN preview):
 # EXTRA_ORIGINS=https://staging.elyraos.com,https://preview.elyraos.com
 
 # ── JSON Body Limit ────────────────────────────────────────────────────────────
@@ -354,21 +372,30 @@ NODE_ENV=development
 # Admins can override this per user via Settings → Admin.
 # DEFAULT_QUOTA_BYTES=1073741824
 
-# ── SMTP / Email (optional) ────────────────────────────────────────────────────
-# When SMTP_USER and SMTP_PASS are set, Elyra sends email OTPs for:
-#   • Sign-up email verification (user is not created in DB until OTP passes)
-#   • Two-factor authentication (enable, disable, login)
-# Leave all SMTP_ keys empty to disable email features entirely.
-# In that case, registration creates accounts directly and 2FA cannot be enabled.
-# OTPs are printed to the server console in development when SMTP is not set.
-#
-# SMTP_HOST=smtp.service.com
-# SMTP_PORT=465
-# SMTP_SECURE=true      # true for port 465 (SSL); false for port 587 (STARTTLS)
-# SMTP_USER=support@example.com
-# SMTP_PASS="your_password"   # quote if the password contains # or other shell chars
-# SMTP_FROM=Elyra <support@example.com>
-# OTP_EXPIRY_MINUTES=10
+# ── Email / SMTP (optional) ────────────────────────────────────────────────────
+# Used for email OTP verification (sign-up) and two-factor authentication.
+# If SMTP_USER / SMTP_PASS are left empty, OTPs are logged to the server console
+# instead of being emailed (useful during development).
+
+SMTP_HOST=smtp.service.com
+SMTP_PORT=465
+SMTP_SECURE=true          # true for port 465 (SSL); false for port 587 (STARTTLS)
+SMTP_USER=noreply@yourdomain.com
+SMTP_PASS=your_email_password
+# Optional: override the "From" display name + address (defaults to SMTP_USER)
+SMTP_FROM=ElyraOS <noreply@yourdomain.com>
+
+# How long a one-time code stays valid in minutes (default: 10)
+OTP_EXPIRY_MINUTES=10
+
+# ── Browser Proxy — Cloudflare Worker (optional) ──────────────────────────────
+# Route in-app browser page fetches through a Cloudflare Worker so your
+# server's home IP is not exposed to visited sites.
+# Deploy the worker from cf-worker/worker.js, add a PROXY_SECRET environment
+# variable (secret) in the Worker settings, then set both values below.
+# Leave blank to fall back to direct server-side fetching (IP not hidden).
+# PROXY_WORKER_URL=https://yourworker.workers.dev/
+# PROXY_WORKER_SECRET=your_long_random_secret_here
 ```
 
 > **Security:** Never commit `server/.env` to version control. It is already listed in `.gitignore`.
@@ -453,14 +480,16 @@ All client-side branding, appearance, and defaults are controlled from a single 
 ```js
 // src/config.js
 export const BRANDING = {
-  name:       "Elyra",                        // shown in title bar, dock tooltips, login screen
-  fullName:   "Elyra Operating System",        // shown in Settings → About
-  pageTitle:  "Elyra",                         // browser tab <title>
-  version:    "1.0",
-  website:    "",                       // URL shown in Settings → About
-  faviconUrl: "/favicon.ico",           // place the file in public/ first
-  logoUrl:    "",                       // login-screen logo; empty = use logoEmoji fallback
-  logoEmoji:  "🌌",                     // fallback text logo when logoUrl is not set
+  name:               "Elyra",                        // short name — title bar, dock tooltips, login screen
+  fullName:           "Elyra Operating System",        // shown in Settings → About
+  pageTitle:          "Elyra",                         // browser tab <title>
+  version:            "1.0",
+  website:            "https://elyraos.com",           // URL shown in Settings → About
+  faviconUrl:         "/favicon.ico",                  // place the file in public/ first
+  logoUrl:            "/elyra_icon.png",               // login-screen logo; empty = use logoEmoji fallback
+  logoEmoji:          "🌌",                            // fallback text logo when logoUrl is not set
+  transparentLogoUrl: "/elyra_icon_transparent.png",   // used in email templates
+  supportUrl:         "support@elyraos.com",           // shown in Settings → About
 }
 ```
 
@@ -485,17 +514,19 @@ export const DEFAULT_ACCENT = "violet"
 
 ### Wallpapers
 
-Each wallpaper slot is either `null` (uses the CSS `.wallpaper` gradient in `index.css`) or any valid CSS `background` shorthand — gradients or `url(...)` image references.
+Each wallpaper slot is either `null` (uses the CSS `.wallpaper` gradient in `index.css`) or any valid CSS `background` shorthand — gradients or `url(...)` image references. `WALLPAPER_LABELS` must have one entry per slot; `BRANDING.name` is interpolated automatically for the first label.
 
 ```js
 export const WALLPAPERS = [
   null,                                                              // slot 0 — CSS default
   "linear-gradient(135deg,#f093fb 0%,#f5576c 50%,#fda085 100%)",   // Sunset
   "linear-gradient(135deg,#0575E6 0%,#021B79 100%)",                // Ocean
-  // … add more slots; each needs a matching entry in WALLPAPER_LABELS
+  // mesh gradients, radial-gradient(...) strings, url('/my-wallpaper.jpg'), …
 ]
 
-export const WALLPAPER_LABELS = ["Elyra Default", "Sunset", "Ocean", "Forest", "Volcano", "Cosmos"]
+export const WALLPAPER_LABELS = [
+  `${BRANDING.name} Default`, "Sunset", "Ocean", /* … one per slot */
+]
 ```
 
 ### Default Layout
@@ -507,29 +538,66 @@ export const DEFAULT_DOCK    = ["launcher", "appcenter", "files", "notes", "ai",
 export const DEFAULT_DESKTOP = ["files", "terminal", "trash"]
 ```
 
-### AI Assistant Defaults
+### Default Settings
 
-These are the **pre-filled defaults** when a user first opens the AI Assistant. Users can override them at runtime from within the app itself.
+Defines the initial settings applied to every new account before the user makes any changes.
 
 ```js
-export const DEFAULT_AI_CONFIG = {
-  endpoint: "https://api.openai.com/v1",  // any OpenAI-compatible API base URL
-  model:    "gpt-4o-mini",
-  key:      "",                           // leave blank — users enter their own key
+export const DEFAULT_SETTINGS = {
+  wallpaperPreset:  0,              // index into WALLPAPERS (0 = CSS default)
+  accentColor:      DEFAULT_ACCENT, // id from ACCENTS
+  customWallpaper:  null,           // custom CSS background string, or null
 }
-
-export const AI_MAX_TOKENS = 1024         // max tokens included in every AI request
 ```
 
-### Storage Key Prefix
+### AI Assistant
 
-Every `localStorage` key and every `user_data` key in the database is prefixed with `STORAGE_PREFIX`. Change this when rebranding to avoid collisions with existing data:
+`AI_MAX_TOKENS` caps the number of tokens included in every AI request sent through the server.
 
 ```js
-export const STORAGE_PREFIX = "elyra"  // keys become: "elyra-fs", "elyra-settings", "elyra-jwt", …
+export const AI_MAX_TOKENS = 4096
+```
+
+> The AI API key and provider are configured **server-side only** (via `server/.env`). No client-side key is needed or exposed.
+
+### Window Defaults
+
+Fallback window size used when an app does not declare its own `defaultSize`.
+
+```js
+export const DEFAULT_WINDOW_SIZE = { width: 900, height: 560 }
+```
+
+### Storage Key Prefix & Keys
+
+Every `localStorage` key and every `user_data` key in the database is prefixed with `STORAGE_PREFIX`. `STORAGE_KEYS` exports all key names so components never hard-code strings directly.
+
+```js
+export const STORAGE_PREFIX = "elyra"   // change once here to rebrand all keys
+
+export const STORAGE_KEYS = {
+  fs:         `${STORAGE_PREFIX}-fs`,
+  settings:   `${STORAGE_PREFIX}-settings`,
+  wallpaper:  `${STORAGE_PREFIX}-wallpaper`,
+  trash:      `${STORAGE_PREFIX}-trash`,
+  dock:       `${STORAGE_PREFIX}-dock`,
+  desktop:    `${STORAGE_PREFIX}-desktop`,
+  widgets:    `${STORAGE_PREFIX}-widgets`,
+  aiConfig:   `${STORAGE_PREFIX}-ai-config`,
+  recentApps: `${STORAGE_PREFIX}-recentapps`,
+  jwt:        `${STORAGE_PREFIX}-jwt`,
+  session:    `${STORAGE_PREFIX}-session`,
+}
 ```
 
 > **Note:** Changing `STORAGE_PREFIX` on a live deployment causes existing users to start with a blank state — old keys are no longer read. Plan a data migration or coordinate a clean rollout.
+
+### Quota Constants
+
+```js
+export const DEFAULT_QUOTA_BYTES = 1_073_741_824   // 1 GB — client-side fallback when server is unreachable
+export const GUEST_QUOTA_BYTES   = 100 * 1024 * 1024  // 100 MB — cap for unauthenticated guest sessions
+```
 
 ---
 
@@ -597,11 +665,14 @@ $env:NODE_ENV="production"; npm run server
 
 ```
 elyraos/
+├── cf-worker/              # Cloudflare Worker for browser proxy (optional)
+│   └── worker.js           # Deploy this to hide your server IP from proxied sites
+│
 ├── server/                 # Express backend
 │   ├── .env                # Your local environment variables (not committed)
 │   ├── .env.example        # Template — copy this to .env and fill in values
 │   ├── config.js           # Server-side config (ports, JWT, SMTP, quotas)
-│   ├── dashboard.cjs       # Admin dashboard shown on repeat start.sh runs
+│   ├── dashboard.cjs       # Admin dashboard shown on repeat start.sh/start.bat runs
 │   ├── db.js               # PostgreSQL pool + schema creation on startup
 │   ├── index.js            # Entry point — app wiring, CORS, route mounting
 │   ├── mailer.js           # nodemailer wrapper — sendOtpEmail(), isSmtpConfigured()
@@ -614,11 +685,11 @@ elyraos/
 │       ├── twofa.js        # /api/twofa — 2FA status, send OTP, enable, disable
 │       ├── data.js         # /api/data — per-user JSON key-value store
 │       ├── fs.js           # /api/fs — file content, quota, streaming upload, raw serve
-│       ├── admin.js        # /api/admin — user management, quotas, AI quotas, config
+│       ├── admin.js        # /api/admin — user management, quotas, AI quotas, config, app catalog
 │       ├── ai.js           # /api/ai — chat, image, video, music, agent, quota
 │       ├── chats.js        # /api/chats — AI chat history (account-scoped)
 │       ├── session.js      # /api/session — SSE stream for server-push events
-│       └── proxy.js        # /api/proxy — URL proxy for iframe apps
+│       └── proxy.js        # /api/proxy — URL proxy for iframe apps (optionally via CF Worker)
 │
 ├── src/                    # React frontend (Vite)
 │   ├── config.js           # Branding, accents, wallpapers, storage keys, AI defaults
@@ -627,7 +698,7 @@ elyraos/
 │   ├── index.css           # Global styles + Tailwind base
 │   ├── apps/               # Individual app components
 │   │   ├── AIAssistant.jsx # Chat UI — text, image, video, music, agent modes
-│   │   ├── AppCenter.jsx   # App catalog browser
+│   │   ├── AppCenter.jsx   # App catalog browser (admin edit mode built-in)
 │   │   ├── ArchiveManager.jsx # ZIP viewer/extractor
 │   │   ├── Browser.jsx     # In-app browser (iframe + URL bar)
 │   │   ├── Calculator.jsx  # Basic calculator
@@ -649,9 +720,10 @@ elyraos/
 │   │   ├── WelcomeApp.jsx  # First-run welcome screen
 │   │   └── renderApp.jsx   # Maps appType → component
 │   ├── components/         # Shell UI components
-│   │   ├── Clock.jsx       # Clock component
+│   │   ├── Clock.jsx       # Clock widget
 │   │   ├── ContextMenu.jsx # Right-click context menu
 │   │   ├── Desktop.jsx     # Desktop background + desktop icons
+│   │   ├── DesktopApp.jsx  # Individual desktop icon component
 │   │   ├── Dock.jsx        # Bottom app dock
 │   │   ├── LoginScreen.jsx # Auth UI (login, register, OTP verify, 2FA)
 │   │   ├── QuickBar.jsx    # Top status bar
@@ -674,16 +746,13 @@ elyraos/
 │       └── termsAndConditions.js # Terms sections for LoginScreen
 │
 ├── public/
-│   ├── apps/catalog.json   # App Center catalog (public, no auth)
+│   ├── apps/catalog.json   # App Center catalog (public, no auth required to read)
 │   ├── elyra_cover.png     # Hero image (used in README)
-│   ├── elyra_icon.png      # App icon
-│   ├── elyra_icon_transparent.png # Transparent logo (used in emails)
+│   ├── elyra_icon.png      # App icon (used in login screen / About)
+│   ├── elyra_icon_transparent.png # Transparent logo (used in email templates)
 │   ├── favicon.ico
 │   └── screenshots/        # README screenshots
-│       ├── 1.png
-│       ├── 2.png
-│       ├── 3.png
-│       └── 4.png
+│       ├── 1.png  2.png  3.png  4.png
 ├── index.html              # Vite HTML entry point
 ├── package.json            # Single package.json for both frontend + backend
 ├── vite.config.js          # Vite config + /api proxy to :3001
@@ -697,20 +766,64 @@ elyraos/
 
 ## 10. Adding Apps to the App Center
 
-Edit `public/apps/catalog.json` and add an entry:
+There are two ways to add or edit apps in the App Center.
+
+---
+
+### Method 1 — Admin "Edit Apps" UI inside the App Center
+
+Admin accounts can add, edit, and delete catalog entries directly from inside the running OS without touching any files:
+
+1. Log in with an **admin** account (the first registered account is admin automatically).
+2. Open **App Center** from the dock or Start Menu.
+3. Click the **Edit Apps** button that appears in the toolbar (only visible to admins).
+4. The catalog switches into edit mode:
+   - **Add app** — click the **+** button to open the app editor form. Fill in all fields (name, URL, description, icon, cover image, tag, etc.) and save.
+   - **Edit app** — click the pencil icon on any existing app card to open its editor. Make changes and save.
+   - **Delete app** — click the trash icon on any app card to remove it from the catalog.
+   - **Toggle live** — flip `is_live` off to hide an app from regular users without deleting it.
+5. Changes are saved back to `public/apps/catalog.json` via the admin API and take effect instantly for all users — no server restart required.
+
+---
+
+### Method 2 — Edit `public/apps/catalog.json` directly
+
+The catalog is stored in `public/apps/catalog.json` as a single JSON object with a top-level `"apps"` array. Each entry supports the following fields:
 
 ```json
 {
   "name": "My App",
-  "description": "Short description shown in App Center",
+  "description": "Supports **Markdown** in the detail view.\n\nDescribe features, tips, or anything useful.",
   "url": "https://example.com",
   "allowIframe": true,
-  "tags": ["productivity", "web"]
+  "showCursor": true,
+  "featured": false,
+  "tags": ["productivity"],
+  "icon_url": "https://example.com/icon.png",
+  "cover_image": "https://example.com/cover.jpg",
+  "media": [
+    "https://www.youtube.com/watch?v=VIDEO_ID",
+    "https://example.com/screenshot1.jpg"
+  ],
+  "is_live": true
 }
 ```
 
-- `allowIframe: true` — opens inside an Elyra window via `<iframe>`.
-- `allowIframe: false` — opens the URL in a new browser tab (for sites that block embedding).
+| Field | Type | Description |
+|-------|------|-------------|
+| `name` | string | Display name shown in the catalog |
+| `description` | string | Markdown-formatted detail page content |
+| `url` | string | The URL to load |
+| `allowIframe` | boolean | `true` = opens in an Elyra window via `<iframe>`; `false` = opens in a new browser tab (for sites that block embedding) |
+| `showCursor` | boolean | Show the system cursor inside the iframe window (useful for games) |
+| `featured` | boolean | Pin to the Featured section at the top of the catalog |
+| `tags` | string[1] | Exactly **one** filter tag — e.g. `"game"`, `"education"`, `"media"`, `"productivity"` |
+| `icon_url` | string | URL to the app icon image |
+| `cover_image` | string | URL to the cover/hero image shown on the detail page |
+| `media` | string[] | Gallery items — YouTube watch URLs and/or image URLs shown in the detail carousel |
+| `is_live` | boolean | Set to `false` to hide an entry without deleting it |
+
+After saving the file, refresh the App Center — changes are served statically and take effect immediately without a server restart.
 
 ---
 

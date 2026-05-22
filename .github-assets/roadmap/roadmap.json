@@ -24,7 +24,7 @@
         "status": "future"
     },
     {
-        "date": "May 2026",
+        "date": "June 2026",
         "title": "Report an App System",
         "desc": "Allow users to report apps for moderation and review",
         "status": "future"
@@ -35,6 +35,12 @@
         "desc": "Build integrated social features and platform",
         "status": "future"
     },
+    {
+        "date": "July 2026",
+        "title": "Terminal Commands Expansion",
+        "desc": "Add new terminal commands and code execution from the terminal",
+        "status": "future"
+    },    
     {
         "date": "July 2026",
         "title": "Admin Panel Enhancements",

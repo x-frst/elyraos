@@ -661,10 +661,14 @@ export const useStore = create((set, get) => ({
   addWidget(type) {
     const uid2 = () => Math.random().toString(36).slice(2,10)
     const defaults = {
-      clock:   { x: 20,  y: 80,  w: 200, h: 130 },
-      weather: { x: 240, y: 80,  w: 220, h: 150 },
-      music:   { x: 480, y: 80,  w: 260, h: 130 },
-      notes:   { x: 20,  y: 230, w: 240, h: 180 },
+      clock:    { x: 20,  y: 80,  w: 200, h: 130 },
+      weather:  { x: 240, y: 80,  w: 220, h: 150 },
+      music:    { x: 480, y: 80,  w: 260, h: 130 },
+      notes:    { x: 20,  y: 230, w: 240, h: 180 },
+      todo:     { x: 280, y: 230, w: 240, h: 220 },
+      calendar: { x: 20,  y: 430, w: 220, h: 230 },
+      news:     { x: 260, y: 430, w: 240, h: 260 },
+      quota:    { x: 520, y: 230, w: 240, h: 150 },
     }
     const pos = defaults[type] || { x: 80, y: 80, w: 200, h: 130 }
     // Clamp initial position so widgets are always visible on any screen size

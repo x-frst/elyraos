@@ -512,6 +512,63 @@ export async function selfChangePassword(currentPassword, newPassword) {
   } catch { return { error: 'Network error' } }
 }
 
+// ── Forgot password (unauthenticated flow) ────────────────────────────────────
+
+/** Step 1: request an OTP for the given email address. Returns { resetToken } on success. */
+export async function forgotPasswordRequest(email) {
+  try {
+    const res = await fetch(`${API}/auth/forgot-password`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email }),
+    })
+    const data = await res.json()
+    if (!res.ok) return { error: data.error || 'Failed to send reset code.' }
+    return { resetToken: data.resetToken }
+  } catch { return { error: 'Cannot reach server. Is it running?' } }
+}
+
+/** Step 2: verify the 6-digit OTP. Returns { resetToken } (a new set-password token) on success. */
+export async function forgotPasswordVerifyOtp(otp, resetToken) {
+  try {
+    const res = await fetch(`${API}/auth/forgot-password/verify-otp`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${resetToken}` },
+      body: JSON.stringify({ otp }),
+    })
+    const data = await res.json()
+    if (!res.ok) return { error: data.error || 'Invalid code.' }
+    return { resetToken: data.resetToken }
+  } catch { return { error: 'Cannot reach server. Is it running?' } }
+}
+
+/** Step 2 (optional): resend OTP without starting a new session. */
+export async function forgotPasswordResendOtp(resetToken) {
+  try {
+    const res = await fetch(`${API}/auth/forgot-password/resend-otp`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${resetToken}` },
+    })
+    const data = await res.json()
+    if (!res.ok) return { error: data.error || 'Failed to resend code.' }
+    return { ok: true }
+  } catch { return { error: 'Cannot reach server. Is it running?' } }
+}
+
+/** Step 3: set the new password. Revokes all existing sessions on success. */
+export async function forgotPasswordReset(newPassword, resetToken) {
+  try {
+    const res = await fetch(`${API}/auth/forgot-password/reset`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${resetToken}` },
+      body: JSON.stringify({ newPassword }),
+    })
+    const data = await res.json()
+    if (!res.ok) return { error: data.error || 'Failed to reset password.' }
+    return { ok: true }
+  } catch { return { error: 'Cannot reach server. Is it running?' } }
+}
+
 /** Admin: change a user's password remotely (also revokes all sessions). */
 export async function adminChangePassword(userId, password) {
   if (!_jwt) return { error: 'Not authenticated' }

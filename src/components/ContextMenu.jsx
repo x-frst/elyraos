@@ -63,10 +63,16 @@ function MenuItem({ item, onClose }) {
             style={openLeft ? { right: '100%', paddingRight: 6 } : { left: '100%', paddingLeft: 6 }}
             onMouseEnter={handleEnter}
             onMouseLeave={handleLeave}>
-            <div className="py-1 rounded-xl min-w-[160px]"
+            <div className="py-1 rounded-xl min-w-[160px] overflow-y-auto"
               style={{
                 background: "rgba(28,28,44,0.97)", border: "1px solid rgba(255,255,255,0.1)",
                 boxShadow: "0 8px 40px rgba(0,0,0,0.5)", backdropFilter: "blur(24px)",
+                maxHeight: (() => {
+                  if (!containerRef.current) return "none"
+                  const rect = containerRef.current.getBoundingClientRect()
+                  const spaceBelow = window.innerHeight - rect.top - 8
+                  return spaceBelow < 260 ? `${Math.max(80, spaceBelow)}px` : "none"
+                })(),
               }}>
               {item.children.map((child, i) => (
                 <MenuItem key={i} item={child} onClose={onClose} />
@@ -94,11 +100,13 @@ export default function ContextMenu() {
   const hideContextMenu = useStore(s => s.hideContextMenu)
   const ref = useRef(null)
 
-  // After rendering, measure the menu and adjust position to keep it on screen
-  const [pos, setPos] = useState({ x: 0, y: 0 })
+  // null until measured; avoids the `pos.x || fallback` bug when x===0
+  const [pos, setPos] = useState(null)
 
   useEffect(() => {
     if (!contextMenu || !ref.current) return
+    // Reset on each new menu so stale position never shows
+    setPos(null)
     const mw = ref.current.offsetWidth  || 220
     const mh = ref.current.offsetHeight || 50
     const vw = window.innerWidth
@@ -110,7 +118,7 @@ export default function ContextMenu() {
     setPos({ x, y })
   }, [contextMenu])
 
-  // Also set initial approximate position before we can measure
+  // Approximate position used on the very first render (before measurement)
   const initX = contextMenu ? Math.min(contextMenu.x, window.innerWidth  - 225) : 0
   const initY = contextMenu ? Math.min(contextMenu.y, window.innerHeight - 50)  : 0
 
@@ -134,8 +142,8 @@ export default function ContextMenu() {
       transition={{ duration: 0.1 }}
       className="fixed z-[1000] py-1 rounded-xl min-w-[200px]"
       style={{
-        left: pos.x || initX,
-        top:  pos.y || initY,
+        left: pos?.x ?? initX,
+        top:  pos?.y ?? initY,
         background: "rgba(28,28,44,0.96)",
         backdropFilter: "blur(24px)",
         WebkitBackdropFilter: "blur(24px)",

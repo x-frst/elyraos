@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Eye, EyeOff, User, Lock, UserPlus, LogIn, UserCheck, Mail, BadgeCheck, X, ScrollText, Check, ShieldCheck } from "lucide-react"
+import { Eye, EyeOff, User, Lock, UserPlus, LogIn, UserCheck, Mail, BadgeCheck, X, ScrollText, Check, ShieldCheck, KeyRound } from "lucide-react"
 import { useAuthStore } from "../store/useAuthStore"
 import { BRANDING } from "../config.js"
 import { TERMS_SECTIONS, TERMS_LAST_UPDATED } from "../utils/termsAndConditions"
-import { verifyEmailOtp, resendVerifyEmailOtp } from "../utils/db"
+import { verifyEmailOtp, resendVerifyEmailOtp, forgotPasswordRequest, forgotPasswordVerifyOtp, forgotPasswordResendOtp, forgotPasswordReset } from "../utils/db"
 
 function Field({ icon, placeholder, type = "text", value, onChange, autoComplete, autoFocus, rightEl }) {
   return (
@@ -28,7 +28,7 @@ function Field({ icon, placeholder, type = "text", value, onChange, autoComplete
 export default function LoginScreen() {
   const { login, register, loginWith2fa, completeEmailVerification, loginGuest, adminConfig, fetchAdminConfig, pendingToken } = useAuthStore()
 
-  const [mode, setMode] = useState("login")   // "login" | "register" | "verify-email" | "two-fa"
+  const [mode, setMode] = useState("login")   // "login" | "register" | "verify-email" | "two-fa" | "forgot-email" | "forgot-otp" | "forgot-reset"
 
   // OTP step shared state
   const [otp, setOtp]                 = useState("")
@@ -39,6 +39,14 @@ export default function LoginScreen() {
 
   // Email to display in the OTP subtitle
   const [otpEmail, setOtpEmail]       = useState("")
+
+  // Forgot-password flow state (all in React state — never persisted, so a page
+  // refresh naturally loses the session and the user must restart the flow)
+  const [forgotEmail,    setForgotEmail]    = useState("")
+  const [fpToken,        setFpToken]        = useState(null)  // in-memory only
+  const [newPwd,         setNewPwd]         = useState("")
+  const [confirmNewPwd,  setConfirmNewPwd]  = useState("")
+  const [successMsg,     setSuccessMsg]     = useState("")
 
   // Login fields
   const [username, setUsername] = useState("")
@@ -127,9 +135,13 @@ export default function LoginScreen() {
     setFirstName(""); setLastName(""); setEmail("")
     setRegUsername(""); setRegPassword(""); setConfirmPwd("")
     setTermsAccepted(false)
+    setForgotEmail(""); setNewPwd(""); setConfirmNewPwd("")
+    setFpToken(null)
+    // Clear success message when navigating away from login
+    if (m !== "login") setSuccessMsg("")
   }
 
-  // ── Handle OTP submit (email verification or 2FA login) ─────────────────
+  // ── Handle OTP submit (email verification, 2FA login, forgot-password OTP) ─
   const handleOtpSubmit = async (e) => {
     e.preventDefault()
     if (!otp.trim() || otp.trim().length !== 6) { setOtpError("Enter the 6-digit code."); return }
@@ -139,6 +151,13 @@ export default function LoginScreen() {
       setOtpLoading(false)
       if (result.error) { setOtpError(result.error); return }
       completeEmailVerification(result.token, result.user, result.qp)
+    } else if (mode === "forgot-otp") {
+      const result = await forgotPasswordVerifyOtp(otp.trim(), fpToken)
+      setOtpLoading(false)
+      if (result.error) { setOtpError(result.error); return }
+      setFpToken(result.resetToken)
+      setNewPwd(""); setConfirmNewPwd("")
+      setMode("forgot-reset")
     } else {
       const result = await loginWith2fa(otp.trim())
       setOtpLoading(false)
@@ -149,9 +168,47 @@ export default function LoginScreen() {
   const handleResendOtp = async () => {
     if (resendCooldown > 0) return
     setOtpError("")
-    const result = await resendVerifyEmailOtp(pendingToken)
-    if (result.error) { setOtpError(result.error); return }
+    if (mode === "forgot-otp") {
+      const result = await forgotPasswordResendOtp(fpToken)
+      if (result.error) { setOtpError(result.error); return }
+    } else {
+      const result = await resendVerifyEmailOtp(pendingToken)
+      if (result.error) { setOtpError(result.error); return }
+    }
     startCooldown(60)
+  }
+
+  // ── Forgot password step 1: request OTP ───────────────────────────────────
+  const handleForgotEmailSubmit = async (e) => {
+    e.preventDefault()
+    if (!forgotEmail.trim() || !forgotEmail.includes("@"))
+      return setError("Enter a valid email address.")
+    setLoading(true); setError("")
+    const result = await forgotPasswordRequest(forgotEmail.trim())
+    setLoading(false)
+    if (result.error) { setError(result.error); return }
+    setFpToken(result.resetToken)
+    setOtpEmail(forgotEmail.trim())
+    setOtp(""); setOtpError("")
+    startCooldown(60)
+    setMode("forgot-otp")
+  }
+
+  // ── Forgot password step 3: set new password ───────────────────────────────
+  const handleForgotResetSubmit = async (e) => {
+    e.preventDefault()
+    if (!newPwd)                  return setError("New password is required.")
+    if (newPwd !== confirmNewPwd) return setError("Passwords do not match.")
+    setLoading(true); setError("")
+    const result = await forgotPasswordReset(newPwd, fpToken)
+    setLoading(false)
+    if (result.error) { setError(result.error); return }
+    // Success — clear all forgot-password state and return to login with a message
+    setError(""); setOtp(""); setOtpError("")
+    setForgotEmail(""); setNewPwd(""); setConfirmNewPwd("")
+    setFpToken(null)
+    setSuccessMsg("✓ Password updated successfully. Please sign in.")
+    setMode("login")
   }
 
   const submitDisabled = loading || (mode === "login"
@@ -222,8 +279,12 @@ export default function LoginScreen() {
           <div className="text-white/40 text-[13px]">
             {mode === "login"         ? "Sign in to continue"
            : mode === "register"      ? "Create your account"
-           : mode === "verify-email" ? "Verify your email"
-                                      : "Two-factor authentication"}
+           : mode === "verify-email"  ? "Verify your email"
+           : mode === "two-fa"        ? "Two-factor authentication"
+           : mode === "forgot-email"  ? "Reset your password"
+           : mode === "forgot-otp"    ? "Enter the verification code"
+           : mode === "forgot-reset"  ? "Create a new password"
+                                      : "Sign in to continue"}
           </div>
         </div>
 
@@ -249,6 +310,10 @@ export default function LoginScreen() {
                       {showPwd ? <EyeOff size={14} /> : <Eye size={14} />}
                     </button>
                   } />
+                <button type="button" onClick={() => switchMode("forgot-email")}
+                  className="text-right text-[12px] text-white/35 hover:text-white/60 transition-colors -mt-1">
+                  Forgot password?
+                </button>
               </motion.div>
             ) : (
               <motion.div key="register"
@@ -320,6 +385,16 @@ export default function LoginScreen() {
             )}
           </AnimatePresence>
 
+          {/* Success message (shown after password reset) */}
+          <AnimatePresence>
+            {successMsg && mode === "login" && (
+              <motion.div initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
+                className="text-emerald-400 text-[12px] mt-3 text-center px-2">
+                {successMsg}
+              </motion.div>
+            )}
+          </AnimatePresence>
+
           {/* Error */}
           <AnimatePresence>
             {error && (
@@ -343,8 +418,8 @@ export default function LoginScreen() {
         </form>
         )}
 
-        {/* OTP step — email verification + 2FA login */}
-        {(mode === "verify-email" || mode === "two-fa") && (
+        {/* OTP step — email verification, 2FA login, forgot-password OTP */}
+        {(mode === "verify-email" || mode === "two-fa" || mode === "forgot-otp") && (
           <form onSubmit={handleOtpSubmit} className="px-8 pb-5">
             <div className="flex flex-col gap-3">
               {/* Info banner */}
@@ -353,6 +428,8 @@ export default function LoginScreen() {
                 <ShieldCheck size={13} className="inline mr-1.5 -mt-0.5" />
                 {mode === "verify-email"
                   ? <>A 6-digit code was sent to <strong>{otpEmail}</strong>. Enter it below to verify your email.<br/><span className="text-white/35">Check your spam folder if you don't see it.</span></>
+                  : mode === "forgot-otp"
+                  ? <>A 6-digit code was sent to <strong>{otpEmail}</strong>. Enter it below to reset your password.<br/><span className="text-white/35">Check your spam folder if you don't see it.</span></>
                   : <>A 6-digit code was sent to the email on your account. Enter it below to sign in.</>}
               </div>
               {/* OTP input */}
@@ -382,10 +459,10 @@ export default function LoginScreen() {
                 style={{ background: 'linear-gradient(135deg,rgba(99,102,241,0.9),rgba(139,92,246,0.9))', boxShadow: '0 4px 20px rgba(99,102,241,0.35)' }}>
                 {otpLoading
                   ? <div className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
-                  : <><ShieldCheck size={15} /> {mode === "verify-email" ? "Verify Email" : "Confirm Sign In"}</>}
+                  : <><ShieldCheck size={15} /> {mode === "verify-email" ? "Verify Email" : mode === "forgot-otp" ? "Verify Code" : "Confirm Sign In"}</>}
               </button>
-              {/* Resend (only for email verification) */}
-              {mode === "verify-email" && (
+              {/* Resend (email verification + forgot-password OTP) */}
+              {(mode === "verify-email" || mode === "forgot-otp") && (
                 <button type="button"
                   disabled={resendCooldown > 0}
                   onClick={handleResendOtp}
@@ -395,9 +472,81 @@ export default function LoginScreen() {
               )}
               {/* Back link */}
               <button type="button"
-                onClick={() => switchMode("login")}
+                onClick={() => switchMode(mode === "forgot-otp" ? "forgot-email" : "login")}
+                className="text-[12px] text-center text-white/35 hover:text-white/60 transition-colors">
+                &larr; {mode === "forgot-otp" ? "Try a different email" : "Back to sign in"}
+              </button>
+            </div>
+          </form>
+        )}
+
+        {/* Forgot password — step 1: enter email */}
+        {mode === "forgot-email" && (
+          <form onSubmit={handleForgotEmailSubmit} className="px-8 pb-5">
+            <div className="flex flex-col gap-3">
+              <Field icon={<Mail size={15} />} placeholder="Email address"
+                type="email" value={forgotEmail}
+                onChange={e => { setForgotEmail(e.target.value); clearError() }}
+                autoComplete="email" autoFocus />
+              <AnimatePresence>
+                {error && (
+                  <motion.div initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
+                    className="text-red-400 text-[12px] text-center px-2">{error}</motion.div>
+                )}
+              </AnimatePresence>
+              <button type="submit"
+                disabled={loading || !forgotEmail.trim()}
+                className="w-full mt-1 py-2.5 rounded-xl text-white font-semibold text-[14px] flex items-center justify-center gap-2 transition-all disabled:opacity-40 hover:brightness-110 active:scale-[0.98]"
+                style={{ background: 'linear-gradient(135deg,rgba(99,102,241,0.9),rgba(139,92,246,0.9))', boxShadow: '0 4px 20px rgba(99,102,241,0.35)' }}>
+                {loading
+                  ? <div className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+                  : <><Mail size={15} /> Send Reset Code</>}
+              </button>
+              <button type="button" onClick={() => switchMode("login")}
                 className="text-[12px] text-center text-white/35 hover:text-white/60 transition-colors">
                 &larr; Back to sign in
+              </button>
+            </div>
+          </form>
+        )}
+
+        {/* Forgot password — step 3: set new password */}
+        {mode === "forgot-reset" && (
+          <form onSubmit={handleForgotResetSubmit} className="px-8 pb-5">
+            <div className="flex flex-col gap-3">
+              <Field icon={<Lock size={15} />} placeholder="New password"
+                type={showPwd ? "text" : "password"} value={newPwd}
+                onChange={e => { setNewPwd(e.target.value); clearError() }}
+                autoComplete="new-password" autoFocus
+                rightEl={
+                  <button type="button" onClick={() => setShowPwd(v => !v)}
+                    className="text-white/30 hover:text-white/60 transition-colors flex-shrink-0">
+                    {showPwd ? <EyeOff size={14} /> : <Eye size={14} />}
+                  </button>
+                } />
+              <Field icon={<Lock size={15} />} placeholder="Confirm new password"
+                type={showConfirm ? "text" : "password"} value={confirmNewPwd}
+                onChange={e => { setConfirmNewPwd(e.target.value); clearError() }}
+                autoComplete="new-password"
+                rightEl={
+                  <button type="button" onClick={() => setShowConfirm(v => !v)}
+                    className="text-white/30 hover:text-white/60 transition-colors flex-shrink-0">
+                    {showConfirm ? <EyeOff size={14} /> : <Eye size={14} />}
+                  </button>
+                } />
+              <AnimatePresence>
+                {error && (
+                  <motion.div initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
+                    className="text-red-400 text-[12px] text-center px-2">{error}</motion.div>
+                )}
+              </AnimatePresence>
+              <button type="submit"
+                disabled={loading || !newPwd || !confirmNewPwd}
+                className="w-full mt-1 py-2.5 rounded-xl text-white font-semibold text-[14px] flex items-center justify-center gap-2 transition-all disabled:opacity-40 hover:brightness-110 active:scale-[0.98]"
+                style={{ background: 'linear-gradient(135deg,rgba(99,102,241,0.9),rgba(139,92,246,0.9))', boxShadow: '0 4px 20px rgba(99,102,241,0.35)' }}>
+                {loading
+                  ? <div className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+                  : <><KeyRound size={15} /> Set New Password</>}
               </button>
             </div>
           </form>

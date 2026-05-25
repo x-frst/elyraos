@@ -113,6 +113,17 @@ try {
     );
     CREATE INDEX IF NOT EXISTS idx_pending_reg_username ON pending_registrations(username);
     CREATE INDEX IF NOT EXISTS idx_pending_reg_email    ON pending_registrations(email);
+    -- Password reset sessions: one active session per user at a time.
+    -- Created when a reset is requested; deleted on success or revoked when a
+    -- new request is made for the same account (handles multiple tabs / refresh).
+    CREATE TABLE IF NOT EXISTS password_reset_sessions (
+      id         TEXT PRIMARY KEY,
+      user_id    TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      step       TEXT NOT NULL DEFAULT 'otp_pending',  -- 'otp_pending' | 'otp_verified'
+      expires_at TIMESTAMPTZ NOT NULL,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    );
+    CREATE INDEX IF NOT EXISTS idx_prs_user ON password_reset_sessions(user_id);
   `)
   console.log('  PostgreSQL   ->  connected, schema ready')
 } catch (e) {

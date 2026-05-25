@@ -30,17 +30,19 @@ export function isSmtpConfigured() {
 }
 
 const PURPOSE_SUBJECT = {
-  verify_email: `Verify your email — ${BRANDING.name}`,
-  enable_2fa:   `Enable two-factor authentication — ${BRANDING.name}`,
-  disable_2fa:  `Disable two-factor authentication — ${BRANDING.name}`,
-  login_2fa:    `Your sign-in code — ${BRANDING.name}`,
+  verify_email:   `Verify your email — ${BRANDING.name}`,
+  enable_2fa:     `Enable two-factor authentication — ${BRANDING.name}`,
+  disable_2fa:    `Disable two-factor authentication — ${BRANDING.name}`,
+  login_2fa:      `Your sign-in code — ${BRANDING.name}`,
+  password_reset: `Reset your password — ${BRANDING.name}`,
 }
 
 const PURPOSE_LABEL = {
-  verify_email: 'verify your email address',
-  enable_2fa:   'enable two-factor authentication',
-  disable_2fa:  'disable two-factor authentication',
-  login_2fa:    'complete your sign-in',
+  verify_email:   'verify your email address',
+  enable_2fa:     'enable two-factor authentication',
+  disable_2fa:    'disable two-factor authentication',
+  login_2fa:      'complete your sign-in',
+  password_reset: 'reset your password',
 }
 
 /**
@@ -96,6 +98,79 @@ export async function sendOtpEmail({ to, otp, purpose }) {
           <div style="font-size:12px;color:rgba(255,255,255,0.3);line-height:1.7">
             This code expires in&nbsp;<strong style="color:rgba(255,255,255,0.5)">${OTP_EXPIRY_MINUTES}&nbsp;minutes</strong>.<br>
             If you didn't request this, you can safely ignore this email.
+          </div>
+        </td></tr>
+
+        <!-- Footer -->
+        <tr><td style="padding:20px 40px;border-top:1px solid rgba(255,255,255,0.07);text-align:center">
+          <div style="font-size:11px;color:rgba(255,255,255,0.2)">&copy; ${year} ${BRANDING.name}. All rights reserved.</div>
+        </td></tr>
+
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`
+
+  await getTransport().sendMail({ from, to, subject, html })
+}
+
+/**
+ * Send a security notification after a successful password change via the
+ * "forgot password" flow. Falls back to console.log when SMTP is not configured.
+ *
+ * @param {{ to: string, supportEmail: string }} opts
+ */
+export async function sendPasswordChangedEmail({ to, supportEmail }) {
+  const subject = `Your ${BRANDING.name} password was changed`
+
+  if (!isSmtpConfigured()) {
+    if (process.env.NODE_ENV !== 'production') {
+      console.log(`[mailer] SMTP not configured — password-changed notice for ${to}`)
+      return
+    }
+    throw new Error('SMTP is not configured.')
+  }
+
+  const from = SMTP.from || `"${BRANDING.name}" <${SMTP.user}>`
+  const year = new Date().getFullYear()
+
+  const html = `<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:0;background:#0f0c29;font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif">
+  <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="padding:48px 20px">
+    <tr><td align="center">
+      <table width="460" cellpadding="0" cellspacing="0" role="presentation"
+        style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:20px;overflow:hidden;max-width:460px">
+
+        <!-- Top accent -->
+        <tr><td style="height:3px;background:linear-gradient(90deg,#6366f1,#8b5cf6,#06b6d4)"></td></tr>
+
+        <!-- Header -->
+        <tr><td style="padding:40px 40px 24px;text-align:center">
+          ${BRANDING.transparentLogoUrl
+            ? `<img src="${BRANDING.website}${BRANDING.transparentLogoUrl}" alt="${BRANDING.name}" width="56" height="56" style="display:block;margin:0 auto 14px;border-radius:12px">`
+            : `<div style="font-size:40px;line-height:1;margin-bottom:14px">${BRANDING.logoEmoji}</div>`}
+          <div style="font-size:22px;font-weight:700;color:#ffffff;letter-spacing:-0.3px;margin-bottom:8px">${BRANDING.name}</div>
+        </td></tr>
+
+        <!-- Body -->
+        <tr><td style="padding:0 40px 36px;text-align:center">
+          <div style="font-size:18px;font-weight:700;color:#ffffff;margin-bottom:12px">Your password has been changed</div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.55);line-height:1.7;margin-bottom:28px">
+            The password for your <strong style="color:rgba(255,255,255,0.75)">${BRANDING.name}</strong> account was successfully updated.<br>
+            If you made this change, no further action is needed.
+          </div>
+
+          <!-- Warning box -->
+          <div style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:12px;padding:16px 20px;text-align:left">
+            <div style="font-size:12px;font-weight:700;color:#fca5a5;margin-bottom:6px">&#9888;&#65039; Wasn't you?</div>
+            <div style="font-size:12px;color:rgba(255,255,255,0.5);line-height:1.7">
+              If you did <strong style="color:rgba(255,255,255,0.7)">not</strong> make this change, your account may be compromised.
+              Please contact our support team immediately at
+              <a href="mailto:${supportEmail}" style="color:#f87171;text-decoration:none">${supportEmail}</a>.
+            </div>
           </div>
         </td></tr>
 

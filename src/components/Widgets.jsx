@@ -1,9 +1,12 @@
 import { useState, useRef, useEffect, useCallback } from "react"
 import { X, Cloud, CloudSun, Sun, CloudRain, CloudSnow, Zap, Music, Radio,
-         SkipBack, SkipForward, Play, Pause, GripHorizontal } from "lucide-react"
+         SkipBack, SkipForward, Play, Pause, GripHorizontal,
+         Plus, Trash2, Check, Settings, ChevronLeft, ChevronRight,
+         ExternalLink, HardDrive, Cpu, RefreshCw } from "lucide-react"
 import { useStore } from "../store/useStore"
-import { dbGet, dbSet } from "../utils/db"
+import { dbGet, dbSet, fsQuota, aiQuota } from "../utils/db"
 import { useMusicStore, RADIO_STATIONS } from "../store/useMusicStore"
+import { STORAGE_PREFIX } from "../config.js"
 
 // ── Clock Widget ──────────────────────────────────────────────────────────────
 function ClockWidget() {
@@ -207,14 +210,570 @@ function NotesWidget({ widgetId }) {
   )
 }
 
-// ── Widget content router ─────────────────────────────────────────────────────
+// ── TODO List Widget ──────────────────────────────────────────────────────────
+function TodoWidget({ widgetId }) {
+  const key = `widget-todo-${widgetId}`
+  const [items,    setItems]   = useState(() => dbGet(key, []))
+  const [draft,    setDraft]   = useState("")
+  const [editId,   setEditId]  = useState(null)   // id of the item being edited inline
+  const [editText, setEditText] = useState("")
+  const inputRef = useRef(null)
+
+  const save = (updated) => { setItems(updated); dbSet(key, updated) }
+
+  const addItem = () => {
+    const text = draft.trim()
+    if (!text) return
+    save([...items, { id: Date.now().toString(36), text, done: false }])
+    setDraft("")
+    inputRef.current?.focus()
+  }
+
+  const toggle   = (id) => save(items.map(it => it.id === id ? { ...it, done: !it.done } : it))
+  const remove   = (id) => { if (editId === id) setEditId(null); save(items.filter(it => it.id !== id)) }
+
+  const startEdit = (it) => { setEditId(it.id); setEditText(it.text) }
+  const commitEdit = (id) => {
+    const t = editText.trim()
+    if (t) save(items.map(it => it.id === id ? { ...it, text: t } : it))
+    setEditId(null)
+  }
+  const editKey = (e, id) => {
+    if (e.key === "Enter")  { e.preventDefault(); commitEdit(id) }
+    if (e.key === "Escape") setEditId(null)
+  }
+
+  const handleKey = (e) => { if (e.key === "Enter") addItem() }
+
+  return (
+    <div className="flex flex-col h-full">
+      {/* Input row */}
+      <div className="flex items-center gap-1 px-2 pt-1 pb-1 flex-shrink-0">
+        <input
+          ref={inputRef}
+          value={draft}
+          onChange={e => setDraft(e.target.value)}
+          onKeyDown={handleKey}
+          placeholder="New task…"
+          className="flex-1 min-w-0 text-xs outline-none px-2 py-1 rounded-lg"
+          style={{ background: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.85)",
+            border: "1px solid rgba(255,255,255,0.1)", caretColor: "#a78bfa" }}
+        />
+        <button
+          onClick={addItem}
+          className="flex-shrink-0 w-6 h-6 rounded-lg flex items-center justify-center transition-all hover:brightness-125"
+          style={{ background: "rgba(139,92,246,0.45)" }}
+          title="Add task"
+        >
+          <Plus size={12} strokeWidth={2.5} style={{ color: "#fff" }} />
+        </button>
+      </div>
+      {/* List */}
+      <div className="flex-1 min-h-0 overflow-y-auto px-2 pb-2 flex flex-col gap-1">
+        {items.length === 0 && (
+          <div className="text-[11px] text-white/25 text-center mt-4">No tasks yet</div>
+        )}
+        {items.map(it => (
+          <div key={it.id}
+            className="flex items-center gap-1.5 rounded-lg px-1.5 py-1 group"
+            style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.06)" }}>
+            {/* Tick */}
+            <button
+              onPointerDown={e => e.stopPropagation()}
+              onClick={() => toggle(it.id)}
+              className="flex-shrink-0 w-4 h-4 rounded flex items-center justify-center border transition-all"
+              style={{
+                borderColor: it.done ? "rgba(139,92,246,0.7)" : "rgba(255,255,255,0.25)",
+                background:  it.done ? "rgba(139,92,246,0.4)" : "transparent",
+              }}
+            >
+              {it.done && <Check size={9} strokeWidth={3} style={{ color: "#c4b5fd" }} />}
+            </button>
+            {/* Text / inline editor */}
+            {editId === it.id ? (
+              <input
+                autoFocus
+                value={editText}
+                onChange={e => setEditText(e.target.value)}
+                onBlur={() => commitEdit(it.id)}
+                onKeyDown={e => editKey(e, it.id)}
+                className="flex-1 min-w-0 text-[11px] outline-none px-1 rounded"
+                style={{ background: "rgba(139,92,246,0.2)", color: "rgba(255,255,255,0.9)",
+                  border: "1px solid rgba(139,92,246,0.4)", caretColor: "#a78bfa" }}
+              />
+            ) : (
+              <span
+                onClick={() => !it.done && startEdit(it)}
+                className="flex-1 min-w-0 text-[11px] leading-tight break-words select-text"
+                style={{
+                  color: it.done ? "rgba(255,255,255,0.3)" : "rgba(255,255,255,0.8)",
+                  textDecoration: it.done ? "line-through" : "none",
+                  cursor: it.done ? "default" : "text",
+                }}>
+                {it.text}
+              </span>
+            )}
+            {/* Delete */}
+            <button
+              onPointerDown={e => e.stopPropagation()}
+              onClick={() => remove(it.id)}
+              className="flex-shrink-0 opacity-0 group-hover:opacity-40 hover:!opacity-80 transition-opacity"
+              style={{ color: "#f87171" }}
+            >
+              <Trash2 size={10} />
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+// ── Mini Calendar Widget ──────────────────────────────────────────────────────
+const CAL_KEY   = `${STORAGE_PREFIX}-calendar-events`
+const CAL_DAYS  = ['Su','Mo','Tu','We','Th','Fr','Sa']
+const CAL_MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+
+function todayCalStr() {
+  const d = new Date()
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`
+}
+function calDateStr(y,m,d) {
+  return `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`
+}
+function calDaysInMonth(y,m) { return new Date(y,m+1,0).getDate() }
+
+const CAL_COLORS = {
+  violet:'#8b5cf6', blue:'#3b82f6', green:'#10b981',
+  red:'#ef4444', amber:'#f59e0b', pink:'#ec4899',
+}
+
+function CalendarWidget() {
+  const now = new Date()
+  const [year,  setYear]  = useState(now.getFullYear())
+  const [month, setMonth] = useState(now.getMonth())
+  const [events, setEvents] = useState(() => dbGet(CAL_KEY, {}))
+
+  // Poll localStorage every 2 s so widget stays synced with the Calendar app
+  useEffect(() => {
+    const id = setInterval(() => {
+      const fresh = dbGet(CAL_KEY, {})
+      setEvents(fresh)
+    }, 2000)
+    return () => clearInterval(id)
+  }, [])
+
+  const prevMonth = () => { if (month === 0) { setYear(y => y-1); setMonth(11) } else setMonth(m => m-1) }
+  const nextMonth = () => { if (month === 11) { setYear(y => y+1); setMonth(0) } else setMonth(m => m+1) }
+  const goToday   = () => { setYear(now.getFullYear()); setMonth(now.getMonth()) }
+
+  const todayStr  = todayCalStr()
+  const firstDay  = new Date(year, month, 1).getDay()
+  const totalDays = calDaysInMonth(year, month)
+
+  const cells = []
+  for (let i = 0; i < firstDay; i++) cells.push(null)
+  for (let d = 1; d <= totalDays; d++) cells.push(d)
+
+  return (
+    <div className="flex flex-col h-full px-2 py-1 gap-1 select-none" style={{ color: "rgba(255,255,255,0.85)" }}>
+      {/* Header */}
+      <div className="flex items-center justify-between flex-shrink-0">
+        <button onClick={prevMonth} className="text-white/40 hover:text-white/80 transition-colors p-0.5">
+          <ChevronLeft size={12} />
+        </button>
+        <button onClick={goToday} className="text-[11px] font-semibold hover:text-white/80 transition-colors">
+          {CAL_MONTHS[month]} {year}
+        </button>
+        <button onClick={nextMonth} className="text-white/40 hover:text-white/80 transition-colors p-0.5">
+          <ChevronRight size={12} />
+        </button>
+      </div>
+      {/* Day labels */}
+      <div className="grid grid-cols-7 flex-shrink-0">
+        {CAL_DAYS.map(d => (
+          <div key={d} className="text-center text-[9px] font-medium text-white/30">{d}</div>
+        ))}
+      </div>
+      {/* Date cells */}
+      <div className="grid grid-cols-7 gap-y-0.5 flex-1">
+        {cells.map((day, i) => {
+          if (!day) return <div key={`empty-${i}`} />
+          const ds = calDateStr(year, month, day)
+          const isToday = ds === todayStr
+          const dayEvents = events[ds] || []
+          return (
+            <div key={ds}
+              className="flex flex-col items-center justify-start pt-0.5"
+              style={{ minHeight: 22 }}>
+              <div className="text-[10px] leading-none w-5 h-5 flex items-center justify-center rounded-full"
+                style={{
+                  fontWeight: isToday ? 700 : 400,
+                  background: isToday ? "rgba(139,92,246,0.7)" : "transparent",
+                  color: isToday ? "#fff" : "rgba(255,255,255,0.7)",
+                }}>
+                {day}
+              </div>
+              {/* Event dots — max 3 */}
+              {dayEvents.length > 0 && (
+                <div className="flex gap-0.5 mt-0.5 flex-wrap justify-center" style={{ maxWidth: 18 }}>
+                  {dayEvents.slice(0,3).map(ev => (
+                    <div key={ev.id}
+                      title={ev.title}
+                      style={{ width: 4, height: 4, borderRadius: "50%", background: CAL_COLORS[ev.color] || CAL_COLORS.violet, flexShrink: 0 }} />
+                  ))}
+                </div>
+              )}
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
+// ── News Widget ───────────────────────────────────────────────────────────────
+const NEWS_TOPICS = [
+  { id: "technology",     label: "Technology",     sub: "technology+tech" },
+  { id: "programming",    label: "Programming",    sub: "programming+webdev+learnprogramming+coding" },
+  { id: "gaming",         label: "Gaming",         sub: "gaming" },
+  { id: "politics",       label: "Politics",       sub: "politics" },
+  { id: "science",        label: "Science",        sub: "science" },
+  { id: "business",       label: "Business",       sub: "business+entrepreneur+startups+smallbusiness" },
+  { id: "health",         label: "Health",         sub: "health" },
+  { id: "sports",         label: "Sports",         sub: "sports" },
+  { id: "entertainment",  label: "Entertainment",  sub: "entertainment" },
+  { id: "world",          label: "World News",     sub: "worldnews" },
+  { id: "ai",             label: "AI & ML",        sub: "MachineLearning+artificial" },
+  { id: "crypto",         label: "Crypto",         sub: "CryptoCurrency" },
+]
+
+// Reddit public JSON API — free, no auth, CORS-friendly.
+// Fetches the selected subreddits as a multi-reddit so only chosen topics appear.
+async function fetchNews(topics) {
+  if (!topics.length) return []
+  const subs = topics
+    .map(id => NEWS_TOPICS.find(t => t.id === id)?.sub || id)
+    .join("+")
+  try {
+    const res = await fetch(
+      `https://www.reddit.com/r/${subs}/hot.json?limit=50&raw_json=1`,
+      { headers: { Accept: "application/json" } }
+    )
+    if (!res.ok) throw new Error()
+    const data = await res.json()
+    return (data.data?.children || [])
+      .map(c => c.data)
+      .filter(p => !p.over_18 && p.title && !p.stickied)
+      .map(p => {
+        const preview = p.preview?.images?.[0]?.source?.url || null
+        const thumb   = p.thumbnail?.startsWith("https") ? p.thumbnail : null
+        const image   = preview || thumb
+        if (!image) return null   // skip articles with no image
+        return {
+          title:   p.title,
+          url:     p.url?.startsWith("http") ? p.url : `https://reddit.com${p.permalink}`,
+          image,
+          source:  `r/${p.subreddit}`,
+          desc:    p.selftext?.trim().slice(0, 280) || null,
+          created: p.created_utc || 0,
+        }
+      })
+      .filter(Boolean)
+      .sort((a, b) => b.created - a.created)   // newest first
+      .slice(0, 15)
+  } catch {
+    return []
+  }
+}
+
+function NewsWidget({ widgetId }) {
+  const prefKey  = `widget-news-topics-${widgetId}`
+  const [topics,       setTopics]   = useState(() => dbGet(prefKey, ["technology"]))
+  const [articles,     setArticles] = useState([])
+  const [idx,          setIdx]      = useState(0)
+  const [loading,      setLoading]  = useState(false)
+  const [hovered,      setHovered]  = useState(false)
+  const [showSettings, setShowSettings] = useState(false)
+  const [draftTopics,  setDraftTopics]  = useState(topics)
+  const timerRef = useRef(null)
+
+  // Fetch on mount + whenever topics change
+  useEffect(() => {
+    let cancelled = false
+    setLoading(true)
+    fetchNews(topics).then(arts => {
+      if (!cancelled) { setArticles(arts); setIdx(0); setLoading(false) }
+    })
+    return () => { cancelled = true }
+  }, [topics.join(",")])
+
+  // Auto-advance carousel
+  useEffect(() => {
+    clearInterval(timerRef.current)
+    if (!hovered && articles.length > 1) {
+      timerRef.current = setInterval(() => setIdx(i => (i + 1) % articles.length), 5000)
+    }
+    return () => clearInterval(timerRef.current)
+  }, [hovered, articles.length])
+
+  const prev = () => setIdx(i => (i - 1 + articles.length) % articles.length)
+  const next = () => setIdx(i => (i + 1) % articles.length)
+
+  const savePref = (selected) => {
+    setTopics(selected)
+    dbSet(prefKey, selected)
+    setShowSettings(false)
+  }
+
+  const article = articles[idx]
+
+  if (showSettings) return (
+    <div className="flex flex-col h-full p-2 gap-2" style={{ color: "rgba(255,255,255,0.85)" }}>
+      <div className="text-[11px] font-semibold text-white/60 flex-shrink-0">Subscribe to topics</div>
+      <div className="flex-1 min-h-0 overflow-y-auto flex flex-col gap-1">
+        {NEWS_TOPICS.map(t => {
+          const on = draftTopics.includes(t.id)
+          return (
+            <button key={t.id}
+              onClick={() => setDraftTopics(d => on ? d.filter(x => x !== t.id) : [...d, t.id])}
+              className="flex items-center gap-2 px-2 py-1 rounded-lg text-left text-[11px] transition-all"
+              style={{ background: on ? "rgba(139,92,246,0.25)" : "rgba(255,255,255,0.05)" }}>
+              <div className="w-3.5 h-3.5 rounded flex items-center justify-center flex-shrink-0"
+                style={{ background: on ? "rgba(139,92,246,0.7)" : "rgba(255,255,255,0.1)" }}>
+                {on && <Check size={9} strokeWidth={3} style={{ color: "#fff" }} />}
+              </div>
+              {t.label}
+            </button>
+          )
+        })}
+      </div>
+      <div className="flex gap-1.5 flex-shrink-0">
+        <button onClick={() => setShowSettings(false)}
+          className="flex-1 py-1 rounded-lg text-[11px] text-white/50 hover:text-white/80 transition-colors"
+          style={{ background: "rgba(255,255,255,0.07)" }}>
+          Cancel
+        </button>
+        <button onClick={() => savePref(draftTopics.length ? draftTopics : ["technology"])}
+          className="flex-1 py-1 rounded-lg text-[11px] font-semibold text-white transition-colors"
+          style={{ background: "rgba(139,92,246,0.5)" }}>
+          Save
+        </button>
+      </div>
+    </div>
+  )
+
+  if (loading) return (
+    <div className="flex flex-col items-center justify-center h-full gap-2">
+      <div className="w-5 h-5 rounded-full border-2 border-white/20 border-t-white/60 animate-spin" />
+      <div className="text-[11px] text-white/30">Loading news…</div>
+    </div>
+  )
+
+  if (!articles.length) return (
+    <div className="flex flex-col items-center justify-center h-full gap-2 p-3">
+      <div className="text-white/25 text-[11px] text-center">No articles found.<br/>Try different topics.</div>
+      <button onClick={() => { setDraftTopics(topics); setShowSettings(true) }}
+        className="text-[11px] text-white/40 hover:text-white/70 flex items-center gap-1 transition-colors">
+        <Settings size={11} /> Topics
+      </button>
+    </div>
+  )
+
+  return (
+    <div className="relative flex flex-col h-full overflow-hidden"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}>
+      {/* Settings button */}
+      <button
+        onClick={() => { setDraftTopics(topics); setShowSettings(true) }}
+        className="absolute top-1 right-1 z-10 w-5 h-5 flex items-center justify-center rounded opacity-50 hover:opacity-100 transition-opacity"
+        style={{ background: "rgba(0,0,0,0.4)" }}>
+        <Settings size={10} style={{ color: "#fff" }} />
+      </button>
+
+      {/* Image */}
+      <div className="flex-1 min-h-0 relative overflow-hidden">
+        {article?.image
+          ? <img src={article.image} alt="" className="w-full h-full object-cover" draggable={false} />
+          : <div className="w-full h-full flex items-center justify-center"
+              style={{ background: "rgba(139,92,246,0.15)" }}>
+              <div className="text-white/20 text-xs">No image</div>
+            </div>
+        }
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 pointer-events-none"
+          style={{ background: "linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.2) 55%, transparent 100%)" }} />
+
+        {/* Prev / Next on hover */}
+        {hovered && articles.length > 1 && (
+          <>
+            <button onClick={prev}
+              className="absolute left-1 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full flex items-center justify-center transition-opacity"
+              style={{ background: "rgba(0,0,0,0.55)" }}>
+              <ChevronLeft size={13} style={{ color: "#fff" }} />
+            </button>
+            <button onClick={next}
+              className="absolute right-1 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full flex items-center justify-center transition-opacity"
+              style={{ background: "rgba(0,0,0,0.55)" }}>
+              <ChevronRight size={13} style={{ color: "#fff" }} />
+            </button>
+          </>
+        )}
+
+        {/* Headline */}
+        <div className="absolute bottom-0 left-0 right-0 px-2 pb-1.5">
+          <a href={article?.url} target="_blank" rel="noopener noreferrer"
+            className="block text-white hover:underline leading-tight"
+            style={{ fontSize: 11, fontWeight: 600, textShadow: "0 1px 4px rgba(0,0,0,0.8)" }}>
+            {article?.title}
+          </a>
+          {article?.source && (
+            <div className="text-[9px] text-white/45 mt-0.5">{article.source}</div>
+          )}
+        </div>
+      </div>
+
+      {/* Expanded article on hover */}
+      {hovered && article?.desc && (
+        <div className="flex-shrink-0 max-h-[90px] overflow-y-auto px-2 py-1.5 text-[10px] leading-relaxed"
+          style={{ background: "rgba(0,0,0,0.7)", color: "rgba(255,255,255,0.7)", borderTop: "1px solid rgba(255,255,255,0.08)" }}>
+          {article.desc}
+          <a href={article.url} target="_blank" rel="noopener noreferrer"
+            className="inline-flex items-center gap-0.5 ml-1 text-indigo-300 hover:text-indigo-200"
+            style={{ whiteSpace: "nowrap" }}>
+            Read more <ExternalLink size={9} />
+          </a>
+        </div>
+      )}
+
+      {/* Dot indicators */}
+      {articles.length > 1 && !hovered && (
+        <div className="absolute bottom-0.5 left-0 right-0 flex justify-center gap-1 pointer-events-none">
+          {articles.slice(0, 8).map((_, i) => (
+            <div key={i} style={{
+              width: i === idx ? 10 : 4, height: 4, borderRadius: 2,
+              background: i === idx ? "rgba(255,255,255,0.8)" : "rgba(255,255,255,0.3)",
+              transition: "width 0.3s",
+            }} />
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ── Quota Widget ──────────────────────────────────────────────────────────────
+function formatBytesShort(b) {
+  if (b >= 1_073_741_824) return `${(b / 1_073_741_824).toFixed(2)} GB`
+  if (b >= 1_048_576)     return `${(b / 1_048_576).toFixed(1)} MB`
+  if (b >= 1024)          return `${(b / 1024).toFixed(1)} KB`
+  return `${b} B`
+}
+
+function QuotaBar({ pct, color }) {
+  return (
+    <div className="w-full h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.08)" }}>
+      <div style={{ width: `${Math.min(100, pct)}%`, height: "100%", borderRadius: 9999,
+        background: pct > 90 ? "#ef4444" : pct > 70 ? "#f59e0b" : color,
+        transition: "width 0.5s ease" }} />
+    </div>
+  )
+}
+
+function QuotaWidget() {
+  const [storage,  setStorage]  = useState(null)
+  const [ai,       setAi]       = useState(null)
+  const [spinning, setSpinning] = useState(false)
+
+  // Silent background fetch — used by the interval poller
+  const fetchData = useCallback(() => {
+    fsQuota().then(d => setStorage(d)).catch(() => {})
+    aiQuota().then(d => setAi(d)).catch(() => {})
+  }, [])
+
+  // Manual refresh — always completes at least one full spin cycle (700 ms)
+  const manualRefresh = useCallback(() => {
+    if (spinning) return
+    setSpinning(true)
+    Promise.all([
+      fsQuota().then(d => setStorage(d)).catch(() => {}),
+      aiQuota().then(d => setAi(d)).catch(() => {}),
+      new Promise(resolve => setTimeout(resolve, 700)),  // minimum one full rotation
+    ]).finally(() => setSpinning(false))
+  }, [spinning])
+
+  // Initial load + poll every 5 s (silent, no spin)
+  useEffect(() => {
+    fetchData()
+    const id = setInterval(fetchData, 5_000)
+    return () => clearInterval(id)
+  }, [fetchData])
+
+  const sPct = storage ? (storage.used / storage.quota) * 100 : 0
+  const aPct = ai && ai.quota > 0 ? (ai.used / ai.quota) * 100 : 0
+
+  return (
+    <div className="flex flex-col justify-center h-full px-3 gap-3" style={{ color: "rgba(255,255,255,0.85)" }}>
+      {/* Manual refresh button */}
+      <button onClick={manualRefresh}
+        className="absolute top-5 right-2 text-white/25 hover:text-white/60 transition-colors"
+        style={{ animation: spinning ? "spin 0.7s linear infinite" : "none" }}
+        title="Refresh">
+        <RefreshCw size={10} />
+      </button>
+
+      {/* Storage */}
+      <div className="flex flex-col gap-1">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-1.5 text-[11px] text-white/60">
+            <HardDrive size={11} /> Storage
+          </div>
+          <div className="text-[10px] text-white/40">
+            {storage ? `${formatBytesShort(storage.used)} / ${formatBytesShort(storage.quota)}` : "—"}
+          </div>
+        </div>
+        <QuotaBar pct={sPct} color="rgba(99,102,241,0.8)" />
+        {storage && (
+          <div className="text-[9px] text-white/25 text-right">
+            {formatBytesShort(storage.quota - storage.used)} free
+          </div>
+        )}
+      </div>
+
+      {/* AI tokens */}
+      <div className="flex flex-col gap-1">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-1.5 text-[11px] text-white/60">
+            <Cpu size={11} /> AI Tokens
+          </div>
+          <div className="text-[10px] text-white/40">
+            {ai && ai.quota > 0 ? `${ai.used.toLocaleString()} / ${ai.quota.toLocaleString()}` : "—"}
+          </div>
+        </div>
+        <QuotaBar pct={aPct} color="rgba(139,92,246,0.8)" />
+        {ai && ai.quota > 0 && (
+          <div className="text-[9px] text-white/25 text-right">
+            {ai.free.toLocaleString()} tokens remaining
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
+
 function WidgetContent({ widget }) {
   switch (widget.type) {
-    case "clock":   return <ClockWidget />
-    case "weather": return <WeatherWidget />
-    case "music":   return <MusicWidget />
-    case "notes":   return <NotesWidget widgetId={widget.id} />
-    default:        return <div className="text-white/30 text-xs p-3">Unknown widget</div>
+    case "clock":    return <ClockWidget />
+    case "weather":  return <WeatherWidget />
+    case "music":    return <MusicWidget />
+    case "notes":    return <NotesWidget widgetId={widget.id} />
+    case "todo":     return <TodoWidget widgetId={widget.id} />
+    case "calendar": return <CalendarWidget />
+    case "news":     return <NewsWidget widgetId={widget.id} />
+    case "quota":    return <QuotaWidget />
+    default:         return <div className="text-white/30 text-xs p-3">Unknown widget</div>
   }
 }
 

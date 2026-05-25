@@ -6,9 +6,9 @@ import { rmSync } from 'fs'
 import { fileURLToPath } from 'url'
 import { dirname, join } from 'path'
 import pool from '../db.js'
-import { JWT_SECRET, TOKEN_EXPIRY, MIN_PASSWORD_LENGTH, DEFAULT_AI_QUOTA_TOKENS, OTP_EXPIRY_MINUTES } from '../config.js'
+import { JWT_SECRET, TOKEN_EXPIRY, MIN_PASSWORD_LENGTH, DEFAULT_AI_QUOTA_TOKENS, OTP_EXPIRY_MINUTES, SMTP } from '../config.js'
 import { STORAGE_PREFIX } from '../../src/config.js'
-import { sendOtpEmail, isSmtpConfigured } from '../mailer.js'
+import { sendOtpEmail, sendPasswordChangedEmail, isSmtpConfigured } from '../mailer.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
@@ -38,6 +38,45 @@ function requirePendingEmail(req, res, next) {
     next()
   } catch {
     res.status(401).json({ error: 'Verification session expired. Please sign up again.' })
+  }
+}
+
+/** Short-lived token issued after OTP is sent — allows verify-otp endpoint only. */
+function signPwdResetOtpToken(sessionId, userId) {
+  return jwt.sign({ type: 'pwd_reset_otp', sessionId, userId }, JWT_SECRET, { expiresIn: `${OTP_EXPIRY_MINUTES}m` })
+}
+/** Short-lived token issued after OTP verified — allows set-password endpoint only. */
+function signPwdResetSetToken(sessionId, userId) {
+  return jwt.sign({ type: 'pwd_reset_set', sessionId, userId }, JWT_SECRET, { expiresIn: `${OTP_EXPIRY_MINUTES}m` })
+}
+
+/** Middleware: requires a pwd_reset_otp token (step 1 → step 2). */
+function requirePwdResetOtp(req, res, next) {
+  const auth = req.headers.authorization
+  if (!auth?.startsWith('Bearer ')) return res.status(401).json({ error: 'Unauthorized' })
+  try {
+    const payload = jwt.verify(auth.slice(7), JWT_SECRET)
+    if (payload.type !== 'pwd_reset_otp') return res.status(401).json({ error: 'Invalid token type.' })
+    req.resetSessionId = payload.sessionId
+    req.resetUserId    = payload.userId
+    next()
+  } catch {
+    res.status(401).json({ error: 'Reset session expired. Please start again.' })
+  }
+}
+
+/** Middleware: requires a pwd_reset_set token (step 2 → step 3). */
+function requirePwdResetSet(req, res, next) {
+  const auth = req.headers.authorization
+  if (!auth?.startsWith('Bearer ')) return res.status(401).json({ error: 'Unauthorized' })
+  try {
+    const payload = jwt.verify(auth.slice(7), JWT_SECRET)
+    if (payload.type !== 'pwd_reset_set') return res.status(401).json({ error: 'Invalid token type.' })
+    req.resetSessionId = payload.sessionId
+    req.resetUserId    = payload.userId
+    next()
+  } catch {
+    res.status(401).json({ error: 'Reset session expired. Please start again.' })
   }
 }
 function generateOtp() { return Math.floor(100000 + Math.random() * 900000).toString() }
@@ -582,4 +621,155 @@ authRouter.post('/logout', async (req, res) => {
   }
   res.clearCookie(REFRESH_COOKIE, { httpOnly: true, sameSite: 'lax', path: '/api/auth' })
   res.json({ ok: true })
+})
+
+// ── POST /api/auth/forgot-password — send OTP to email, create reset session ─────
+// Revokes any existing reset session for the user so that opening a new tab
+// or refreshing and resubmitting automatically invalidates the old flow.
+authRouter.post('/forgot-password', async (req, res) => {
+  try {
+    const { email } = req.body || {}
+    if (!email?.trim()) return res.status(400).json({ error: 'Email address is required.' })
+
+    const { rows } = await pool.query(
+      'SELECT * FROM users WHERE email IS NOT NULL AND LOWER(email) = LOWER($1)',
+      [email.trim()]
+    )
+    const user = rows[0]
+    if (!user) return res.status(404).json({ error: 'No account found with that email address.' })
+    if (user.is_frozen) return res.status(403).json({ error: 'This account has been frozen.' })
+
+    // Revoke all existing reset sessions for this user (handles multiple-tab / refresh case)
+    await pool.query('DELETE FROM password_reset_sessions WHERE user_id = $1', [user.id])
+
+    // Create a new reset session
+    const sessionId = 'prs-' + randomBytes(12).toString('hex')
+    const expiresAt = new Date(Date.now() + OTP_EXPIRY_MINUTES * 60 * 1000)
+    await pool.query(
+      'INSERT INTO password_reset_sessions (id, user_id, step, expires_at) VALUES ($1, $2, $3, $4)',
+      [sessionId, user.id, 'otp_pending', expiresAt]
+    )
+
+    // Generate OTP (stored in email_otps, purpose = 'password_reset')
+    const { otp } = await storeOtp(user.id, 'password_reset')
+
+    try {
+      await sendOtpEmail({ to: user.email, otp, purpose: 'password_reset' })
+    } catch (mailErr) {
+      console.error('[forgot-password/mailer]', mailErr.message)
+      // Clean up on mail failure so the user can try again
+      await pool.query('DELETE FROM password_reset_sessions WHERE id = $1', [sessionId])
+      await pool.query('DELETE FROM email_otps WHERE user_id = $1 AND purpose = $2', [user.id, 'password_reset'])
+      return res.status(503).json({ error: 'Failed to send reset email. Please try again.' })
+    }
+
+    res.json({ resetToken: signPwdResetOtpToken(sessionId, user.id) })
+  } catch (e) {
+    console.error('/forgot-password', e.message)
+    res.status(500).json({ error: 'Server error.' })
+  }
+})
+
+// ── POST /api/auth/forgot-password/verify-otp — validate OTP, advance session ──
+authRouter.post('/forgot-password/verify-otp', requirePwdResetOtp, async (req, res) => {
+  const { otp } = req.body || {}
+  if (!otp) return res.status(400).json({ error: 'Code is required.' })
+  try {
+    // Confirm the session still exists (not revoked by a concurrent request)
+    const { rows: sessionRows } = await pool.query(
+      `SELECT * FROM password_reset_sessions
+       WHERE id = $1 AND user_id = $2 AND step = 'otp_pending' AND expires_at > NOW()`,
+      [req.resetSessionId, req.resetUserId]
+    )
+    if (!sessionRows[0])
+      return res.status(400).json({ error: 'Reset session expired or was revoked. Please start again.' })
+
+    // Validate and consume the OTP
+    const otpRow = await consumeOtp(req.resetUserId, 'password_reset', String(otp).trim())
+    if (!otpRow) return res.status(400).json({ error: 'Invalid or expired code.' })
+
+    // Advance session step
+    await pool.query(
+      `UPDATE password_reset_sessions SET step = 'otp_verified' WHERE id = $1`,
+      [req.resetSessionId]
+    )
+
+    res.json({ resetToken: signPwdResetSetToken(req.resetSessionId, req.resetUserId) })
+  } catch (e) {
+    console.error('/forgot-password/verify-otp', e.message)
+    res.status(500).json({ error: 'Server error.' })
+  }
+})
+
+// ── POST /api/auth/forgot-password/resend-otp — resend code (same session) ───
+authRouter.post('/forgot-password/resend-otp', requirePwdResetOtp, async (req, res) => {
+  try {
+    const { rows: sessionRows } = await pool.query(
+      `SELECT * FROM password_reset_sessions
+       WHERE id = $1 AND user_id = $2 AND step = 'otp_pending' AND expires_at > NOW()`,
+      [req.resetSessionId, req.resetUserId]
+    )
+    if (!sessionRows[0])
+      return res.status(400).json({ error: 'Reset session expired. Please start again.' })
+
+    const { rows: userRows } = await pool.query('SELECT email FROM users WHERE id = $1', [req.resetUserId])
+    const user = userRows[0]
+    if (!user?.email) return res.status(400).json({ error: 'No email on file.' })
+
+    const { otp } = await storeOtp(req.resetUserId, 'password_reset')
+    try {
+      await sendOtpEmail({ to: user.email, otp, purpose: 'password_reset' })
+    } catch (mailErr) {
+      console.error('[forgot-password/resend]', mailErr.message)
+      return res.status(503).json({ error: 'Failed to send code. Please try again.' })
+    }
+    res.json({ ok: true })
+  } catch (e) {
+    console.error('/forgot-password/resend-otp', e.message)
+    res.status(500).json({ error: 'Server error.' })
+  }
+})
+
+// ── POST /api/auth/forgot-password/reset — set new password, close session ──
+authRouter.post('/forgot-password/reset', requirePwdResetSet, async (req, res) => {
+  const { newPassword } = req.body || {}
+  if (!newPassword) return res.status(400).json({ error: 'New password is required.' })
+  if (newPassword.length < MIN_PASSWORD_LENGTH)
+    return res.status(400).json({ error: `Password must be at least ${MIN_PASSWORD_LENGTH} characters.` })
+  try {
+    // Verify session is in the correct step (prevents skipping OTP)
+    const { rows: sessionRows } = await pool.query(
+      `SELECT * FROM password_reset_sessions
+       WHERE id = $1 AND user_id = $2 AND step = 'otp_verified' AND expires_at > NOW()`,
+      [req.resetSessionId, req.resetUserId]
+    )
+    if (!sessionRows[0])
+      return res.status(400).json({ error: 'Reset session expired or was revoked. Please start again.' })
+
+    const hash = await bcrypt.hash(newPassword, 10)
+    // Update password and invalidate all existing access tokens
+    await pool.query(
+      'UPDATE users SET password_hash = $1, tokens_invalidated_at = NOW() WHERE id = $2',
+      [hash, req.resetUserId]
+    )
+
+    // Delete reset session (consumed) and all active refresh sessions
+    await pool.query('DELETE FROM password_reset_sessions WHERE id = $1', [req.resetSessionId])
+    await invalidateAllSessions(req.resetUserId)
+
+    // Fire-and-forget security notification — do not block the response on mail errors
+    const { rows: notifyRows } = await pool.query('SELECT email FROM users WHERE id = $1', [req.resetUserId])
+    if (notifyRows[0]?.email) {
+      const supportEmail = SMTP.from
+        ? SMTP.from.replace(/.*<(.+)>.*/, '$1').trim()
+        : SMTP.user
+      sendPasswordChangedEmail({ to: notifyRows[0].email, supportEmail })
+        .catch(e => console.error('[forgot-password/notify]', e.message))
+    }
+
+    res.json({ ok: true })
+  } catch (e) {
+    console.error('/forgot-password/reset', e.message)
+    res.status(500).json({ error: 'Server error.' })
+  }
 })

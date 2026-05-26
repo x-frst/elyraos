@@ -204,8 +204,13 @@
 
   <!-- Node -->
   <circle cx="140" cy="303.0" r="9"
-          class="future nodePulse"
+          class="completed nodePulse"
           filter="url(#nodeGlow)"/>
+
+  <path d="M136 303.0
+           L140 307.0
+           L147 298.0"
+        class="tick"/>
 
 
   <!-- Text -->
@@ -229,8 +234,13 @@
 
   <!-- Node -->
   <circle cx="140" cy="413.0" r="9"
-          class="future nodePulse"
+          class="completed nodePulse"
           filter="url(#nodeGlow)"/>
+
+  <path d="M136 413.0
+           L140 417.0
+           L147 408.0"
+        class="tick"/>
 
 
   <!-- Text -->

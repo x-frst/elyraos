@@ -434,57 +434,128 @@ function CalendarWidget() {
 
 // ── News Widget ───────────────────────────────────────────────────────────────
 const NEWS_TOPICS = [
-  { id: "technology",     label: "Technology",     sub: "technology+tech" },
-  { id: "programming",    label: "Programming",    sub: "programming+webdev+learnprogramming+coding" },
-  { id: "gaming",         label: "Gaming",         sub: "gaming" },
-  { id: "politics",       label: "Politics",       sub: "politics" },
-  { id: "science",        label: "Science",        sub: "science" },
-  { id: "business",       label: "Business",       sub: "business+entrepreneur+startups+smallbusiness" },
-  { id: "health",         label: "Health",         sub: "health" },
-  { id: "sports",         label: "Sports",         sub: "sports" },
-  { id: "entertainment",  label: "Entertainment",  sub: "entertainment" },
-  { id: "world",          label: "World News",     sub: "worldnews" },
-  { id: "ai",             label: "AI & ML",        sub: "MachineLearning+artificial" },
-  { id: "crypto",         label: "Crypto",         sub: "CryptoCurrency" },
+  { id: "technology",     label: "Technology",    feed: "https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml" },
+  { id: "programming",    label: "Programming",   devto: ["programming", "javascript", "webdev"] },
+  { id: "gaming",         label: "Gaming",        feed: "https://kotaku.com/rss" },
+  { id: "politics",       label: "Politics",      feed: "https://rss.nytimes.com/services/xml/rss/nyt/Politics.xml" },
+  { id: "science",        label: "Science",       feed: "https://rss.nytimes.com/services/xml/rss/nyt/Science.xml" },
+  { id: "business",       label: "Business",      feed: "https://rss.nytimes.com/services/xml/rss/nyt/Business.xml" },
+  { id: "health",         label: "Health",        feed: "https://rss.nytimes.com/services/xml/rss/nyt/Health.xml" },
+  { id: "sports",         label: "Sports",        feed: "https://feeds.bbci.co.uk/sport/rss.xml" },
+  { id: "entertainment",  label: "Entertainment", feed: "https://rss.nytimes.com/services/xml/rss/nyt/Arts.xml" },
+  { id: "world",          label: "World News",    feed: "https://rss.nytimes.com/services/xml/rss/nyt/World.xml" },
+  { id: "ai",             label: "AI & ML",       feed: "https://www.technologyreview.com/feed/" },
+  { id: "crypto",         label: "Crypto",        feed: "https://cointelegraph.com/rss" },
 ]
 
-// Reddit public JSON API — free, no auth, CORS-friendly.
-// Fetches the selected subreddits as a multi-reddit so only chosen topics appear.
-async function fetchNews(topics) {
-  if (!topics.length) return []
-  const subs = topics
-    .map(id => NEWS_TOPICS.find(t => t.id === id)?.sub || id)
-    .join("+")
+// Extract the best image URL from an RSS <item> element.
+function rssItemImage(item) {
+  const mediaNS = "http://search.yahoo.com/mrss/"
+  // media:content / media:thumbnail (with proper namespace)
+  for (const local of ["content", "thumbnail"]) {
+    const el  = item.getElementsByTagNameNS(mediaNS, local)[0]
+    const url = el?.getAttribute("url")
+    if (url?.startsWith("http")) return url
+  }
+  // enclosure
+  const enc = item.querySelector("enclosure")
+  const encUrl = enc?.getAttribute("url") || ""
+  if (encUrl.startsWith("http") && (enc.getAttribute("type") || "").startsWith("image")) return encUrl
+  // <img> inside CDATA description
+  const descText = item.querySelector("description")?.textContent || ""
+  const imgTag = descText.match(/<img[^>]+src=["']([^"']+)["']/i)
+  if (imgTag) return imgTag[1]
+  // last resort — any image URL anywhere inside the item XML
+  const rawText = item.innerHTML || new XMLSerializer().serializeToString(item)
+  const anyImg = rawText.match(/https?:\/\/[^\s"'<>]+\.(?:jpe?g|png|gif|webp)(?:\?[^\s"'<>]*)?/i)
+  return anyImg ? anyImg[0] : null
+}
+
+// Try multiple CORS proxies in sequence, returning the raw text of the first
+// one that succeeds. This makes the widget resilient to any single proxy going down.
+async function proxyFetch(url) {
+  const proxies = [
+    `https://corsproxy.io/?${encodeURIComponent(url)}`,
+    `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+    `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`,
+  ]
+  for (const proxy of proxies) {
+    try {
+      const res = await fetch(proxy, { signal: AbortSignal.timeout(8000) })
+      if (!res.ok) continue
+      const text = await res.text()
+      if (text && text.length > 200) return text
+    } catch { /* try next */ }
+  }
+  return null
+}
+
+// Fetch one RSS feed, trying three CORS proxies as fallbacks.
+async function fetchTopicFeed(topic) {
+  const t = NEWS_TOPICS.find(x => x.id === topic)
+  if (!t) return []
+
+  // Dev.to public API — CORS-native, no proxy required
+  if (t.devto) {
+    const results = await Promise.all(t.devto.map(tag =>
+      fetch(`https://dev.to/api/articles?per_page=12&tag=${tag}`, { signal: AbortSignal.timeout(8000) })
+        .then(r => r.ok ? r.json() : [])
+        .catch(() => [])
+    ))
+    return results.flat().map(a => ({
+      title:   a.title,
+      url:     a.url,
+      image:   a.cover_image || a.social_image || null,
+      source:  a.user?.name || "Dev.to",
+      desc:    a.description || null,
+      created: a.published_at ? Date.parse(a.published_at) : 0,
+    })).filter(a => a.title && a.url)
+  }
+
+  const xml = await proxyFetch(t.feed)
+  if (!xml) return []
   try {
-    const res = await fetch(
-      `https://www.reddit.com/r/${subs}/hot.json?limit=50&raw_json=1`,
-      { headers: { Accept: "application/json" } }
-    )
-    if (!res.ok) throw new Error()
-    const data = await res.json()
-    return (data.data?.children || [])
-      .map(c => c.data)
-      .filter(p => !p.over_18 && p.title && !p.stickied)
-      .map(p => {
-        const preview = p.preview?.images?.[0]?.source?.url || null
-        const thumb   = p.thumbnail?.startsWith("https") ? p.thumbnail : null
-        const image   = preview || thumb
-        if (!image) return null   // skip articles with no image
-        return {
-          title:   p.title,
-          url:     p.url?.startsWith("http") ? p.url : `https://reddit.com${p.permalink}`,
-          image,
-          source:  `r/${p.subreddit}`,
-          desc:    p.selftext?.trim().slice(0, 280) || null,
-          created: p.created_utc || 0,
-        }
-      })
-      .filter(Boolean)
-      .sort((a, b) => b.created - a.created)   // newest first
-      .slice(0, 15)
+    const doc    = new DOMParser().parseFromString(xml, "text/xml")
+    const source = doc.querySelector("channel > title")?.textContent?.trim()
+                   || new URL(t.feed).hostname
+    return [...doc.querySelectorAll("item")].map(item => {
+      const title   = item.querySelector("title")?.textContent?.trim()
+      // RSS uses text content; Atom uses href attribute
+      const link    = item.querySelector("link")?.textContent?.trim()
+                      || item.querySelector("link")?.getAttribute("href")
+                      || item.querySelector("guid")?.textContent?.trim()
+      const pubDate = item.querySelector("pubDate")?.textContent?.trim()
+      const image   = rssItemImage(item)
+      const rawDesc = item.querySelector("description")?.textContent || ""
+      const desc    = rawDesc.replace(/<[^>]+>/g, "").trim().slice(0, 280) || null
+      if (!title || !link?.startsWith("http")) return null
+      return { title, url: link, image, source, desc, created: pubDate ? Date.parse(pubDate) : 0 }
+    }).filter(Boolean)
   } catch {
     return []
   }
+}
+
+// Fetch all selected topics in parallel, merge and sort newest-first.
+async function fetchNews(topics) {
+  if (!topics.length) return []
+  const results = await Promise.all(topics.map(fetchTopicFeed))
+  // Give each topic an equal share of the 20 slots so no single source dominates.
+  const perTopic = Math.ceil(20 / topics.length)
+  const capped   = results.map(items =>
+    [...items].sort((a, b) => b.created - a.created).slice(0, perTopic)
+  )
+  // Interleave round-robin then shuffle so articles from every category appear mixed.
+  const interleaved = []
+  const maxLen = Math.max(...capped.map(a => a.length))
+  for (let i = 0; i < maxLen; i++)
+    capped.forEach(arr => { if (arr[i]) interleaved.push(arr[i]) })
+  // Fisher-Yates shuffle for a fully randomised feed
+  for (let i = interleaved.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [interleaved[i], interleaved[j]] = [interleaved[j], interleaved[i]]
+  }
+  return interleaved.slice(0, 20)
 }
 
 function NewsWidget({ widgetId }) {

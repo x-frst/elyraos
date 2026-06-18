@@ -471,23 +471,19 @@ function rssItemImage(item) {
   return anyImg ? anyImg[0] : null
 }
 
-// Try multiple CORS proxies in sequence, returning the raw text of the first
-// one that succeeds. This makes the widget resilient to any single proxy going down.
+// Fetch an RSS feed through the ElyraOS backend proxy (/api/proxy/rss).
+// This avoids all third-party CORS proxies and works on any domain.
 async function proxyFetch(url) {
-  const proxies = [
-    `https://corsproxy.io/?${encodeURIComponent(url)}`,
-    `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
-    `https://thingproxy.freeboard.io/fetch/${url}`,
-  ]
-  for (const proxy of proxies) {
-    try {
-      const res = await fetch(proxy, { signal: AbortSignal.timeout(8000) })
-      if (!res.ok) continue
-      const text = await res.text()
-      if (text && text.length > 200) return text
-    } catch { /* try next */ }
+  try {
+    const res = await fetch(`/api/proxy/rss?url=${encodeURIComponent(url)}`, {
+      signal: AbortSignal.timeout(12_000),
+    })
+    if (!res.ok) return null
+    const text = await res.text()
+    return text.length > 200 ? text : null
+  } catch {
+    return null
   }
-  return null
 }
 
 // Fetch one RSS feed, trying three CORS proxies as fallbacks.

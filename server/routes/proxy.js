@@ -240,6 +240,40 @@ const INTERCEPTOR = `<script data-nova-proxy>
 </script>
 `
 
+// GET /api/proxy/rss?url=<encoded-feed-url>
+// No auth required — called by the News widget on the public desktop.
+// Fetches an RSS/Atom feed server-side (bypassing CORS) and returns raw XML.
+// SSRF-protected: only allows http/https to non-private hosts.
+router.get('/rss', async (req, res) => {
+  const raw = req.query.url
+  if (!raw) return res.status(400).json({ error: 'Missing url parameter' })
+  let parsed
+  try { parsed = new URL(raw) } catch { return res.status(400).json({ error: 'Invalid URL' }) }
+  if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:')
+    return res.status(400).json({ error: 'Only http/https allowed' })
+  if (isBlockedHost(parsed.hostname))
+    return res.status(403).json({ error: 'Blocked host' })
+  try {
+    const upstream = await fetch(parsed.href, {
+      headers: {
+        'User-Agent':      'Mozilla/5.0 (compatible; RSS reader)',
+        'Accept':          'application/rss+xml, application/atom+xml, application/xml, text/xml, */*',
+        'Accept-Encoding': 'identity',
+        'Cache-Control':   'no-cache',
+      },
+      signal: AbortSignal.timeout(12_000),
+      redirect: 'follow',
+    })
+    if (!upstream.ok) return res.status(upstream.status).json({ error: `Upstream returned ${upstream.status}` })
+    const xml = await upstream.text()
+    res.setHeader('Content-Type', 'application/xml; charset=utf-8')
+    res.setHeader('Cache-Control', 'public, max-age=300') // cache 5 min on CDN/browser
+    res.send(xml)
+  } catch (e) {
+    res.status(502).json({ error: e.message })
+  }
+})
+
 router.use(requireAuth)
 
 // GET /api/proxy/download?url=<encoded-url>

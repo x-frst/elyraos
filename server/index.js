@@ -78,7 +78,7 @@ app.use('/api/twofa',   twofaRouter)
 const distPath = path.join(__dirname, '..', 'dist')
 if (process.env.NODE_ENV === 'production' && existsSync(distPath)) {
   app.use(express.static(distPath))
-  app.get('*', (_req, res) => res.sendFile(path.join(distPath, 'index.html')))
+  app.get('/*splat', (_req, res) => res.sendFile(path.join(distPath, 'index.html')))
 }
 
 // ── Global error handler ──────────────────────────────────────────────────────

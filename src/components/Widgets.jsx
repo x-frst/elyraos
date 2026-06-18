@@ -436,7 +436,7 @@ function CalendarWidget() {
 const NEWS_TOPICS = [
   { id: "technology",     label: "Technology",    feed: "https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml" },
   { id: "programming",    label: "Programming",   devto: ["programming", "javascript", "webdev"] },
-  { id: "gaming",         label: "Gaming",        feed: "https://kotaku.com/rss" },
+  { id: "gaming",         label: "Gaming",        feed: "https://feeds.ign.com/ign/all" },
   { id: "politics",       label: "Politics",      feed: "https://rss.nytimes.com/services/xml/rss/nyt/Politics.xml" },
   { id: "science",        label: "Science",       feed: "https://rss.nytimes.com/services/xml/rss/nyt/Science.xml" },
   { id: "business",       label: "Business",      feed: "https://rss.nytimes.com/services/xml/rss/nyt/Business.xml" },
@@ -445,7 +445,7 @@ const NEWS_TOPICS = [
   { id: "entertainment",  label: "Entertainment", feed: "https://rss.nytimes.com/services/xml/rss/nyt/Arts.xml" },
   { id: "world",          label: "World News",    feed: "https://rss.nytimes.com/services/xml/rss/nyt/World.xml" },
   { id: "ai",             label: "AI & ML",       feed: "https://www.technologyreview.com/feed/" },
-  { id: "crypto",         label: "Crypto",        feed: "https://cointelegraph.com/rss" },
+  { id: "crypto",         label: "Crypto",        feed: "https://www.coindesk.com/arc/outboundfeeds/rss/" },
 ]
 
 // Extract the best image URL from an RSS <item> element.
@@ -477,7 +477,7 @@ async function proxyFetch(url) {
   const proxies = [
     `https://corsproxy.io/?${encodeURIComponent(url)}`,
     `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
-    `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`,
+    `https://thingproxy.freeboard.io/fetch/${url}`,
   ]
   for (const proxy of proxies) {
     try {

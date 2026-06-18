@@ -1251,7 +1251,8 @@
       "url": "https://eaglercraftx.pages.dev/",
       "allowIframe": true,
       "showCursor": false,
-      "featured": false,
+      "featured": true,
+      "is_live": true,
       "tags": [
         "game"
       ],
@@ -1261,8 +1262,7 @@
         "https://www.youtube.com/watch?v=7A5YWn33eps",
         "https://i.imgur.com/EE5CHMm.jpeg",
         "https://i.imgur.com/tW3ZWDk.jpeg"
-      ],
-      "is_live": true
+      ]
     },
     {
       "name": "GTA VC",
@@ -1270,7 +1270,8 @@
       "url": "https://vc.quenq.com/",
       "allowIframe": true,
       "showCursor": false,
-      "featured": true,
+      "featured": false,
+      "is_live": false,
       "tags": [
         "game"
       ],
@@ -1280,8 +1281,7 @@
         "https://www.youtube.com/watch?v=BcqMaYdYow0",
         "https://i.imgur.com/n0sPqjp.jpeg",
         "https://i.imgur.com/pnT11ck.jpeg"
-      ],
-      "is_live": true
+      ]
     },
     {
       "name": "Typing Tools",
@@ -2038,6 +2038,25 @@
       "media": [
         "https://i.imgur.com/dhc4ytJ.jpeg",
         "https://i.imgur.com/FugFsU3.jpeg"
+      ]
+    },
+    {
+      "name": "Venge IO",
+      "description": "Enter the battlefield in a fast-paced **multiplayer FPS game** where quick reflexes and strategy lead to victory.\n\nChoose your weapons, master unique abilities, and compete against players in intense online matches.\n\n## ✨ Key Features\n- Multiplayer first-person shooter gameplay  \n- Multiple maps and competitive game modes  \n- Unlock and use powerful abilities  \n- Wide selection of weapons and loadouts  \n- Smooth controls and action-packed combat  \n\n## 🚀 Why You'll Love It\n*Perfect for players who enjoy competitive online shooters.*  \n\nJump into the action, sharpen your aim, and dominate every match.",
+      "url": "https://venge.io/",
+      "allowIframe": true,
+      "showCursor": true,
+      "featured": false,
+      "is_live": true,
+      "tags": [
+        "game"
+      ],
+      "icon_url": "https://i.imgur.com/GyP2hPV.jpeg",
+      "cover_image": "https://i.imgur.com/cLIeyjR.jpeg",
+      "media": [
+        "https://www.youtube.com/watch?v=ohOF2dr9F6M",
+        "https://i.imgur.com/3kvFtGr.jpeg",
+        "https://i.imgur.com/n3vYzPG.jpeg"
       ]
     }
   ]

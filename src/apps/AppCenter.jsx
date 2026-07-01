@@ -3,12 +3,14 @@ import { createPortal } from 'react-dom'
 import {
   Search, Play, Download, Trash2, ArrowLeft,
   Gamepad2, Briefcase, Palette, Code2, Wrench, Tv, BookOpen,
-  ExternalLink, X, Sparkles, Check, Globe, Pencil, Plus, ShieldCheck, ChevronDown, Eye, EyeOff,
+  ExternalLink, X, Sparkles, Check, Globe, Pencil, Plus, ShieldCheck, ChevronDown, Eye, EyeOff, Flag, ScrollText,
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useStore } from '../store/useStore'
-import { useAuthStore } from '../store/useAuthStore'
+import { useAuthStore, getCurrentUser } from '../store/useAuthStore'
 import { CatalogTile } from '../utils/icons'
+import { TERMS_SECTIONS, TERMS_LAST_UPDATED } from '../utils/termsAndConditions'
+import { reportApp, getSelfProfile } from '../utils/db'
 
 // ── Categories ───────────────────────────────────────────────────────────────
 const CATEGORIES = [
@@ -371,8 +373,459 @@ function AppEditModal({ initial, onSave, onClose, saving }) {
   )
 }
 
+// ── Custom dropdown for Report modal (portals list to body to escape overflow clips) ─
+function ReportDropdown({ value, onChange, options, placeholder }) {
+  const [open, setOpen]   = useState(false)
+  const [pos,  setPos]    = useState({ top: 0, left: 0, width: 0 })
+  const btnRef  = useRef(null)
+  const listRef = useRef(null)
+
+  useEffect(() => {
+    if (!open) return
+    function handleOutside(e) {
+      if (btnRef.current?.contains(e.target))  return
+      if (listRef.current?.contains(e.target)) return
+      setOpen(false)
+    }
+    document.addEventListener('mousedown', handleOutside)
+    return () => document.removeEventListener('mousedown', handleOutside)
+  }, [open])
+
+  function toggle() {
+    if (!open && btnRef.current) {
+      const r       = btnRef.current.getBoundingClientRect()
+      const listH   = Math.min(options.length * 38 + 8, 264)
+      const goAbove = r.bottom + listH + 8 > window.innerHeight
+      setPos({ top: goAbove ? r.top - listH - 4 : r.bottom + 4, left: r.left, width: r.width })
+    }
+    setOpen(v => !v)
+  }
+
+  const selected = options.find(o => o.value === value)
+
+  return (
+    <>
+      <button ref={btnRef} type="button" onClick={toggle}
+        className="flex items-center justify-between w-full transition-all"
+        style={{
+          background:   'rgba(255,255,255,0.05)',
+          border:       `1px solid ${open ? 'rgba(130,80,255,0.45)' : 'rgba(255,255,255,0.12)'}`,
+          borderRadius: 10,
+          padding:      '8px 12px',
+          fontSize:     13,
+          color:        selected ? 'rgba(255,255,255,0.85)' : 'rgba(255,255,255,0.28)',
+          outline:      'none',
+          cursor:       'pointer',
+          textAlign:    'left',
+        }}>
+        <span className="truncate">{selected?.label || placeholder}</span>
+        <ChevronDown size={13} style={{
+          color:      'rgba(255,255,255,0.35)',
+          flexShrink: 0,
+          marginLeft: 6,
+          transform:  open ? 'rotate(180deg)' : 'none',
+          transition: 'transform 0.15s',
+        }} />
+      </button>
+
+      {open && createPortal(
+        <div ref={listRef} style={{
+          position:        'fixed',
+          top:             pos.top,
+          left:            pos.left,
+          width:           pos.width,
+          zIndex:          10002,
+          background:      'rgba(16,13,30,0.99)',
+          border:          '1px solid rgba(255,255,255,0.12)',
+          borderRadius:    10,
+          boxShadow:       '0 12px 40px rgba(0,0,0,0.7)',
+          backdropFilter:  'blur(16px)',
+          overflow:        'hidden',
+        }}>
+          <div className="overflow-y-auto scrollbar-thin" style={{ maxHeight: 264 }}>
+            {options.map(opt => (
+              <button
+                key={opt.value}
+                type="button"
+                onClick={() => { onChange(opt.value); setOpen(false) }}
+                className="w-full flex items-center justify-between transition-colors"
+                style={{
+                  padding:    '9px 12px',
+                  fontSize:   13,
+                  cursor:     'pointer',
+                  color:      opt.value === value ? 'rgba(255,255,255,0.95)' : 'rgba(255,255,255,0.65)',
+                  background: opt.value === value ? 'rgba(130,80,255,0.2)' : 'transparent',
+                  textAlign:  'left',
+                  border:     'none',
+                  outline:    'none',
+                }}
+                onMouseEnter={e => { if (opt.value !== value) e.currentTarget.style.background = 'rgba(255,255,255,0.07)' }}
+                onMouseLeave={e => { e.currentTarget.style.background = opt.value === value ? 'rgba(130,80,255,0.2)' : 'transparent' }}
+              >
+                <span>{opt.label}</span>
+                {opt.value === value && <Check size={12} style={{ color: '#a78bfa', flexShrink: 0 }} />}
+              </button>
+            ))}
+          </div>
+        </div>,
+        document.body
+      )}
+    </>
+  )
+}
+
+// ── App Report Modal ──────────────────────────────────────────────────────────
+const REPORT_CATEGORIES = [
+  { value: 'app_not_working',  label: 'App Not Working'         },
+  { value: 'needs_update',     label: 'App Needs an Update'     },
+  { value: 'broken_link',      label: 'Broken / Dead Link'      },
+  { value: 'removal_request',  label: 'App Removal Request'     },
+  { value: 'inappropriate',    label: 'Inappropriate Content'   },
+  { value: 'copyright',        label: 'Copyright Violation'     },
+  { value: 'security',         label: 'Security / Privacy Concern' },
+  { value: 'spam_misleading',  label: 'Spam or Misleading'      },
+  { value: 'feature_request',  label: 'Feature Request'         },
+  { value: 'duplicate',        label: 'Duplicate App'           },
+  { value: 'other',            label: 'Other'                   },
+]
+
+function AppReportModal({ app, onClose }) {
+  // ── User profile — fetched on mount since JWT restore doesn't populate store ─
+  const [profile, setProfile] = useState(null)
+  useEffect(() => {
+    getSelfProfile().then(u => { if (u) setProfile(u) })
+  }, [])
+  const firstName = profile?.firstName || ''
+  const lastName  = profile?.lastName  || ''
+  const username  = profile?.username  || getCurrentUser()?.username || ''
+  const email     = profile?.email     || ''
+
+  const [category,    setCategory]    = useState('')
+  const [description, setDescription] = useState('')
+  const [attachment,  setAttachment]  = useState(null) // { name, type, data (base64) }
+  const [agreedToTos, setAgreedToTos] = useState(false)
+  const [submitting,  setSubmitting]  = useState(false)
+  const [submitted,   setSubmitted]   = useState(false)
+  const [error,       setError]       = useState('')
+  const [showTos,     setShowTos]     = useState(false)
+  const fileRef = useRef(null)
+
+  function handleFile(e) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    if (file.size > 5 * 1024 * 1024) { setError('Attachment must be under 5 MB.'); return }
+    setError('')
+    const reader = new FileReader()
+    reader.onload = ev => {
+      const base64 = ev.target.result.split(',')[1]
+      setAttachment({ name: file.name, type: file.type, data: base64 })
+    }
+    reader.readAsDataURL(file)
+  }
+
+  async function handleSubmit(e) {
+    e.preventDefault()
+    if (!category)           { setError('Please select an issue category.'); return }
+    if (!description.trim()) { setError('Please describe the issue.'); return }
+    if (!agreedToTos)        { setError('You must agree to the Terms of Service before submitting.'); return }
+    setError('')
+    setSubmitting(true)
+    const res = await reportApp({
+      appTitle:    app.title,
+      appUrl:      app.url || null,
+      category,
+      description: description.trim(),
+      attachment:  attachment || null,
+    })
+    setSubmitting(false)
+    if (res?.ok) { setSubmitted(true) }
+    else          { setError(res?.error || 'Submission failed. Please try again.') }
+  }
+
+  const inpSt = {
+    background:   'rgba(255,255,255,0.05)',
+    border:       '1px solid rgba(255,255,255,0.12)',
+    borderRadius: 10,
+    color:        'rgba(255,255,255,0.85)',
+    fontSize:     13,
+    outline:      'none',
+    width:        '100%',
+    padding:      '8px 12px',
+  }
+
+  return createPortal(
+    <>
+    <div className="fixed inset-0 z-[9999] flex items-end sm:items-center justify-center"
+      style={{ background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(6px)' }}
+      onClick={onClose}>
+      <motion.div
+        initial={{ opacity: 0, y: 48 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: 48 }}
+        transition={{ type: 'spring', stiffness: 340, damping: 32 }}
+        className="w-full max-w-md flex flex-col"
+        style={{
+          background:   'rgba(14,12,28,0.97)',
+          border:       '1px solid rgba(255,255,255,0.1)',
+          borderRadius: 20,
+          maxHeight:    '92vh',
+        }}
+        onClick={e => e.stopPropagation()}
+      >
+        {/* Drag indicator (mobile) */}
+        <div className="flex justify-center pt-2.5 pb-1 flex-shrink-0 sm:hidden">
+          <div className="w-9 h-1 rounded-full" style={{ background: 'rgba(255,255,255,0.18)' }} />
+        </div>
+
+        {/* Header */}
+        <div className="flex items-center gap-2 px-5 py-4 flex-shrink-0"
+          style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
+          <Flag size={15} className="text-red-400 flex-shrink-0" />
+          <div className="flex-1 min-w-0">
+            <div className="text-white font-semibold text-[14px]">Report an App</div>
+            <div className="text-white/40 text-[11px] truncate">{app.title}</div>
+          </div>
+          <button onClick={onClose}
+            className="p-1.5 rounded-lg text-white/40 hover:text-white hover:bg-white/10 transition-all flex-shrink-0">
+            <X size={15} />
+          </button>
+        </div>
+
+        {submitted ? (
+          <div className="flex flex-col items-center justify-center gap-4 px-6 py-12 text-center">
+            <div className="w-12 h-12 rounded-full flex items-center justify-center"
+              style={{ background: 'rgba(34,197,94,0.15)', border: '1px solid rgba(34,197,94,0.3)' }}>
+              <Check size={22} className="text-green-400" />
+            </div>
+            <div>
+              <div className="text-white font-semibold text-[15px] mb-1">Report Submitted</div>
+              <div className="text-white/45 text-[12px]">Thank you. The platform owner will review your report.</div>
+            </div>
+            <button onClick={onClose}
+              className="mt-2 px-6 py-2 rounded-xl text-white text-[13px] font-medium transition-all hover:brightness-110"
+              style={{ background: 'rgba(130,80,255,0.7)' }}>
+              Done
+            </button>
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit} className="flex flex-col flex-1 overflow-hidden">
+            {/* Scrollable fields */}
+            <div className="flex-1 overflow-y-auto scrollbar-thin px-5 py-4 space-y-3.5">
+
+              {/* Read-only reporter info */}
+              <div className="grid grid-cols-2 gap-2.5">
+                <div>
+                  <label className="block text-white/40 text-[10.5px] font-medium uppercase tracking-wide mb-1">First Name</label>
+                  <input readOnly value={firstName} style={{ ...inpSt, opacity: 0.5, cursor: 'default' }} />
+                </div>
+                <div>
+                  <label className="block text-white/40 text-[10.5px] font-medium uppercase tracking-wide mb-1">Last Name</label>
+                  <input readOnly value={lastName} style={{ ...inpSt, opacity: 0.5, cursor: 'default' }} />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-2.5">
+                <div>
+                  <label className="block text-white/40 text-[10.5px] font-medium uppercase tracking-wide mb-1">Username</label>
+                  <input readOnly value={username} style={{ ...inpSt, opacity: 0.5, cursor: 'default' }} />
+                </div>
+                <div>
+                  <label className="block text-white/40 text-[10.5px] font-medium uppercase tracking-wide mb-1">Email</label>
+                  <input readOnly value={email} style={{ ...inpSt, opacity: 0.5, cursor: 'default' }} />
+                </div>
+              </div>
+
+              {/* Issue category — custom themed dropdown */}
+              <div>
+                <label className="block text-white/40 text-[10.5px] font-medium uppercase tracking-wide mb-1">
+                  Issue Category <span className="text-red-400">*</span>
+                </label>
+                <ReportDropdown
+                  value={category}
+                  onChange={v => { setCategory(v); setError('') }}
+                  options={REPORT_CATEGORIES}
+                  placeholder="Select a category…"
+                />
+              </div>
+
+              {/* Description */}
+              <div>
+                <label className="block text-white/40 text-[10.5px] font-medium uppercase tracking-wide mb-1">
+                  Description <span className="text-red-400">*</span>
+                </label>
+                <textarea
+                  value={description}
+                  onChange={e => { setDescription(e.target.value); setError('') }}
+                  placeholder="Describe the issue in detail…"
+                  maxLength={4000}
+                  rows={5}
+                  style={{ ...inpSt, resize: 'vertical', minHeight: 90 }}
+                />
+                <div className="text-white/20 text-[10px] text-right mt-0.5">{description.length} / 4000</div>
+              </div>
+
+              {/* Attachment */}
+              <div>
+                <label className="block text-white/40 text-[10.5px] font-medium uppercase tracking-wide mb-1">
+                  Attachment <span className="text-white/25">(optional, max 5 MB)</span>
+                </label>
+                <div className="flex items-center gap-2">
+                  <button type="button" onClick={() => fileRef.current?.click()}
+                    className="px-3 py-1.5 rounded-lg text-[12px] font-medium text-white/60 hover:text-white transition-all flex-shrink-0"
+                    style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.1)' }}>
+                    Choose File
+                  </button>
+                  <span className="text-white/35 text-[11px] truncate flex-1 min-w-0">
+                    {attachment ? attachment.name : 'No file chosen'}
+                  </span>
+                  {attachment && (
+                    <button type="button"
+                      onClick={() => { setAttachment(null); if (fileRef.current) fileRef.current.value = '' }}
+                      className="text-white/30 hover:text-red-400 transition-colors flex-shrink-0">
+                      <X size={12} />
+                    </button>
+                  )}
+                </div>
+                <input ref={fileRef} type="file" className="hidden" onChange={handleFile}
+                  accept="image/*,video/*,application/pdf,.txt,.log" />
+              </div>
+
+              {/* T&C */}
+              <div className="flex items-start gap-2.5">
+                <button type="button"
+                  onClick={() => setAgreedToTos(v => !v)}
+                  className="flex-shrink-0 w-4 h-4 rounded flex items-center justify-center mt-0.5 transition-all"
+                  style={{
+                    background: agreedToTos ? 'rgba(130,80,255,0.8)' : 'rgba(255,255,255,0.07)',
+                    border:     agreedToTos ? '1px solid rgba(130,80,255,0.9)' : '1px solid rgba(255,255,255,0.15)',
+                  }}>
+                  {agreedToTos && <Check size={10} className="text-white" />}
+                </button>
+                <span className="text-white/45 text-[11.5px] leading-relaxed">
+                  I confirm this report is accurate and I agree to the{' '}
+                  <button type="button"
+                    onClick={() => setShowTos(true)}
+                    className="text-violet-400 hover:text-violet-300 underline underline-offset-2 transition-colors">
+                    Terms of Service
+                  </button>
+                  . False or malicious reports may result in account action.
+                </span>
+              </div>
+
+              {/* Error */}
+              {error && (
+                <div className="text-red-400 text-[12px] rounded-lg px-3 py-2"
+                  style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.2)' }}>
+                  {error}
+                </div>
+              )}
+            </div>
+
+            {/* Sticky footer */}
+            <div className="flex items-center gap-2.5 px-5 py-3.5 flex-shrink-0"
+              style={{ borderTop: '1px solid rgba(255,255,255,0.07)' }}>
+              <button type="button" onClick={onClose}
+                className="flex-1 py-2 rounded-xl text-white/60 text-[13px] font-medium transition-all hover:text-white hover:bg-white/10"
+                style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.09)' }}>
+                Cancel
+              </button>
+              <button type="submit" disabled={submitting}
+                className="flex-1 py-2 rounded-xl text-white text-[13px] font-semibold transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-50"
+                style={{ background: 'linear-gradient(135deg, rgba(239,68,68,0.85), rgba(220,38,38,0.85))' }}>
+                {submitting ? 'Submitting…' : 'Submit Report'}
+              </button>
+            </div>
+          </form>
+        )}
+      </motion.div>
+    </div>
+
+    {/* Terms of Service sheet — shown on top of the report modal */}
+    <AnimatePresence>
+      {showTos && (
+        <div className="fixed inset-0 z-[10000] flex items-end sm:items-center justify-center"
+          style={{ background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)' }}
+          onClick={() => setShowTos(false)}>
+          <motion.div
+            initial={{ opacity: 0, y: 32 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 32 }}
+            transition={{ type: 'spring', stiffness: 360, damping: 34 }}
+            className="w-full max-w-lg flex flex-col"
+            style={{
+              background:   'rgba(14,12,28,0.99)',
+              border:       '1px solid rgba(255,255,255,0.1)',
+              borderRadius: 20,
+              maxHeight:    '88vh',
+            }}
+            onClick={e => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div className="flex items-center justify-between px-5 py-4 flex-shrink-0"
+              style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
+              <div className="flex items-center gap-2">
+                <ScrollText size={14} className="text-violet-400" />
+                <span className="text-white font-semibold text-[13px]">Terms &amp; Conditions</span>
+              </div>
+              <button onClick={() => setShowTos(false)}
+                className="p-1.5 rounded-lg text-white/40 hover:text-white hover:bg-white/10 transition-all">
+                <X size={14} />
+              </button>
+            </div>
+            <div className="px-5 py-2 flex-shrink-0"
+              style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+              <span className="text-[10.5px] text-white/25">Last updated: {TERMS_LAST_UPDATED}</span>
+            </div>
+            {/* Content */}
+            <div className="flex-1 overflow-y-auto scrollbar-thin px-5 py-4 space-y-5">
+              {TERMS_SECTIONS.map(section => (
+                <div key={section.id}>
+                  <h3 className="text-white/90 font-semibold text-[12.5px] mb-2 tracking-tight">{section.title}</h3>
+                  {section.paragraphs?.map((p, i) => (
+                    <p key={i} className="text-white/45 text-[12px] leading-relaxed mb-1.5">{p}</p>
+                  ))}
+                  {section.items?.length > 0 && (
+                    <ul className="space-y-1 mb-1.5">
+                      {section.items.map((item, i) => (
+                        <li key={i} className="flex gap-2">
+                          <span className="text-violet-400/50 text-[10px] flex-shrink-0 mt-[3px]">◆</span>
+                          <span className="text-white/45 text-[12px] leading-relaxed">{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                  {section.closing && (
+                    <p className="text-white/45 text-[12px] leading-relaxed mt-1.5 pl-3 border-l-2 border-violet-500/25 italic">
+                      {section.closing}
+                    </p>
+                  )}
+                </div>
+              ))}
+            </div>
+            {/* Footer */}
+            <div className="px-5 py-3.5 flex-shrink-0 flex gap-2.5"
+              style={{ borderTop: '1px solid rgba(255,255,255,0.07)' }}>
+              <button onClick={() => setShowTos(false)}
+                className="flex-1 py-2 rounded-xl text-white/60 text-[13px] font-medium transition-all hover:text-white hover:bg-white/10"
+                style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.09)' }}>
+                Close
+              </button>
+              <button onClick={() => { setAgreedToTos(true); setShowTos(false) }}
+                className="flex-1 py-2 rounded-xl text-white text-[13px] font-semibold transition-all hover:brightness-110 active:scale-[0.98]"
+                style={{ background: 'linear-gradient(135deg, rgba(99,102,241,0.9), rgba(139,92,246,0.9))' }}>
+                I Agree
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      )}
+    </AnimatePresence>
+    </>,
+    document.body
+  )
+}
+
 // ── App Detail page ───────────────────────────────────────────────────────────
-function AppDetail({ app, isInstalled, onInstall, onUninstall, onLaunch, onBack, editMode, onEdit }) {
+function AppDetail({ app, isInstalled, onInstall, onUninstall, onLaunch, onBack, editMode, onEdit, onReport, canReport }) {
   const hue      = app.hue ?? 240
   const gradBg   = `linear-gradient(135deg, hsl(${hue},60%,20%) 0%, hsl(${(hue + 55) % 360},55%,12%) 100%)`
   const hasCover = !!app.cover_image
@@ -461,6 +914,13 @@ function AppDetail({ app, isInstalled, onInstall, onUninstall, onLaunch, onBack,
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-violet-300 text-[12px] font-medium transition-all hover:bg-violet-500/20"
             style={{ background: 'rgba(130,80,255,0.12)', border: '1px solid rgba(130,80,255,0.28)' }}>
             <Pencil size={11} /> Edit App
+          </button>
+        )}
+        {canReport && (
+          <button onClick={() => onReport(app)}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-red-400 text-[12px] font-medium transition-all hover:bg-red-500/20 ml-auto"
+            style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)' }}>
+            <Flag size={11} /> Report
           </button>
         )}
       </div>
@@ -881,6 +1341,7 @@ export default function AppCenter({ windowId }) {
   const [selectedApp, setSelectedApp] = useState(null)
   const [editMode,    setEditMode]    = useState(false)
   const [editingApp,  setEditingApp]  = useState(null) // null=closed | 'new'=add | app=edit
+  const [reportingApp, setReportingApp] = useState(null) // null | app object
   const [saving,      setSaving]      = useState(false)
   const [confirmDelete, setConfirmDelete] = useState(null) // null | app object
   const [showSuggestions, setShowSuggestions] = useState(false)
@@ -1196,6 +1657,8 @@ export default function AppCenter({ windowId }) {
               onBack={() => setSelectedApp(null)}
               editMode={editMode}
               onEdit={setEditingApp}
+              onReport={setReportingApp}
+              canReport={!isGuest}
             />
           ) : (
             <motion.div
@@ -1283,6 +1746,13 @@ export default function AppCenter({ windowId }) {
         </AnimatePresence>,
         document.body
       )}
+
+      {/* App Report Modal */}
+      <AnimatePresence>
+        {reportingApp && (
+          <AppReportModal app={reportingApp} onClose={() => setReportingApp(null)} />
+        )}
+      </AnimatePresence>
 
       {/* Delete confirmation dialog */}
       {confirmDelete && createPortal(

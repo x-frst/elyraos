@@ -23,6 +23,7 @@ import { sessionRouter } from './routes/session.js'
 import { aiRouter }     from './routes/ai.js'
 import { chatsRouter }  from './routes/chats.js'
 import { twofaRouter }  from './routes/twofa.js'
+import { reportRouter } from './routes/report.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const app  = express()
@@ -73,6 +74,7 @@ app.use('/api/session', sessionRouter)
 app.use('/api/ai',      aiRouter)
 app.use('/api/chats',   chatsRouter)
 app.use('/api/twofa',   twofaRouter)
+app.use('/api/report',  reportRouter)
 
 // ── Serve built frontend in production ───────────────────────────────────────
 const distPath = path.join(__dirname, '..', 'dist')

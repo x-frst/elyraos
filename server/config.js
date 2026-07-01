@@ -286,6 +286,9 @@ export const SMTP = {
   from:   process.env.SMTP_FROM   || '',
 }
 
+/** Platform owner / admin email — receives App Center reports sent by users. */
+export const OWNER_EMAIL = process.env.OWNER_EMAIL || ''
+
 /** How long a one-time code stays valid (minutes). Override via OTP_EXPIRY_MINUTES. */
 export const OTP_EXPIRY_MINUTES = parseInt(process.env.OTP_EXPIRY_MINUTES || '10', 10)
 

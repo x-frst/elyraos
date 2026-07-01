@@ -512,6 +512,32 @@ export async function selfChangePassword(currentPassword, newPassword) {
   } catch { return { error: 'Network error' } }
 }
 
+/**
+ * Submit an app report.
+ * @param {{ appTitle: string, appUrl?: string, category: string, description: string, attachment?: { name: string, type: string, data: string } | null }} data
+ */
+export async function reportApp(data) {
+  if (!_jwt) return { error: 'Not authenticated' }
+  try {
+    const res = await fetch(`${API}/report/app`, {
+      method: 'POST', headers: _h(),
+      body: JSON.stringify(data),
+    })
+    return await res.json()
+  } catch { return { error: 'Network error' } }
+}
+
+/** Fetch the current user's own profile from the server. */
+export async function getSelfProfile() {
+  if (!_jwt) return null
+  try {
+    const res = await fetch(`${API}/auth/me`, { headers: _h() })
+    if (!res.ok) return null
+    const data = await res.json()
+    return data.user || null
+  } catch { return null }
+}
+
 // ── Forgot password (unauthenticated flow) ────────────────────────────────────
 
 /** Step 1: request an OTP for the given email address. Returns { resetToken } on success. */

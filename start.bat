@@ -428,6 +428,7 @@ if /i "!SMTP_CHOICE!"=="y" (
     echo SMTP_PASS="!SMTP_PASS!"
     echo SMTP_FROM=!SMTP_FROM!
     echo OTP_EXPIRY_MINUTES=!OTP_EXPIRY!
+    echo OWNER_EMAIL=!SMTP_USER!
   )
 ) > "%ENV_FILE%"
 

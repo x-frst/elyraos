@@ -340,6 +340,7 @@ setup_env() {
       printf 'SMTP_PASS="%s"\n'  "$smtp_pass"
       printf 'SMTP_FROM=%s\n'    "$smtp_from"
       printf 'OTP_EXPIRY_MINUTES=%s\n' "$otp_expiry"
+      printf 'OWNER_EMAIL=%s\n'  "$smtp_user"
     fi
   } > "$ENV_FILE"
   ok "server/.env written"

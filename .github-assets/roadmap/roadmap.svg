@@ -264,8 +264,13 @@
 
   <!-- Node -->
   <circle cx="140" cy="523.0" r="9"
-          class="future nodePulse"
+          class="completed nodePulse"
           filter="url(#nodeGlow)"/>
+
+  <path d="M136 523.0
+           L140 527.0
+           L147 518.0"
+        class="tick"/>
 
 
   <!-- Text -->
@@ -294,7 +299,7 @@
 
 
   <!-- Text -->
-  <text x="225" y="612" class="date">June 2026</text>
+  <text x="225" y="612" class="date">July 2026 (Delayed)</text>
 
   <text x="225" y="642" class="title">
     Social Media Platform
